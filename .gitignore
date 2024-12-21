@@ -111,6 +111,6 @@ angular/test/build/
 packages/vue/test/build/
 
 .npmrc
-TableBookingAPI/TableBooking/obj
-TableBookingAPI/TableBooking/appsettings.json
+TableBookingAPI/TableBooking.Api/obj
+TableBookingAPI/TableBooking.Api/appsettings.json
 TableBookingAPI/.vs
