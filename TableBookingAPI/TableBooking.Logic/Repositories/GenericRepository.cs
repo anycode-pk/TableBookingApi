@@ -35,10 +35,22 @@ namespace TableBooking.Logic.Repositories
             _objectSet.Remove(objectToDelete);
         }
 
-        public async virtual Task Update(T entity)
+        public async Task Update(T entity)
         {
-            await Update(entity);
-        }
+            var existingEntity = await _objectSet.FindAsync(GetKeyValues(entity));
 
+            if (existingEntity != null)
+            {
+                _context.Entry(existingEntity).State = EntityState.Detached;
+            }
+
+            _objectSet.Update(entity);
+        }
+        
+        private object[] GetKeyValues(T entity)
+        {
+            var keyProperties = _context.Model.FindEntityType(typeof(T)).FindPrimaryKey().Properties;
+            return keyProperties.Select(prop => prop.PropertyInfo.GetValue(entity)).ToArray();
+        }
     }
 }

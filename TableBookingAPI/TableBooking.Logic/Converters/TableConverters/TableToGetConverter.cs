@@ -21,7 +21,8 @@ namespace TableBooking.Logic.Converters.TableConverters
             {
                 Id = table.Id,
                 RestaurantId = table.RestaurantId,
-                NumberOfSeats = table.NumberOfSeats
+                NumberOfSeats = table.NumberOfSeats,
+                Bookings = table.Bookings
             };
         }
     }

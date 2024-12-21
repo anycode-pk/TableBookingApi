@@ -1,4 +1,6 @@
-﻿namespace TableBooking.Model.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace TableBooking.Model.Models
 {
     public enum Price
     {
@@ -15,7 +17,8 @@
         public string Phone { get; set; }
         public string? PrimaryImageURL { get; set; }
         public string? SecondaryImageURL { get; set; }
-        public float Rating { get; set; }
+        [Precision(1,1)]
+        public double Rating { get; set; }
         public Price Price { get; set; }
         public DateTime OpenTime { get; set; }
         public DateTime CloseTime { get; set; }

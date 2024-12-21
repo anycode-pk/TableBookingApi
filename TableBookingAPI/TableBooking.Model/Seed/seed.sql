@@ -1,5 +1,4 @@
 ALTER ROLE "TableBookingUser" SET search_path = public;
-
 -- Create Restaurants table
 CREATE TABLE IF NOT EXISTS "Restaurants" (
     "Id" UUID PRIMARY KEY,
@@ -12,7 +11,7 @@ CREATE TABLE IF NOT EXISTS "Restaurants" (
     "PrimaryImageURL" TEXT,
     "SecondaryImageURL" TEXT,
     "Price" INT,
-    "Rating" INT,
+    "Rating" DOUBLE PRECISION,
     "Phone" VARCHAR(20)
 );
 
@@ -21,6 +20,14 @@ CREATE TABLE IF NOT EXISTS "Tables" (
     "Id" UUID PRIMARY KEY,
     "NumberOfSeats" INT NOT NULL,
     "RestaurantId" UUID REFERENCES "Restaurants"("Id")
+);
+
+-- Create Role table
+CREATE TABLE IF NOT EXISTS "Roles" (
+    "Id" UUID PRIMARY KEY,
+    "Name" VARCHAR(30),
+    "NormalizedName" VARCHAR(255),
+    "ConcurrencyStamp" VARCHAR(255)
 );
 
 -- Create Users table
@@ -41,15 +48,17 @@ CREATE TABLE IF NOT EXISTS "Users" (
     "TwoFactorEnabled" BOOLEAN,
     "LockoutEnd" TIMESTAMPTZ,
     "LockoutEnabled" BOOLEAN,
-    "AccessFailedCount" INT
+    "AccessFailedCount" INT,
+    "AppRoleId" UUID REFERENCES "Roles"("Id")
 );
 
 -- Create Bookings table
 CREATE TABLE IF NOT EXISTS "Bookings" (
     "Id" UUID PRIMARY KEY,
     "Date" TIMESTAMPTZ,
+    "AmountOfPeople" INT,
     "DurationInMinutes" INT,
-    "UserId" UUID REFERENCES "Users"("Id"),
+    "AppUserId" UUID REFERENCES "Users"("Id"),
     "TableId" UUID REFERENCES "Tables"("Id")
 );
 
@@ -88,6 +97,17 @@ INSERT INTO "Tables" ("Id","NumberOfSeats", "RestaurantId") VALUES ('423d89b6-1d
 INSERT INTO "Tables" ("Id","NumberOfSeats", "RestaurantId") VALUES ('840fffa7-ba45-4f44-a139-d794dcc4c647',4, 'a7f7be1c-adae-40df-b315-f772857936d5');
 INSERT INTO "Tables" ("Id","NumberOfSeats", "RestaurantId") VALUES ('d3f5aa07-4803-4008-8fed-7fa6a4de5fe6',8, 'a7f7be1c-adae-40df-b315-f772857936d5');
 
+--Seed Roles records
+INSERT INTO "Roles"(
+	"Id", "Name", "NormalizedName", "ConcurrencyStamp")
+	VALUES ('65329b28-837c-46cb-8f3c-e2ce20a81cac', 'Admin', 'admin', 'xd1');
+INSERT INTO "Roles"(
+    "Id", "Name", "NormalizedName", "ConcurrencyStamp")
+    VALUES ('5ad1268f-f61f-4b1c-b690-cbf8c3d35019', 'User', 'user', 'xd2');
+INSERT INTO "Roles"(
+    "Id", "Name", "NormalizedName", "ConcurrencyStamp")
+    VALUES ('6e380994-fb58-4364-aeaa-83f7a06e1cc2', 'Restaurant', 'restaurant', 'xd3');
+
 -- seed Users records
 INSERT INTO "Users" (
     "Id",
@@ -106,7 +126,8 @@ INSERT INTO "Users" (
     "TwoFactorEnabled",
     "LockoutEnd",
     "LockoutEnabled",
-    "AccessFailedCount"
+    "AccessFailedCount",
+    "AppRoleId"
 ) VALUES (
     'abc663f0-08b1-4c52-afe4-1d446b11017f',
     'refreshtoken1',
@@ -124,7 +145,8 @@ INSERT INTO "Users" (
     FALSE,
     '2023-10-12 14:30:00+00'::timestamptz,
     TRUE,
-    0
+    0,
+    '65329b28-837c-46cb-8f3c-e2ce20a81cac'
 );
 
 INSERT INTO "Users" (
@@ -144,7 +166,8 @@ INSERT INTO "Users" (
     "TwoFactorEnabled",
     "LockoutEnd",
     "LockoutEnabled",
-    "AccessFailedCount"
+    "AccessFailedCount",
+    "AppRoleId"
 ) VALUES (
     '123663f0-08b1-4c52-afe4-1d446b11017f',
     'refreshtoken2',
@@ -162,19 +185,20 @@ INSERT INTO "Users" (
     TRUE,
     '2023-10-12 14:30:00+00'::timestamptz,
     TRUE,
-    2
+    2,
+    '5ad1268f-f61f-4b1c-b690-cbf8c3d35019'
 );
 
 -- seed Bookings records
-INSERT INTO "Bookings" ("Id", "Date", "DurationInMinutes", "UserId", "TableId") VALUES ('fc9663f0-08b1-4c52-afe4-1d446b11017f','2030-01-01 14:30:00+00', 5, 'abc663f0-08b1-4c52-afe4-1d446b11017f', '123e1a20-6801-4a5e-a327-ecc5cb2bd906');
-INSERT INTO "Bookings" ("Id", "Date", "DurationInMinutes", "UserId", "TableId") VALUES ('c4c4a1c0-3cb4-445e-ba81-311a6b939b4a','2050-05-07 20:15:00+00', 3, '123663f0-08b1-4c52-afe4-1d446b11017f', '3eb2eb68-a47e-47cd-8a22-06c20197a0b3');
+INSERT INTO "Bookings" ("Id", "Date","AmountOfPeople", "DurationInMinutes", "AppUserId", "TableId") VALUES ('fc9663f0-08b1-4c52-afe4-1d446b11017f','2030-01-01 14:30:00+00', 1, 5, 'abc663f0-08b1-4c52-afe4-1d446b11017f', '123e1a20-6801-4a5e-a327-ecc5cb2bd906');
+INSERT INTO "Bookings" ("Id", "Date","AmountOfPeople", "DurationInMinutes", "AppUserId", "TableId") VALUES ('c4c4a1c0-3cb4-445e-ba81-311a6b939b4a','2050-05-07 20:15:00+00', 2, 3, '123663f0-08b1-4c52-afe4-1d446b11017f', '3eb2eb68-a47e-47cd-8a22-06c20197a0b3');
 
 -- Seed Users records
-INSERT INTO "Users" ("Id", "RefreshToken", "RefreshTokenExpiryTime", "UserName", "NormalizedUserName", "Email", "NormalizedEmail", "EmailConfirmed", "PasswordHash", "SecurityStamp", "ConcurrencyStamp", "PhoneNumber", "PhoneNumberConfirmed", "TwoFactorEnabled", "LockoutEnd", "LockoutEnabled", "AccessFailedCount")
-VALUES ('e8213e4a-c336-4345-b93e-26231379acda', 'refreshtoken1', '2023-11-12 00:00:00+00', 'user uno', 'normalized user uno name', 'email1', 'normalized_email1', FALSE, 'hashpasswd1', 'securitystamp1', 'concurrencystamp1', '123-456-789', FALSE, TRUE, '2023-10-12 14:30:00+00', TRUE, 0);
+INSERT INTO "Users" ("Id", "RefreshToken", "RefreshTokenExpiryTime", "UserName", "NormalizedUserName", "Email", "NormalizedEmail", "EmailConfirmed", "PasswordHash", "SecurityStamp", "ConcurrencyStamp", "PhoneNumber", "PhoneNumberConfirmed", "TwoFactorEnabled", "LockoutEnd", "LockoutEnabled", "AccessFailedCount", "AppRoleId")
+VALUES ('e8213e4a-c336-4345-b93e-26231379acda', 'refreshtoken1', '2023-11-12 00:00:00+00', 'user uno', 'normalized user uno name', 'email1', 'normalized_email1', FALSE, 'hashpasswd1', 'securitystamp1', 'concurrencystamp1', '123-456-789', FALSE, TRUE, '2023-10-12 14:30:00+00', TRUE, 0, '5ad1268f-f61f-4b1c-b690-cbf8c3d35019');
 
-INSERT INTO "Users" ("Id", "RefreshToken", "RefreshTokenExpiryTime", "UserName", "NormalizedUserName", "Email", "NormalizedEmail", "EmailConfirmed", "PasswordHash", "SecurityStamp", "ConcurrencyStamp", "PhoneNumber", "PhoneNumberConfirmed", "TwoFactorEnabled", "LockoutEnd", "LockoutEnabled", "AccessFailedCount")
-VALUES ('c52fd4e3-1e46-4c38-84cc-d686800b425c', 'refreshtoken2', '2023-11-12 00:00:00+00', 'user nienazarty', 'normalized user nienazarty name', 'email2', 'normalized_email2', TRUE, 'hashpasswd2', 'securitystamp2', 'concurrencystamp2', '123-333-789', TRUE, FALSE, '2023-10-12 14:30:00+00', TRUE, 2);
+INSERT INTO "Users" ("Id", "RefreshToken", "RefreshTokenExpiryTime", "UserName", "NormalizedUserName", "Email", "NormalizedEmail", "EmailConfirmed", "PasswordHash", "SecurityStamp", "ConcurrencyStamp", "PhoneNumber", "PhoneNumberConfirmed", "TwoFactorEnabled", "LockoutEnd", "LockoutEnabled", "AccessFailedCount", "AppRoleId")
+VALUES ('c52fd4e3-1e46-4c38-84cc-d686800b425c', 'refreshtoken2', '2023-11-12 00:00:00+00', 'user nienazarty', 'normalized user nienazarty name', 'email2', 'normalized_email2', TRUE, 'hashpasswd2', 'securitystamp2', 'concurrencystamp2', '123-333-789', TRUE, FALSE, '2023-10-12 14:30:00+00', TRUE, 2, '6e380994-fb58-4364-aeaa-83f7a06e1cc2');
 
 -- seed Ratings records
 INSERT INTO "Ratings"(

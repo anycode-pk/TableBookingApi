@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TableBooking.Model;
@@ -11,9 +12,10 @@ using TableBooking.Model;
 namespace TableBooking.Model.Migrations
 {
     [DbContext(typeof(TableBookingContext))]
-    partial class TableBookingContextModelSnapshot : ModelSnapshot
+    [Migration("20231202144812_restaurant_rating_and_approle")]
+    partial class restaurant_rating_and_approle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

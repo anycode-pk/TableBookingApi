@@ -17,6 +17,7 @@ namespace TableBooking.Api.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly string userRoleId = "5ad1268f-f61f-4b1c-b690-cbf8c3d35019";
 
         public UserService(
             UserManager<AppUser> userManager,
@@ -35,31 +36,40 @@ namespace TableBooking.Api.Services
             if (userExists != null)
                 return new BadRequestObjectResult("Bad request: Registration failed");
 
+            var appUserRole = await _roleManager.FindByIdAsync(userRoleId);
+            if (appUserRole == null)
+                return new BadRequestObjectResult("Bad request: Registration failed");
+
             var user = new AppUser()
             {
                 Email = dto.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = dto.Username
+                UserName = dto.Username,
+                AppRoleId = appUserRole.Id
             };
+
             var result = await _userManager.CreateAsync(user, dto.Password);
             if (!result.Succeeded)
-                return new BadRequestObjectResult("Invalid password lenght");
+                return new BadRequestObjectResult("Invalid password lenght Or Bad Email");
 
             return new OkObjectResult(new ResultDto { Status = "Success", Message = "User created successfully!" });
         }
 
         public async Task<IActionResult> Login(UserLoginDto dto)
         {
-            var user = await _userManager.FindByNameAsync(dto.Username);
+            var user = await _userManager.FindByNameAsync(dto.Username) ;     
             if (user == null || !await _userManager.CheckPasswordAsync(user, dto.Password))
             {
                 return new UnauthorizedResult();
             }
+            var role = await _roleManager.FindByIdAsync(user.AppRoleId.ToString());
+            if (role == null) return new BadRequestObjectResult("Bad request");
 
             var authClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, role.Name),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

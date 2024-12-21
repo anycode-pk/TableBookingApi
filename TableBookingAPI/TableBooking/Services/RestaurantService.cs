@@ -3,6 +3,7 @@ using TableBooking.Model.Dtos.RestaurantDtos;
 using TableBooking.Logic.Interfaces;
 using TableBooking.Model.Models;
 using TableBooking.Api.Interfaces;
+using TableBooking.Model.Dtos.BookingDtos;
 
 namespace TableBooking.Api.Services
 {
@@ -21,6 +22,7 @@ namespace TableBooking.Api.Services
                 Name = dto.Name,
                 CloseTime = dto.CloseTime,
                 Description = dto.Description,
+                Phone = dto.Phone,
                 Location = dto.Location,
                 Rating = 0,
                 Price = dto.Price,
@@ -37,7 +39,7 @@ namespace TableBooking.Api.Services
             var restaurantToDelete = await _unitOfWork.RestaurantRepository.GetByIdAsync(restaurantId);
             if (restaurantToDelete == null)
                 return new NotFoundObjectResult($"Restaurant with Id = {restaurantId} not found");
-            await _unitOfWork.RestaurantRepository.Delete(restaurantToDelete);
+            await _unitOfWork.RestaurantRepository.Delete(restaurantToDelete.Id);
             await _unitOfWork.SaveChangesAsync();
             return new OkObjectResult(restaurantToDelete);
         }
@@ -57,9 +59,33 @@ namespace TableBooking.Api.Services
             return new OkObjectResult(restaurant);
         }
 
-        public Task<IActionResult> UpdateRestaurantAsync(RestaurantShortInfoDto dto)
+        public async Task<IActionResult> UpdateRestaurantAsync(RestaurantShortInfoDto dto, Guid restaurantId)
         {
-            throw new NotImplementedException();
+            var restaurant = await _unitOfWork.RestaurantRepository.GetByIdAsync(restaurantId);
+            if (restaurant == null)
+                return new BadRequestObjectResult($"Booking with id {restaurantId} doesn't exist.");
+
+            var newRestaurant = new Restaurant
+            {
+                Id = restaurant.Id,
+                Description = dto.Description,
+                Location = dto.Location,
+                Name = dto.Name,
+                Phone = dto.Phone,
+                Price = dto.Price,
+                PrimaryImageURL = dto.ImageURL,
+                SecondaryImageURL = dto.ImageURL,
+                Tables = restaurant.Tables,
+                Type = dto.Type,
+                Rating = restaurant.Rating,
+                CloseTime = dto.CloseTime,
+                OpenTime = dto.OpenTime
+            };
+
+            await _unitOfWork.RestaurantRepository.Update(newRestaurant);
+            await _unitOfWork.SaveChangesAsync();
+
+            return new OkObjectResult(newRestaurant);
         }
     }
 }

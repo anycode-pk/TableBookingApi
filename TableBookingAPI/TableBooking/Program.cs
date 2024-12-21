@@ -121,6 +121,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 {
     options.User.RequireUniqueEmail = true;
     options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
+    options.ClaimsIdentity.RoleClaimType = ClaimTypes.Role;
 });
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -142,6 +143,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 app.UseSerilogRequestLogging();
 app.MapHealthChecks("/healthz"); //.RequireHost("*:5001").RequireAuthorization();

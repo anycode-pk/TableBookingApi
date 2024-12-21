@@ -7,7 +7,7 @@ namespace TableBooking.Model.Dtos.BookingDtos
         public Guid Id { get; set; }
         public DateTime Date { get; set; }
         public int DurationInMinutes { get; set; }
-        public TableDto TableDto { get; set; }
-        public Guid UserId { get; set; }
+        public int AmountOfPeople { get; set; }
+        public Guid AppUserId { get; set; }
     }
 }

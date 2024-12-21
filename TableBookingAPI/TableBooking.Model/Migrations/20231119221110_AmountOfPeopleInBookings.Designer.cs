@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TableBooking.Model;
@@ -11,9 +12,10 @@ using TableBooking.Model;
 namespace TableBooking.Model.Migrations
 {
     [DbContext(typeof(TableBookingContext))]
-    partial class TableBookingContextModelSnapshot : ModelSnapshot
+    [Migration("20231119221110_AmountOfPeopleInBookings")]
+    partial class AmountOfPeopleInBookings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,26 +23,6 @@ namespace TableBooking.Model.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("TableBooking.Model.Models.AppRole", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("NormalizedName")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
-                });
 
             modelBuilder.Entity("TableBooking.Model.Models.AppUser", b =>
                 {
@@ -50,9 +32,6 @@ namespace TableBooking.Model.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
-
-                    b.Property<Guid>("AppRoleId")
-                        .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("text");
@@ -100,8 +79,6 @@ namespace TableBooking.Model.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppRoleId");
 
                     b.ToTable("Users");
                 });
@@ -203,9 +180,8 @@ namespace TableBooking.Model.Migrations
                     b.Property<string>("PrimaryImageURL")
                         .HasColumnType("text");
 
-                    b.Property<double>("Rating")
-                        .HasPrecision(1, 1)
-                        .HasColumnType("double precision");
+                    b.Property<float>("Rating")
+                        .HasColumnType("real");
 
                     b.Property<string>("SecondaryImageURL")
                         .HasColumnType("text");
@@ -238,17 +214,6 @@ namespace TableBooking.Model.Migrations
                     b.ToTable("Tables");
                 });
 
-            modelBuilder.Entity("TableBooking.Model.Models.AppUser", b =>
-                {
-                    b.HasOne("TableBooking.Model.Models.AppRole", "AppRole")
-                        .WithMany()
-                        .HasForeignKey("AppRoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppRole");
-                });
-
             modelBuilder.Entity("TableBooking.Model.Models.Booking", b =>
                 {
                     b.HasOne("TableBooking.Model.Models.AppUser", null)
@@ -257,11 +222,13 @@ namespace TableBooking.Model.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TableBooking.Model.Models.Table", null)
+                    b.HasOne("TableBooking.Model.Models.Table", "Table")
                         .WithMany("Bookings")
                         .HasForeignKey("TableId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Table");
                 });
 
             modelBuilder.Entity("TableBooking.Model.Models.Rating", b =>

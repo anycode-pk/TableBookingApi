@@ -39,13 +39,13 @@ namespace TableBooking.Controllers
             return await _tableService.CreateTableAsync(tableDto);
         }
 
-        [HttpPut("UpdateTable")]
-        public async Task<IActionResult> UpdateTable([FromBody] TableDto tableDto)
+        [HttpPut("UpdateTable/{tableId}")]
+        public async Task<IActionResult> UpdateTable([FromBody] TableDto tableDto, Guid tableId)
         {
-            return await _tableService.UpdateTableAsync(tableDto);
+            return await _tableService.UpdateTableAsync(tableDto, tableId);
         }
 
-        [HttpDelete("DeleteTable/{id:int}")]
+        [HttpDelete("DeleteTable/{id:Guid}")]
         public async Task<IActionResult> DeleteTable(Guid id)
         {
             return await _tableService.DeleteTableAsync(id);

@@ -34,6 +34,18 @@ namespace TableBooking.Api.Services
 
             await _unitOfWork.RatingRepository.InsertAsync(rating);
             await _unitOfWork.SaveChangesAsync();
+            var ratings = await _unitOfWork.RatingRepository.GetRatingsAsync(dto.RestaurantId) ;
+            var numberOfRaitings = ratings.Count();
+            var result = 0d;
+
+            if (numberOfRaitings > 0 && numberOfRaitings % 5 == 0)
+            {
+                result = ratings.Select(x => x.RatingStars).Average();
+                restaurant.Rating = result;
+                await _unitOfWork.RestaurantRepository.Update(restaurant);
+                await _unitOfWork.SaveChangesAsync();
+            }
+
             return new OkObjectResult(_ratingConverter.RatingToRatingDto(rating));
         }
 

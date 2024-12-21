@@ -29,6 +29,7 @@ namespace TableBooking.Model
         public DbSet<Table> Tables { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<AppUser> Users { get; set; }
+        public DbSet<AppRole> Roles { get; set; }
 
     }
 }

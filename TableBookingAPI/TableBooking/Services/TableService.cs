@@ -22,7 +22,7 @@ namespace TableBooking.Api.Services
             var table = new Table
             {
                 NumberOfSeats = dto.NumberOfSeats,
-                
+                RestaurantId = dto.RestaurantId
             };
             await _unitOfWork.TableRepository.InsertAsync(table);
             await _unitOfWork.SaveChangesAsync();
@@ -34,7 +34,7 @@ namespace TableBooking.Api.Services
             var tableToDelete = await _unitOfWork.TableRepository.GetByIdAsync(tableId);
             if (tableToDelete == null)
                 return new NotFoundObjectResult($"Restaurant with Id = {tableId} not found");
-            await _unitOfWork.TableRepository.Delete(tableToDelete);
+            await _unitOfWork.TableRepository.Delete(tableToDelete.Id);
             await _unitOfWork.SaveChangesAsync();
             return new OkObjectResult(tableToDelete);
         }
@@ -43,7 +43,7 @@ namespace TableBooking.Api.Services
         {
             var tables = await _unitOfWork.TableRepository.GetAllAsync();
             if (tables == null) return new BadRequestObjectResult("No tables found");
-            return new OkObjectResult(tables);
+            return new OkObjectResult(_tableConverter.TablesToTableDtos(tables));
         }
 
         public async Task<IActionResult> GetTableByIdAsync(Guid tableId)
@@ -51,7 +51,7 @@ namespace TableBooking.Api.Services
             var table = await _unitOfWork.TableRepository.GetByIdAsync(tableId);
             if (table == null)
                 return new BadRequestObjectResult($"Can't find table with {tableId}");
-            return new OkObjectResult(table);
+            return new OkObjectResult(_tableConverter.TableToTableDto(table));
         }
         
         public async Task<Table> GetTableObjectByIdAsync(Guid tableId)
@@ -69,11 +69,17 @@ namespace TableBooking.Api.Services
             return new OkObjectResult(_tableConverter.TablesToTableDtos(tables));
         }
 
-        public async Task<IActionResult> UpdateTableAsync(TableDto dto)
+        public async Task<IActionResult> UpdateTableAsync(TableDto dto, Guid tableId)
         {
+            var updateTable = await _unitOfWork.TableRepository.GetByIdAsync(tableId);
+            if (updateTable == null)
+                return new BadRequestObjectResult($"Booking with id {tableId} doesn't exist.");
+
             var table = new Table
             { 
-                NumberOfSeats = dto.NumberOfSeats  
+                Id = updateTable.Id,
+                NumberOfSeats = dto.NumberOfSeats,
+                RestaurantId = dto.RestaurantId
             };
             await _unitOfWork.TableRepository.Update(table);
             await _unitOfWork.SaveChangesAsync();

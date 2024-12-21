@@ -2,7 +2,7 @@
 
 namespace TableBooking.Model.Dtos.TableDtos
 {
-    public class TableDto : Entity
+    public class TableDto
     {
         public int NumberOfSeats { get; set; }
         public Guid RestaurantId { get; set; }
