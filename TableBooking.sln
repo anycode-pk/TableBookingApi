@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TableBooking.Api", "TableBooking\TableBooking.Api.csproj", "{4B7B965D-99E8-4CC4-AC67-57F4055E962C}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{415AFF54-C855-4B6A-A3D1-05B32100C08F}"
 	ProjectSection(SolutionItems) = preProject
 		.env = .env
@@ -19,16 +17,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TableBooking.IntegrationTes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TableBooking.Logic", "TableBooking.Logic\TableBooking.Logic.csproj", "{11C2A605-A9FE-4C1F-AEA6-42598F8A396A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableBooking.Api", "TableBooking.Api\TableBooking.Api.csproj", "{8D1F5E3B-B4D4-4222-8BB2-DAAD8180425C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4B7B965D-99E8-4CC4-AC67-57F4055E962C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4B7B965D-99E8-4CC4-AC67-57F4055E962C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4B7B965D-99E8-4CC4-AC67-57F4055E962C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4B7B965D-99E8-4CC4-AC67-57F4055E962C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D78B787F-4760-4AB1-B369-DBEBEFD632DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D78B787F-4760-4AB1-B369-DBEBEFD632DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D78B787F-4760-4AB1-B369-DBEBEFD632DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -41,6 +37,10 @@ Global
 		{11C2A605-A9FE-4C1F-AEA6-42598F8A396A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11C2A605-A9FE-4C1F-AEA6-42598F8A396A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11C2A605-A9FE-4C1F-AEA6-42598F8A396A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D1F5E3B-B4D4-4222-8BB2-DAAD8180425C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D1F5E3B-B4D4-4222-8BB2-DAAD8180425C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D1F5E3B-B4D4-4222-8BB2-DAAD8180425C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D1F5E3B-B4D4-4222-8BB2-DAAD8180425C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
