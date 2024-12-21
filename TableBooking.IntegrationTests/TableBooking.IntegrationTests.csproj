@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TableBooking.Api\TableBooking.Api.csproj" />
     <ProjectReference Include="..\TableBooking\TableBooking.Api.csproj" />
   </ItemGroup>
 
