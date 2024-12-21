@@ -16,18 +16,16 @@ services:
     volumes: 
       - ./TableBooking.Model/Seed/seed.sql:/docker-entrypoint-initdb.d/seed.sql
 
-  # api:
-  #   build:
-  #       context: .
-  #       dockerfile: ./TableBooking/Dockerfile
-  #   ports:
-  #     - "7012:7012"
-  #   depends_on:
-  #     - db
-  #   #     condition: service_healthy
-  #   # command: ["python", "app.py"]
-  #   networks:
-  #       - table_booking_network
+  api:
+   build:
+       context: .
+       dockerfile: ./TableBooking/Dockerfile
+   ports:
+     - "7012:7012"
+   depends_on:
+     - db
+   networks:
+       - table_booking_network
   
 networks:
   table_booking_network:
