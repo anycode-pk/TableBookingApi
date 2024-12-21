@@ -56,4 +56,10 @@
 	<ItemGroup>
 		<InternalsVisibleTo Include="TableBooking.IntegrationTests" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="..\.dockerignore">
+	    <Link>.dockerignore</Link>
+	  </Content>
+	</ItemGroup>
 </Project>

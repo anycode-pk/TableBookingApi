@@ -71,6 +71,30 @@ builder.Host.UseSerilog((builderContext, loggerConfiguration) =>
 builder.Services.AddDbContext<TableBookingContext>(o =>
 {
     var connectionString = builder.Configuration.GetConnectionString("TableBookingConnStr");
+    
+    var dbHost = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DB_HOST")) 
+        ? Environment.GetEnvironmentVariable("DB_HOST") 
+        : "localhost";
+
+    var dbPort = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DB_PORT")) 
+        ? Environment.GetEnvironmentVariable("DB_PORT") 
+        : "5432";
+
+    var dbName = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("POSTGRES_DB")) 
+        ? Environment.GetEnvironmentVariable("POSTGRES_DB") 
+        : "TableBookingDB";
+
+    var dbUser = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("POSTGRES_USER")) 
+        ? Environment.GetEnvironmentVariable("POSTGRES_USER") 
+        : "TableBookingUser";
+
+    var dbPassword = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")) 
+        ? Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") 
+        : "postgres";
+
+
+    connectionString = $"Host={dbHost};Port={dbPort};Database={dbName};Username={dbUser};Password={dbPassword}";
+    
     o.UseNpgsql(connectionString);
 });
 builder.Services.AddHostedService<DbInitializerService>();
