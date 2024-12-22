@@ -20,7 +20,9 @@ RUN dotnet publish "TableBooking.Api.csproj" -c $BUILD_CONFIGURATION -o /app/pub
 
 FROM publish AS dbupdate
 WORKDIR /app/publish
-RUN dotnet ef database update --no-build
+RUN dotnet tool install --global dotnet-ef \
+    && export PATH="$PATH:/root/.dotnet/tools" \
+    && dotnet ef database update --no-build
 
 FROM base AS final
 WORKDIR /app
