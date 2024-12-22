@@ -14,6 +14,7 @@ RUN dotnet tool install --global dotnet-ef --version 8.0.0
 
 FROM build AS publish
 RUN dotnet publish "TableBooking.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet ef database update
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
