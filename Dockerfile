@@ -10,11 +10,12 @@ COPY . .
 WORKDIR "/src/TableBooking.Api"
 RUN dotnet build "TableBooking.Api.csproj" -c Release -o /app/build
 
-RUN dotnet tool install --global dotnet-ef --version 8.0.0
+RUN dotnet tool install --global dotnet-ef --version 8.0.0 \
+    && export PATH="$PATH:/root/.dotnet/tools" \
+    && dotnet ef database update
 
 FROM build AS publish
 RUN dotnet publish "TableBooking.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
-RUN dotnet ef database update
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS final
 WORKDIR /app
