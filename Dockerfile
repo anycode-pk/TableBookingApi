@@ -1,6 +1,4 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-EXPOSE 80
-EXPOSE 443
 WORKDIR /src
 
 COPY ["TableBooking.Api/TableBooking.Api.csproj", "TableBooking.Api/"]
@@ -18,4 +16,6 @@ RUN dotnet publish "TableBooking.Api.csproj" -c Release -o /app/publish /p:UseAp
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+EXPOSE 80
+EXPOSE 443
 ENTRYPOINT ["dotnet", "TableBooking.Api.dll"]
