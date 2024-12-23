@@ -1,4 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+EXPOSE 80
+EXPOSE 443
 WORKDIR /src
 
 COPY ["TableBooking.Api/TableBooking.Api.csproj", "TableBooking.Api/"]
