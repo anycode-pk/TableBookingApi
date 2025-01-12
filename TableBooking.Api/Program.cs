@@ -181,24 +181,3 @@ app.MapControllers();
 app.Run();
 
 public partial class Program { }
-
-public static class MigrationExtensions
-{
-    public static void ApplyMigrations(this IHost host)
-    {
-        using var scope = host.Services.CreateScope();
-        var services = scope.ServiceProvider;
-
-        try
-        {
-            var context = services.GetRequiredService<TableBookingContext>();
-            context.Database.Migrate();
-            Console.WriteLine("Database migrations applied successfully.");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"An error occurred while applying migrations: {ex.Message}");
-            throw;
-        }
-    }
-}
