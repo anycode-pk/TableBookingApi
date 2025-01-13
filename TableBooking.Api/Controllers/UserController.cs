@@ -47,10 +47,16 @@ namespace TableBooking.Controllers
         
         [HttpGet]
         [Authorize]
-        [Route("{id:guid}")]
-        public async Task<AppUserDto> GetUserInfo(Guid id)
+        public async Task<AppUserDto> GetUserInfo()
         {
-            return await _userService.GetUserInfo(id, CancellationToken.None);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+            if (userId == null)
+            {
+                throw new UnauthorizedAccessException("User is not authenticated.");
+            }
+
+            return await _userService.GetUserInfo(Guid.Parse(userId), CancellationToken.None);
         }
     }
 }
