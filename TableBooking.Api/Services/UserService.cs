@@ -12,22 +12,28 @@ using TableBooking.Model.Dtos;
 
 namespace TableBooking.Api.Services
 {
+    using Microsoft.EntityFrameworkCore;
+    using Model;
+
     public class UserService : IUserService
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly string userRoleId = "5ad1268f-f61f-4b1c-b690-cbf8c3d35019";
+        private readonly TableBookingContext _dbContext;
 
         public UserService(
             UserManager<AppUser> userManager,
             RoleManager<AppRole> roleManager,
             IConfiguration configuration,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, 
+            TableBookingContext dbContext)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _dbContext = dbContext;
         }
 
         public async Task<IActionResult> Register(UserRegisterDto dto)
@@ -80,6 +86,15 @@ namespace TableBooking.Api.Services
                 token = new JwtSecurityTokenHandler().WriteToken(token),
                 expiration = token.ValidTo
             });
+        }
+
+        public async Task<AppUserDto> GetUserInfo(Guid id, CancellationToken cancellationToken)
+        {
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+
+            var userDto = user?.ToDto();
+
+            return userDto ?? new();
         }
 
         private JwtSecurityToken GetToken(List<Claim> authClaims)
