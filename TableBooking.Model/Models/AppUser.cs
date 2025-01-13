@@ -16,7 +16,9 @@ public class AppUser : IdentityUser<Guid>
     {
         return new AppUserDto
         {
-            Bookings = Bookings
+            Bookings = Bookings,
+            Email = this.Email,
+            Username = this.UserName
         };
     }
 }

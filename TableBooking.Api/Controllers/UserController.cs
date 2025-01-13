@@ -6,6 +6,8 @@ using TableBooking.Model.Dtos.UserDtos;
 
 namespace TableBooking.Controllers
 {
+    using Model.Models;
+
     [Route("[controller]")]
     [ApiController]
     [Authorize]
@@ -43,13 +45,12 @@ namespace TableBooking.Controllers
             throw new NotImplementedException();
         }
         
-        // TODO: endpoint user info.
         [HttpGet]
         [Authorize]
         [Route("{id:guid}")]
-        public async Task<IActionResult> GetUserInfo(Guid id)
+        public async Task<AppUserDto> GetUserInfo(Guid id)
         {
-            return await _userService.GetUserInfo(id);
+            return await _userService.GetUserInfo(id, CancellationToken.None);
         }
     }
 }

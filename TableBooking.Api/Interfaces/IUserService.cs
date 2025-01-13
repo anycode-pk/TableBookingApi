@@ -10,8 +10,8 @@ namespace TableBooking.Api.Interfaces
     public interface IUserService
     {
         public Task<IActionResult> Register(UserRegisterDto userRegisterDTO);
-        public Task<IActionResult> Login(UserLoginDto userLoginDTO, CancellationToken cancellationToken);
-        public Task<AppUser> GetUserInfo(Guid id);
+        public Task<IActionResult> Login(UserLoginDto userLoginDTO);
+        public Task<AppUserDto> GetUserInfo(Guid id, CancellationToken cancellationToken);
         public Task SeedRoles();
     }
 }
