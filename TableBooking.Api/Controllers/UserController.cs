@@ -35,10 +35,21 @@ namespace TableBooking.Controllers
         }
         
         [HttpPost]
+        [Authorize]
         [Route("logout")]
         public async Task<IActionResult> Logout()
         {
+            // TODO: implement logout
             throw new NotImplementedException();
+        }
+        
+        // TODO: endpoint user info.
+        [HttpGet]
+        [Authorize]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> GetUserInfo(Guid id)
+        {
+            return await _userService.GetUserInfo(id);
         }
     }
 }
