@@ -18,5 +18,12 @@ namespace TableBooking.Logic.Repositories
                 .FilterByPrice(price)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Guid>> GetAllRestaurantIds()
+        {
+            return await _objectSet
+                .Select(r => r.Id)
+                .ToListAsync();
+        }
     }
 }
