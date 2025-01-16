@@ -20,3 +20,14 @@ In order to get the application running locally along with seeded database perfo
 docker compose up db
 ```
 4. Run the api locally (button)
+
+## Migrations
+
+Add migration:
+```bash
+dotnet ef migrations add {MigrationName} --project "{PATH_TO_PROJECT}\TableBooking\TableBooking.Model\TableBooking.Model.csproj" --startup-project "{PATH_TO_PROJECT}\TableBooking\TableBooking.Api\TableBooking.Api.csproj" 
+```
+
+```bash
+dotnet ef database update --project "{PATH_TO_PROJECT}\TableBooking\TableBooking.Model\TableBooking.Model.csproj" --startup-project "{PATH_TO_PROJECT}\TableBooking\TableBooking.Api\TableBooking.Api.csproj"
+```

@@ -10,7 +10,7 @@ namespace TableBooking.Controllers
     [ApiController]
     public class RestaurantController : ControllerBase
     {
-        private IRestaurantService _restaurantService;
+        private readonly IRestaurantService _restaurantService;
 
         public RestaurantController(IRestaurantService restaurantService)
         {
@@ -18,9 +18,9 @@ namespace TableBooking.Controllers
         }
 
         [HttpGet("GetAllRestaurants")]
-        public async Task<IActionResult> GetRestaurants([FromQuery]string? restuarantName, [FromQuery]Price? price)
+        public async Task<IActionResult> GetRestaurants([FromQuery]string? restaurantName, [FromQuery]Price? price)
         {
-            return await _restaurantService.GetAllRestaurantsAsync(restuarantName, price);
+            return await _restaurantService.GetAllRestaurantsAsync(restaurantName, price);
         }
 
         [HttpGet("GetRestaurantById/{id}")]

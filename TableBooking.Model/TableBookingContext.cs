@@ -9,12 +9,21 @@ namespace TableBooking.Model
         public TableBookingContext() { }
         public TableBookingContext(DbContextOptions<TableBookingContext> options) : base(options) { }
 
-        // This code is typically used when you have custom entity configurations or specific requirements for how your entities are mapped to the database:
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    base.OnModelCreating(modelBuilder);
-        //    modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        //}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Restaurant>(entity =>
+            {
+                const string defaultImage = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png";
+                
+                entity.Property(r => r.PrimaryImageURL).IsRequired()
+                    .HasDefaultValue(defaultImage);
+
+                entity.Property(r => r.SecondaryImageURL).IsRequired()
+                    .HasDefaultValue(defaultImage);
+            });
+
+            base.OnModelCreating(modelBuilder);
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

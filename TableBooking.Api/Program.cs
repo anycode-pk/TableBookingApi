@@ -78,7 +78,7 @@ builder.Services.AddDbContext<TableBookingContext>(o =>
 
     var dbPort = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DB_PORT")) 
         ? Environment.GetEnvironmentVariable("DB_PORT") 
-        : "5432";
+        : "5433";
 
     var dbName = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("POSTGRES_DB")) 
         ? Environment.GetEnvironmentVariable("POSTGRES_DB") 

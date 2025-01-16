@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS "Restaurants" (
     "Location" VARCHAR(255) NOT NULL,
     "OpenTime" TIMESTAMP NOT NULL,
     "Type" VARCHAR(255),
-    "PrimaryImageURL" TEXT,
-    "SecondaryImageURL" TEXT,
+    "PrimaryImageURL" TEXT NOT NULL,
+    "SecondaryImageURL" TEXT NOT NULL,
     "Price" INT,
     "Rating" DOUBLE PRECISION,
     "Phone" VARCHAR(20)
@@ -75,15 +75,15 @@ CREATE TABLE IF NOT EXISTS "Ratings" (
 
 -- seed Restaurants records
 INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageURL","SecondaryImageURL", "Price", "Rating", "Phone")
-VALUES ('a7f7be1c-adae-40df-b315-f772857936d5', 'UNO', '2023-10-26 21:00:00', 'Description of UNO.', 'Śniadeckich 10b/2', '2023-10-26 12:00:00', 'Pizza', null,null, 1, 5, 123-456-789);
+VALUES ('a7f7be1c-adae-40df-b315-f772857936d5', 'UNO', '2023-10-26 21:00:00', 'Description of UNO.', 'Śniadeckich 10b/2', '2023-10-26 12:00:00', 'Pizza', "","", 1, 5, 123-456-789);
 INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageURL","SecondaryImageURL", "Price", "Rating", "Phone")
-VALUES ('bfa8ba14-e4ef-4f13-a4a9-4b1d29d2f8ba','Mozaika', '2023-10-26 22:15:00', 'Description of Mozaika restaurant.', 'Ratuszowska 10', '2023-10-26 15:00:00', 'Generic restaurant', null,null, 3, 4, 41-334-219);
+VALUES ('bfa8ba14-e4ef-4f13-a4a9-4b1d29d2f8ba','Mozaika', '2023-10-26 22:15:00', 'Description of Mozaika restaurant.', 'Ratuszowska 10', '2023-10-26 15:00:00', 'Generic restaurant', "","", 3, 4, 41-334-219);
 INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageURL","SecondaryImageURL", "Price", "Rating", "Phone")
-VALUES ('a50c6651-c1b4-497f-b8db-e101da537692','NieNaŻarty', '2023-10-27 00:15:00', 'Description of NieNaŻarty.', 'Zwycięstwa 20/2', '2023-10-26 13:30:00', 'Burger', null, null, 3, 3, 432-123-543);
+VALUES ('a50c6651-c1b4-497f-b8db-e101da537692','NieNaŻarty', '2023-10-27 00:15:00', 'Description of NieNaŻarty.', 'Zwycięstwa 20/2', '2023-10-26 13:30:00', 'Burger', "","", 3, 3, 432-123-543);
 INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageURL","SecondaryImageURL", "Price", "Rating", "Phone")
-VALUES ('207989de-6d2b-416a-9634-c45870cd9f4f','Heaven', '2023-10-26 20:00:00', 'Description of Heaven.', 'Staszewskiego 2', '2023-10-26 12:00:00', 'Pizza', null,null, 2, 2, 164-231-324);
+VALUES ('207989de-6d2b-416a-9634-c45870cd9f4f','Heaven', '2023-10-26 20:00:00', 'Description of Heaven.', 'Staszewskiego 2', '2023-10-26 12:00:00', 'Pizza', "","", 2, 2, 164-231-324);
 INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageURL","SecondaryImageURL", "Price", "Rating", "Phone")
-VALUES ('123e1a20-6801-4a5e-a327-ecc5cb2bd906','Green', '2023-10-26 24:00:00', 'Description of Green restaurant.', 'Fałata 5/5', '2023-10-26 14:30:00', 'Generic restaurant', null,null, 2, 1, 357-877-667);
+VALUES ('123e1a20-6801-4a5e-a327-ecc5cb2bd906','Green', '2023-10-26 24:00:00', 'Description of Green restaurant.', 'Fałata 5/5', '2023-10-26 14:30:00', 'Generic restaurant', "","", 2, 1, 357-877-667);
 
 -- seed Table records
 INSERT INTO "Tables" ("Id","NumberOfSeats", "RestaurantId") VALUES ('123e1a20-6801-4a5e-a327-ecc5cb2bd906',1, '123e1a20-6801-4a5e-a327-ecc5cb2bd906');
