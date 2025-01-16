@@ -27,7 +27,9 @@ namespace TableBooking.Api.Services
                 Rating = 0,
                 Price = dto.Price,
                 OpenTime = dto.OpenTime,
-                Type = dto.Type
+                Type = dto.Type,
+                PrimaryImageURL = dto.PrimaryImageURL,
+                SecondaryImageURL = dto.SecondaryImageURL
             };
             await _unitOfWork.RestaurantRepository.InsertAsync(restaurant);
             await _unitOfWork.SaveChangesAsync();
@@ -73,8 +75,8 @@ namespace TableBooking.Api.Services
                 Name = dto.Name,
                 Phone = dto.Phone,
                 Price = dto.Price,
-                PrimaryImageURL = dto.ImageURL,
-                SecondaryImageURL = dto.ImageURL,
+                PrimaryImageURL = dto.PrimaryImageURL,
+                SecondaryImageURL = dto.SecondaryImageURL,
                 Tables = restaurant.Tables,
                 Type = dto.Type,
                 Rating = restaurant.Rating,

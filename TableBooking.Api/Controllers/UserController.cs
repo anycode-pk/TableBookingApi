@@ -31,7 +31,7 @@ namespace TableBooking.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDTO)
+        public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDTO) 
         {
             return await _userService.Login(userLoginDTO);
         }

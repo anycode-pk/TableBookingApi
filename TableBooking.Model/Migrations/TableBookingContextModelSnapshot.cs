@@ -17,7 +17,7 @@ namespace TableBooking.Model.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.15")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -201,14 +201,20 @@ namespace TableBooking.Model.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("PrimaryImageURL")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png");
 
                     b.Property<double>("Rating")
                         .HasPrecision(1, 1)
                         .HasColumnType("double precision");
 
                     b.Property<string>("SecondaryImageURL")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -285,11 +291,13 @@ namespace TableBooking.Model.Migrations
 
             modelBuilder.Entity("TableBooking.Model.Models.Table", b =>
                 {
-                    b.HasOne("TableBooking.Model.Models.Restaurant", null)
+                    b.HasOne("TableBooking.Model.Models.Restaurant", "Restaurant")
                         .WithMany("Tables")
                         .HasForeignKey("RestaurantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Restaurant");
                 });
 
             modelBuilder.Entity("TableBooking.Model.Models.AppUser", b =>

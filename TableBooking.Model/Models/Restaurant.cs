@@ -2,6 +2,8 @@
 
 namespace TableBooking.Model.Models
 {
+    using System.ComponentModel.DataAnnotations;
+
     public enum Price
     {
         LOW,
@@ -15,8 +17,13 @@ namespace TableBooking.Model.Models
         public string? Description { get; set; }
         public string Location { get; set; }
         public string Phone { get; set; }
-        public string? PrimaryImageURL { get; set; }
-        public string? SecondaryImageURL { get; set; }
+
+        [Required]
+        public string PrimaryImageURL { get; set; } =
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png";
+        [Required]
+        public string SecondaryImageURL { get; set; } = 
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png";
         [Precision(1,1)]
         public double Rating { get; set; }
         public Price Price { get; set; }
