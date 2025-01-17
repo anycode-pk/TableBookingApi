@@ -31,3 +31,9 @@ dotnet ef migrations add {MigrationName} --project "{PATH_TO_PROJECT}\TableBooki
 ```bash
 dotnet ef database update --project "{PATH_TO_PROJECT}\TableBooking\TableBooking.Model\TableBooking.Model.csproj" --startup-project "{PATH_TO_PROJECT}\TableBooking\TableBooking.Api\TableBooking.Api.csproj"
 ```
+
+## Migrations deployment
+Apply migrations to server by generating SQL script
+```bash
+dotnet ef migrations script --project "{PATH_TO_PROJECT}\TableBooking\TableBooking.Model\TableBooking.Model.csproj" --startup-project "{PATH_TO_PROJECT}\TableBooking\TableBooking.Api\TableBooking.Api.csproj" 
+```

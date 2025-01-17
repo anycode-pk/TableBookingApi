@@ -1,10 +1,10 @@
-﻿using TableBooking.Model.Models;
+﻿namespace TableBooking.Logic.Interfaces;
 
-namespace TableBooking.Logic.Interfaces
+using Model.Models;
+
+public interface IRestaurantRepository : IGenericRepository<Restaurant>
 {
-    public interface IRestaurantRepository : IGenericRepository<Restaurant>
-    {
-        public Task<IEnumerable<Restaurant>> GetRestaurantsAsync(string? restaurantName, Price? price);
-        public Task<IEnumerable<Guid>> GetAllRestaurantIds();
-    }
+    public Task<IEnumerable<Restaurant>> GetRestaurantsAsync(string? restaurantName, Price? price);
+    public Task<Restaurant> GetRestaurantByTableIdAsync(Guid tableId);
+    public Task<IEnumerable<Guid>> GetAllRestaurantIds();
 }

@@ -1,13 +1,12 @@
-﻿using TableBooking.Model.Dtos.RatingDtos;
-using TableBooking.Model.Dtos.TableDtos;
-using TableBooking.Model.Models;
+﻿namespace TableBooking.Logic.Converters.TableConverters;
 
-namespace TableBooking.Logic.Converters.TableConverters
+using Model.Dtos.TableDtos;
+using Model.Models;
+
+public class TableConverter : ITableConverter
 {
-    public class TableConverter : ITableConverter
+    public IEnumerable<TableDto> TablesToTableDtos(IEnumerable<Table> tables)
     {
-        public IEnumerable<TableDto> TablesToTableDtos(IEnumerable<Table> tables)
-        {
             var tablesDto = new List<TableDto>();
             foreach (var table in tables)
             {
@@ -15,13 +14,12 @@ namespace TableBooking.Logic.Converters.TableConverters
             }
             return tablesDto;
         }
-        public TableDto TableToTableDto(Table table)
-        {
+    public TableDto TableToTableDto(Table table)
+    {
             return new TableDto
             {
                 RestaurantId = table.RestaurantId,
                 NumberOfSeats = table.NumberOfSeats,
             };
         }
-    }
 }

@@ -1,11 +1,10 @@
-﻿using TableBooking.Model.Dtos.RatingDtos;
-using TableBooking.Model.Models;
+﻿namespace TableBooking.Logic.Converters.RatingConverters;
 
-namespace TableBooking.Logic.Converters.RatingConverters
+using Model.Dtos.RatingDtos;
+using Model.Models;
+
+public interface IRatingConverter
 {
-    public interface IRatingConverter
-    {
-        IEnumerable<RatingDto> RatingsToRatingDtos(IEnumerable<Rating> ratings);
-        public RatingDto RatingToRatingDto(Rating rating);
-    }
+    IEnumerable<RatingDto> RatingsToRatingDtos(IEnumerable<Rating> ratings);
+    public RatingDto RatingToRatingDto(Rating rating);
 }

@@ -74,16 +74,16 @@ CREATE TABLE IF NOT EXISTS "Ratings" (
 );
 
 -- seed Restaurants records
-INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageURL","SecondaryImageURL", "Price", "Rating", "Phone")
-VALUES ('a7f7be1c-adae-40df-b315-f772857936d5', 'UNO', '2023-10-26 21:00:00', 'Description of UNO.', 'Śniadeckich 10b/2', '2023-10-26 12:00:00', 'Pizza', "","", 1, 5, 123-456-789);
-INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageURL","SecondaryImageURL", "Price", "Rating", "Phone")
-VALUES ('bfa8ba14-e4ef-4f13-a4a9-4b1d29d2f8ba','Mozaika', '2023-10-26 22:15:00', 'Description of Mozaika restaurant.', 'Ratuszowska 10', '2023-10-26 15:00:00', 'Generic restaurant', "","", 3, 4, 41-334-219);
-INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageURL","SecondaryImageURL", "Price", "Rating", "Phone")
-VALUES ('a50c6651-c1b4-497f-b8db-e101da537692','NieNaŻarty', '2023-10-27 00:15:00', 'Description of NieNaŻarty.', 'Zwycięstwa 20/2', '2023-10-26 13:30:00', 'Burger', "","", 3, 3, 432-123-543);
-INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageURL","SecondaryImageURL", "Price", "Rating", "Phone")
-VALUES ('207989de-6d2b-416a-9634-c45870cd9f4f','Heaven', '2023-10-26 20:00:00', 'Description of Heaven.', 'Staszewskiego 2', '2023-10-26 12:00:00', 'Pizza', "","", 2, 2, 164-231-324);
-INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageURL","SecondaryImageURL", "Price", "Rating", "Phone")
-VALUES ('123e1a20-6801-4a5e-a327-ecc5cb2bd906','Green', '2023-10-26 24:00:00', 'Description of Green restaurant.', 'Fałata 5/5', '2023-10-26 14:30:00', 'Generic restaurant', "","", 2, 1, 357-877-667);
+INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageUrl","SecondaryImageUrl", "Price", "Rating", "Phone")
+VALUES ('a7f7be1c-adae-40df-b315-f772857936d5', 'UNO', '2023-10-26 21:00:00', 'Description of UNO.', 'Śniadeckich 10b/2', '2023-10-26 12:00:00', 'Pizza', 'https://placehold.co/300x200?text=Restaurant','https://placehold.co/300x200?text=Restaurant', 1, 5, 123-456-789);
+INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageUrl","SecondaryImageUrl", "Price", "Rating", "Phone")
+VALUES ('bfa8ba14-e4ef-4f13-a4a9-4b1d29d2f8ba','Mozaika', '2023-10-26 22:15:00', 'Description of Mozaika restaurant.', 'Ratuszowska 10', '2023-10-26 15:00:00', 'Generic restaurant', 'https://placehold.co/300x200?text=Restaurant','https://placehold.co/300x200?text=Restaurant', 3, 4, 41-334-219);
+INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageUrl","SecondaryImageUrl", "Price", "Rating", "Phone")
+VALUES ('a50c6651-c1b4-497f-b8db-e101da537692','NieNaŻarty', '2023-10-27 00:15:00', 'Description of NieNaŻarty.', 'Zwycięstwa 20/2', '2023-10-26 13:30:00', 'Burger', 'https://placehold.co/300x200?text=Restaurant','https://placehold.co/300x200?text=Restaurant', 3, 3, 432-123-543);
+INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageUrl","SecondaryImageUrl", "Price", "Rating", "Phone")
+VALUES ('207989de-6d2b-416a-9634-c45870cd9f4f','Heaven', '2023-10-26 20:00:00', 'Description of Heaven.', 'Staszewskiego 2', '2023-10-26 12:00:00', 'Pizza', 'https://placehold.co/300x200?text=Restaurant','https://placehold.co/300x200?text=Restaurant', 2, 2, 164-231-324);
+INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageUrl","SecondaryImageUrl", "Price", "Rating", "Phone")
+VALUES ('123e1a20-6801-4a5e-a327-ecc5cb2bd906','Green', '2023-10-26 24:00:00', 'Description of Green restaurant.', 'Fałata 5/5', '2023-10-26 14:30:00', 'Generic restaurant', 'https://placehold.co/300x200?text=Restaurant','https://placehold.co/300x200?text=Restaurant', 2, 1, 357-877-667);
 
 -- seed Table records
 INSERT INTO "Tables" ("Id","NumberOfSeats", "RestaurantId") VALUES ('123e1a20-6801-4a5e-a327-ecc5cb2bd906',1, '123e1a20-6801-4a5e-a327-ecc5cb2bd906');
@@ -207,3 +207,7 @@ INSERT INTO "Ratings"(
 INSERT INTO "Ratings"(
 	"Id", "RatingStars", "NumberOfLikes", "Comment", "DateOfRating", "RestaurantId", "AppUserId")
 	VALUES ('1e84bcfc-7106-11ee-b962-0242ac120002', 2, 6, 'Mucha w zupie! Ochyda!', '2023-10-24 15:21:00', '123e1a20-6801-4a5e-a327-ecc5cb2bd906', '123663f0-08b1-4c52-afe4-1d446b11017f');
+
+-- seed RevokedTokens record for testing
+INSERT INTO "RevokedTokens" ("Id", "Token", "RevokedAt")
+VALUES ('d6d101b1-e37e-47ab-b9b9-5787f92510b6', 'some_token_string_here', '2025-01-17 22:00:00+00');

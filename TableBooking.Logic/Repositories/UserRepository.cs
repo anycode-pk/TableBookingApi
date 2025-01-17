@@ -1,24 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TableBooking.Logic.Interfaces;
-using TableBooking.Model;
-using TableBooking.Model.Models;
+﻿namespace TableBooking.Logic.Repositories;
 
-namespace TableBooking.Logic.Repositories
+using Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Model;
+using Model.Models;
+
+public class UserRepository : GenericRepository<AppUser>, IUserRepository
 {
-    public class UserRepository : GenericRepository<AppUser>, IUserRepository
+    public UserRepository(TableBookingContext context) : base(context)
     {
-        public UserRepository(TableBookingContext context) : base(context)
-        {
-        }
+    }
         
-        public async Task<IEnumerable<AppUser>> GetAllUsers()
-        {
-            return await _objectSet.Include(x => x.Bookings).ToListAsync();
-        }
+    public async Task<IEnumerable<AppUser>> GetAllUsers()
+    {
+        return await ObjectSet.Include(x => x.Bookings).ToListAsync();
+    }
 
-        public async Task<AppUser> GetUserById(Guid userId)
-        {
-            return await _objectSet.Include(x => x.Bookings).FirstOrDefaultAsync(x => x.Id == userId);
-        }
+    public async Task<AppUser> GetUserById(Guid userId)
+    {
+        return (await ObjectSet.Include(x => x.Bookings).FirstOrDefaultAsync(x => x.Id == userId))!;
     }
 }

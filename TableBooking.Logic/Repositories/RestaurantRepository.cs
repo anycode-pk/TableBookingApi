@@ -1,29 +1,31 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TableBooking.Logic.Extensions;
-using TableBooking.Logic.Interfaces;
-using TableBooking.Model;
-using TableBooking.Model.Models;
+﻿namespace TableBooking.Logic.Repositories;
 
-namespace TableBooking.Logic.Repositories
+using Extensions;
+using Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Model;
+using Model.Models;
+
+public class RestaurantRepository : GenericRepository<Restaurant>, IRestaurantRepository
 {
-    public class RestaurantRepository : GenericRepository<Restaurant>, IRestaurantRepository
+    public RestaurantRepository(TableBookingContext context) : base(context) { }
+    public async Task<IEnumerable<Restaurant>> GetRestaurantsAsync(string? restaurantName, Price? price)
     {
-        public RestaurantRepository(TableBookingContext context) : base(context)
-        {
-        }
-        public async Task<IEnumerable<Restaurant>> GetRestaurantsAsync(string? restaurantName, Price? price)
-        {
-            return await _objectSet
-                .FilterByName(restaurantName)
-                .FilterByPrice(price)
-                .ToListAsync();
-        }
+        return await ObjectSet
+            .FilterByName(restaurantName)
+            .FilterByPrice(price)
+            .ToListAsync();
+    }
 
-        public async Task<IEnumerable<Guid>> GetAllRestaurantIds()
-        {
-            return await _objectSet
-                .Select(r => r.Id)
-                .ToListAsync();
-        }
+    public async Task<Restaurant> GetRestaurantByTableIdAsync(Guid tableId)
+    {
+        return (await ObjectSet.FirstOrDefaultAsync(r => r.Tables.Any(t => t.Id == tableId)))!;
+    }
+
+    public async Task<IEnumerable<Guid>> GetAllRestaurantIds()
+    {
+        return await ObjectSet
+            .Select(r => r.Id)
+            .ToListAsync();
     }
 }

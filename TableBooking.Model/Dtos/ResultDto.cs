@@ -1,8 +1,7 @@
-﻿namespace TableBooking.Model.Dtos
+﻿namespace TableBooking.Model.Dtos;
+
+public class ResultDto
 {
-    public class ResultDto
-    {
-        public string? Status { get; set; }
-        public string? Message { get; set; }
-    }
+    public string? Status { get; set; }
+    public string? Message { get; set; }
 }

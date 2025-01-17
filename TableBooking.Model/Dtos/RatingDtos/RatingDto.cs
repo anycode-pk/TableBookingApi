@@ -1,15 +1,14 @@
-﻿using TableBooking.Model.Dtos.UserDtos;
+﻿namespace TableBooking.Model.Dtos.RatingDtos;
 
-namespace TableBooking.Model.Dtos.RatingDtos
+using UserDtos;
+
+public class RatingDto
 {
-    public class RatingDto
-    {
-        public Guid Id { get; set; }
-        public int RatingStars { get; set; }
-        public int NumberOfLikes { get; set; }
-        public string Comment { get; set; }
-        public DateTime DateOfRating { get; set; }
-        public Guid RestaurantId { get; set; }
-        public UserShortInfoDto User { get; set; }
-    }
+    public Guid Id { get; set; }
+    public int RatingStars { get; set; }
+    public int NumberOfLikes { get; set; }
+    public string Comment { get; set; } = string.Empty;
+    public DateTime DateOfRating { get; set; }
+    public Guid RestaurantId { get; set; }
+    public UserShortInfoDto User { get; set; } = new();
 }

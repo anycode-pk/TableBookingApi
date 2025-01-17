@@ -1,12 +1,12 @@
-﻿using TableBooking.Model.Dtos.TableDtos;
-using TableBooking.Model.Models;
+﻿namespace TableBooking.Logic.Converters.TableConverters;
 
-namespace TableBooking.Logic.Converters.TableConverters
-{
-    public class TableToGetConverter : ITableToGetConverter
-    { 
-        public IEnumerable<GetTablesDto> TablesToTableDtos(IEnumerable<Table> tables)
-        {
+using Model.Dtos.TableDtos;
+using Model.Models;
+
+public class TableToGetConverter : ITableToGetConverter
+{ 
+    public IEnumerable<GetTablesDto> TablesToTableDtos(IEnumerable<Table> tables)
+    {
             var tablesDto = new List<GetTablesDto>();
             foreach (var table in tables)
             {
@@ -15,8 +15,8 @@ namespace TableBooking.Logic.Converters.TableConverters
             return tablesDto;
         }
 
-        public GetTablesDto TableToTableDto(Table table)
-        {
+    public GetTablesDto TableToTableDto(Table table)
+    {
             return new GetTablesDto
             {
                 Id = table.Id,
@@ -25,5 +25,4 @@ namespace TableBooking.Logic.Converters.TableConverters
                 Bookings = table.Bookings
             };
         }
-    }
 }

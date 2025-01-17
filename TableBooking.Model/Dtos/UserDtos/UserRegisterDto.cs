@@ -1,17 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace TableBooking.Model.Dtos.UserDtos;
 
-namespace TableBooking.Model.Dtos.UserDtos
+using System.ComponentModel.DataAnnotations;
+
+public class UserRegisterDto
 {
-    public class UserRegisterDto
-    {
-        [Required(ErrorMessage = "User Name is required")]
-        public string? Username { get; set; }
+    [Required(ErrorMessage = "User Name is required")]
+    public string Username { get; set; } = string.Empty;
 
-        [EmailAddress]
-        [Required(ErrorMessage = "Email is required")]
-        public string? Email { get; set; }
+    [EmailAddress]
+    [Required(ErrorMessage = "Email is required")]
+    public string Email { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Password is required")]
-        public string? Password { get; set; }
-    }
+    [Required(ErrorMessage = "Password is required")]
+    public string Password { get; set; } = string.Empty;
 }
