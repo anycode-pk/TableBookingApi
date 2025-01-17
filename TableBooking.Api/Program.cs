@@ -23,7 +23,7 @@ using TableBooking.Model.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers() .AddJsonOptions(options =>
+builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
@@ -170,10 +170,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 app.UseSerilogRequestLogging();
-app.MapHealthChecks("/healthz"); //.RequireHost("*:5001").RequireAuthorization();
+app.MapHealthChecks("/healthz").RequireAuthorization();
 app.UseCors("cors");
 app.UseHttpsRedirection();
 app.UseAuthentication();

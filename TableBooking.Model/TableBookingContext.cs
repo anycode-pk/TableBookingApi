@@ -3,7 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 
-public class TableBookingContext : DbContext//IdentityDbContext<AppUser>
+public class TableBookingContext : DbContext
 {
     public TableBookingContext() { }
     public TableBookingContext(DbContextOptions<TableBookingContext> options) : base(options) { }

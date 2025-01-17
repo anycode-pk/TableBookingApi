@@ -28,6 +28,5 @@ public class DbInitializerService : BackgroundService
         {
             _logger.LogError("Failed within migration {Msg}: ", e);
         }
-
     }
 }
