@@ -20,5 +20,10 @@ namespace TableBooking.Logic.Repositories
         {
             return await _objectSet.FirstOrDefaultAsync(x => x.Id.Equals(bookingId) && x.AppUserId.Equals(userId));
         }
+
+        public async Task<IEnumerable<Booking>> GetBookingsByTableId(Guid tableId)
+        {
+            return await _objectSet.Where(b => b.TableId == tableId).ToListAsync();
+        }
     }
 }

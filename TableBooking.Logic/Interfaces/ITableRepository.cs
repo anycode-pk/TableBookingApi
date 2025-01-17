@@ -1,9 +1,9 @@
 ﻿using TableBooking.Model.Models;
 
-namespace TableBooking.Logic.Interfaces
+namespace TableBooking.Logic.Interfaces;
+
+public interface ITableRepository : IGenericRepository<Table>
 {
-    public interface ITableRepository : IGenericRepository<Table>
-    {
-        Task<IEnumerable<Table>> GetTablesByRestaurantIdAsync(Guid restaurantId);
-    }
+    Task<IEnumerable<Table>> GetTablesByRestaurantIdAsync(Guid restaurantId);
+    Task<Table> GetTableByTableIdAsync(Guid tableId);
 }

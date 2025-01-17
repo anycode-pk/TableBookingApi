@@ -13,9 +13,13 @@ namespace TableBooking.Logic.Repositories
         public async Task<IEnumerable<Table>> GetTablesByRestaurantIdAsync(Guid restaurantId)
         {
             return await _objectSet
-                .Include(x => x.Restaurant)
                 .Where(x => x.RestaurantId.Equals(restaurantId))
                 .ToListAsync();
+        }
+
+        public async Task<Table> GetTableByTableIdAsync(Guid tableId)
+        {
+            return (await _objectSet.FirstOrDefaultAsync(t => t.Id == tableId))!;
         }
     }
 }

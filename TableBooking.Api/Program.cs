@@ -18,10 +18,14 @@ using TableBooking.Logic.Converters.TableConverters;
 using TableBooking.Logic.Converters.RatingConverters;
 using TableBooking.Logic.Converters.UserConverters;
 using System.Security.Claims;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers() .AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});;
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -91,7 +95,6 @@ builder.Services.AddDbContext<TableBookingContext>(o =>
     var dbPassword = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")) 
         ? Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") 
         : "postgres";
-
 
     connectionString = $"Host={dbHost};Port={dbPort};Database={dbName};Username={dbUser};Password={dbPassword}";
     

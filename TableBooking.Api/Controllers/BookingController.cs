@@ -56,12 +56,12 @@ namespace TableBooking.Api.Controllers
             return await _bookingService.DeleteBookingAsync(id, userId);
         }
 
-        [HttpPost("CreateBooking/{restaurantId}")]
-        public async Task<IActionResult> CreateUserBooking([FromBody] CreateBookingDto bookingToCreateDto, Guid restaurantId)
+        [HttpPost("CreateBooking/{tableId}")]
+        public async Task<IActionResult> CreateUserBooking([FromBody] CreateBookingDto bookingToCreateDto, Guid tableId)
         {
             var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             
-            return await _bookingService.CreateBookingAsync(bookingToCreateDto, userId, restaurantId);
+            return await _bookingService.CreateBookingAsync(bookingToCreateDto, userId, tableId);
         }
 
         [HttpPut("UpdateBooking/{bookingId}")]

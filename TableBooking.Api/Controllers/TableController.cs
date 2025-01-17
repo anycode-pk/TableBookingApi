@@ -30,7 +30,7 @@ namespace TableBooking.Controllers
         [HttpGet("GetTableByRestaurant")]
         public async Task<IActionResult> GetTableByRestaurantId([FromQuery] Guid restaurantId)
         {
-            return await _tableService.GetTableByRestaurantAsync(restaurantId);
+            return await _tableService.GetTablesForRestaurantAsync(restaurantId);
         }
 
         [HttpPost("CreateTable")]
