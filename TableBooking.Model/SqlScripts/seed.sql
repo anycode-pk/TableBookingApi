@@ -207,3 +207,7 @@ INSERT INTO "Ratings"(
 INSERT INTO "Ratings"(
 	"Id", "RatingStars", "NumberOfLikes", "Comment", "DateOfRating", "RestaurantId", "AppUserId")
 	VALUES ('1e84bcfc-7106-11ee-b962-0242ac120002', 2, 6, 'Mucha w zupie! Ochyda!', '2023-10-24 15:21:00', '123e1a20-6801-4a5e-a327-ecc5cb2bd906', '123663f0-08b1-4c52-afe4-1d446b11017f');
+
+-- seed RevokedTokens record for testing
+INSERT INTO "RevokedTokens" ("Id", "Token", "RevokedAt")
+VALUES ('d6d101b1-e37e-47ab-b9b9-5787f92510b6', 'some_token_string_here', '2025-01-17 22:00:00+00');

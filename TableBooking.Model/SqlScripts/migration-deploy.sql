@@ -1,4 +1,5 @@
 -- Last time updated: 17.01.2025 
+-- dotnet ef migrations script --project "D:\repositories\TableBooking\TableBooking.Model\TableBooking.Model.csproj" --startup-project "D:\repositories\TableBooking\TableBooking.Api\TableBooking.Api.csproj"
 
 CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
                                                        "MigrationId" character varying(150) NOT NULL,
