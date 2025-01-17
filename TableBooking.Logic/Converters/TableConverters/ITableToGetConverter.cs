@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TableBooking.Model.Dtos.TableDtos;
-using TableBooking.Model.Models;
+﻿namespace TableBooking.Logic.Converters.TableConverters;
 
-namespace TableBooking.Logic.Converters.TableConverters
+using Model.Dtos.TableDtos;
+using Model.Models;
+
+public interface ITableToGetConverter
 {
-    public interface ITableToGetConverter
-    {
-        IEnumerable<GetTablesDto> TablesToTableDtos(IEnumerable<Table> tables);
-        public GetTablesDto TableToTableDto(Table table);
-    }
+    IEnumerable<GetTablesDto> TablesToTableDtos(IEnumerable<Table> tables);
+    public GetTablesDto TableToTableDto(Table table);
 }

@@ -1,12 +1,11 @@
-﻿using TableBooking.Model.Models;
+﻿namespace TableBooking.Model.Dtos.TableDtos;
 
-namespace TableBooking.Model.Dtos.TableDtos
+using Models;
+
+public class GetTablesDto
 {
-    public class GetTablesDto
-    {
-        public Guid Id { get; set; }
-        public int NumberOfSeats { get; set; }
-        public Guid RestaurantId { get; set; }
-        public IEnumerable<Booking>? Bookings { get; set; }
-    }
+    public Guid Id { get; set; }
+    public int NumberOfSeats { get; set; }
+    public Guid RestaurantId { get; set; }
+    public IEnumerable<Booking>? Bookings { get; set; }
 }

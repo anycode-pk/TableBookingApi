@@ -1,31 +1,31 @@
+using System.Security.Claims;
+using System.Text;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Text;
-using TableBooking.Model;
 using Serilog;
-using TableBooking.Logic.Interfaces;
-using TableBooking.Logic;
-using TableBooking.Api.Services;
 using TableBooking.Api.Configuration.DbSetup;
 using TableBooking.Api.Configuration.HealthCheck;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using TableBooking.Api.Interfaces;
-using TableBooking.Model.Models;
-using TableBooking.Logic.Converters.TableConverters;
+using TableBooking.Api.Services;
+using TableBooking.Logic;
 using TableBooking.Logic.Converters.RatingConverters;
+using TableBooking.Logic.Converters.TableConverters;
 using TableBooking.Logic.Converters.UserConverters;
-using System.Security.Claims;
-using System.Text.Json.Serialization;
+using TableBooking.Logic.Interfaces;
+using TableBooking.Model;
+using TableBooking.Model.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers() .AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-});;
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -42,7 +42,7 @@ builder.Services.AddSwaggerGen(c =>
         Name = "Authorization",
         Scheme = "Bearer",
         BearerFormat = "JWT",
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Type = SecuritySchemeType.Http,
     });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement {
                 {
@@ -131,7 +131,7 @@ builder.Services.AddAuthentication(options =>
 {
     options.SaveToken = true;
     options.RequireHttpsMetadata = false;
-    options.TokenValidationParameters = new TokenValidationParameters()
+    options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
         ValidateAudience = true,
@@ -140,7 +140,7 @@ builder.Services.AddAuthentication(options =>
 
         ValidAudience = builder.Configuration["JWT:ValidAudience"],
         ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"] ?? string.Empty))
     };
 });
 

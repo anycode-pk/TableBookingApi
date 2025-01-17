@@ -1,23 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿namespace TableBooking.IntegrationTests.Controllers;
+
+using Microsoft.AspNetCore.Mvc.Testing;
+using Model.Models;
 using Newtonsoft.Json;
-using TableBooking.Model.Models;
 
-namespace TableBooking.IntegrationTests.Controllers
+public class RestaurantControllerTests : IClassFixture<WebApplicationFactory<Program>>
 {
+    private readonly WebApplicationFactory<Program> _factory;
 
-    public class RestaurantControllerTests : IClassFixture<WebApplicationFactory<Program>>
+    public RestaurantControllerTests(WebApplicationFactory<Program> factory)
     {
-        private readonly WebApplicationFactory<Program> _factory;
-
-        public RestaurantControllerTests(WebApplicationFactory<Program> factory)
-        {
             _factory = factory;
         }
 
-        [Theory]
-        [InlineData(1)]
-        public async Task GetRestaurantById_WhenCalled_ReturnRestaurant(int id)
-        {
+    [Theory]
+    [InlineData(1)]
+    public async Task GetRestaurantById_WhenCalled_ReturnRestaurant(int id)
+    {
             var client = _factory.CreateClient();
 
             var response = await client.GetAsync($"restaurant/{id}");
@@ -28,6 +27,4 @@ namespace TableBooking.IntegrationTests.Controllers
 
             Assert.NotNull(restaurant);
         }
-    }
 }
-

@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TableBooking.Api.Interfaces;
-using TableBooking.Logic.Interfaces;
-using TableBooking.Model.Dtos.BookingDtos;
-using TableBooking.Model.Models;
+﻿namespace TableBooking.Api.Services;
 
-namespace TableBooking.Api.Services;
+using Interfaces;
+using Logic.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Model.Dtos.BookingDtos;
+using Model.Models;
 
 public class BookingService : IBookingService
 {
@@ -53,34 +53,32 @@ public class BookingService : IBookingService
 
         await _unitOfWork.BookingRepository.Delete(booking.Id);
         await _unitOfWork.SaveChangesAsync();
+        
         return new NoContentResult();
     }
 
     public async Task<IActionResult> GetBookingByIdAsync(Guid bookingId, Guid userId)
     {
-        if (bookingId != null)
-        {
-            var booking = await _unitOfWork.BookingRepository.GetBookingByIdForSpecificUserAsync(bookingId, userId);
+        
+        var booking = await _unitOfWork.BookingRepository.GetBookingByIdForSpecificUserAsync(bookingId, userId);
 
-            if (booking == null)
-                return new BadRequestObjectResult("Bad request: no bookings");
-            var bookingDto = new BookingDto
-            {
-                Id = booking.Id,
-                Date = booking.Date,
-                DurationInMinutes = booking.DurationInMinutes,
-                AmountOfPeople = booking.AmountOfPeople,
-                AppUserId = userId
-            };
-            return new OkObjectResult(bookingDto);
-        }
-        return new BadRequestObjectResult("Bad request: no booking id");
+        if (booking == null)
+            return new BadRequestObjectResult("Bad request: no bookings");
+        var bookingDto = new BookingDto
+        {
+            Id = booking.Id,
+            Date = booking.Date,
+            DurationInMinutes = booking.DurationInMinutes,
+            AmountOfPeople = booking.AmountOfPeople,
+            AppUserId = userId
+        };
+        return new OkObjectResult(bookingDto);
     }
 
     public async Task<IActionResult> GetAllBookings(Guid userId)
     {
         var bookings = await _unitOfWork.BookingRepository.GetAllBookingsForSpecificUserAsync(userId);
-        if (bookings == null) return new BadRequestObjectResult("No bookings found");
+        
         return new OkObjectResult(bookings);
     }
 

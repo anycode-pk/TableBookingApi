@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TableBooking.Model.Dtos.RestaurantDtos;
-using TableBooking.Model.Models;
+﻿namespace TableBooking.Api.Interfaces;
 
-namespace TableBooking.Api.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Model.Dtos.RestaurantDtos;
+using Model.Models;
 
 public interface IRestaurantService
 {

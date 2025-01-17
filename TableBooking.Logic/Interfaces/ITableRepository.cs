@@ -1,6 +1,6 @@
-﻿using TableBooking.Model.Models;
+﻿namespace TableBooking.Logic.Interfaces;
 
-namespace TableBooking.Logic.Interfaces;
+using Model.Models;
 
 public interface ITableRepository : IGenericRepository<Table>
 {

@@ -1,17 +1,16 @@
-﻿using TableBooking.Model.Dtos.UserDtos;
-using TableBooking.Model.Models;
+﻿namespace TableBooking.Logic.Converters.UserConverters;
 
-namespace TableBooking.Logic.Converters.UserConverters
+using Model.Dtos.UserDtos;
+using Model.Models;
+
+public class ShortUserInfoConverter : IShortUserInfoConverter
 {
-    public class ShortUserInfoConverter : IShortUserInfoConverter
+    public UserShortInfoDto UserToUserShortInfo(AppUser user)
     {
-        public UserShortInfoDto UserToUserShortInfo(AppUser user)
+        return new UserShortInfoDto
         {
-            return new UserShortInfoDto
-            {
-                Id = user.Id,
-                UserName = user.UserName
-            };
-        }
+            Id = user.Id,
+            UserName = user.UserName ?? string.Empty
+        };
     }
 }

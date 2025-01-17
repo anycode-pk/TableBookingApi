@@ -1,16 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TableBooking.Api.Interfaces;
-using TableBooking.Model.Dtos.RatingDtos;
-
-namespace TableBooking.Api.Controllers;
+﻿namespace TableBooking.Api.Controllers;
 
 using System.Security.Claims;
+using Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Model.Dtos.RatingDtos;
 
 [Route("[controller]")]
 [ApiController]
 public class RatingController : ControllerBase
 {
-    private IRatingService _ratingService;
+    private readonly IRatingService _ratingService;
 
     public RatingController(IRatingService ratingService)
     {

@@ -1,7 +1,7 @@
 namespace TableBooking.Api.Controllers;
 
-using Microsoft.AspNetCore.Mvc;
 using Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Model.Dtos.RestaurantDtos;
 using Model.Models;
 
