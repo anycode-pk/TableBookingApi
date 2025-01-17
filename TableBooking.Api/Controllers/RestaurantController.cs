@@ -1,12 +1,14 @@
 namespace TableBooking.Api.Controllers;
 
 using Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Dtos.RestaurantDtos;
 using Model.Models;
 
 [Route("[controller]")]
 [ApiController]
+[Authorize]
 public class RestaurantController : ControllerBase
 {
     private readonly IRestaurantService _restaurantService;
@@ -22,13 +24,13 @@ public class RestaurantController : ControllerBase
         return await _restaurantService.GetAllRestaurantsAsync(restaurantName, price);
     }
 
-    [HttpGet("GetRestaurantById/{id}")]
-    public async Task<IActionResult> GetRestaurantById(Guid id)
+    [HttpGet("GetRestaurantById/{restaurantId:guid}")]
+    public async Task<IActionResult> GetRestaurantById(Guid restaurantId)
     {
-        return await _restaurantService.GetRestaurantByIdAsync(id);
+        return await _restaurantService.GetRestaurantByIdAsync(restaurantId);
     }
     
-    [HttpGet("GetRestaurantByTableId/{tableId}")]
+    [HttpGet("GetRestaurantByTableId/{tableId:guid}")]
     public async Task<IActionResult> GetRestaurantByTableId(Guid tableId)
     {
         return await _restaurantService.GetRestaurantByTableIdAsync(tableId);
@@ -40,13 +42,13 @@ public class RestaurantController : ControllerBase
         return await _restaurantService.CreateRestaurantAsync(restaurantShortInfoDto);
     }
 
-    [HttpDelete("DeleteRestaurant/{id:Guid}")]
-    public async Task<IActionResult> DeleteRestaurant(Guid id)
+    [HttpDelete("DeleteRestaurant/{restaurantId:guid}")]
+    public async Task<IActionResult> DeleteRestaurant(Guid restaurantId)
     {
-        return await _restaurantService.DeleteRestaurantAsync(id);
+        return await _restaurantService.DeleteRestaurantAsync(restaurantId);
     }
 
-    [HttpPut("UpdateRestaurant/{restaurantId}")]
+    [HttpPut("UpdateRestaurant/{restaurantId:guid}")]
     public async Task<IActionResult> UpdateRestaurant([FromBody] RestaurantShortInfoDto restaurantShortInfoDto, Guid restaurantId)
     {
         return await _restaurantService.UpdateRestaurantAsync(restaurantShortInfoDto, restaurantId);

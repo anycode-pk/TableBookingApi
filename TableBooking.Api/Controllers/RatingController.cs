@@ -2,11 +2,13 @@
 
 using System.Security.Claims;
 using Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Dtos.RatingDtos;
 
 [Route("[controller]")]
 [ApiController]
+[Authorize]
 public class RatingController : ControllerBase
 {
     private readonly IRatingService _ratingService;

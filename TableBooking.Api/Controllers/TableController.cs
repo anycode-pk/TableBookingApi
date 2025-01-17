@@ -1,11 +1,13 @@
 ﻿namespace TableBooking.Api.Controllers;
 
 using Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Dtos.TableDtos;
 
 [Route("[controller]")]
 [ApiController]
+[Authorize]
 public class TableController : ControllerBase
 {
     private readonly ITableService _tableService;
@@ -20,10 +22,10 @@ public class TableController : ControllerBase
         return await _tableService.GetAllTablesAsync();
     }
 
-    [HttpGet("GetTable/{id}")]
-    public async Task<IActionResult> GetTableById(Guid id)
+    [HttpGet("GetTable/{tableId:guid}")]
+    public async Task<IActionResult> GetTableById(Guid tableId)
     {
-        return await _tableService.GetTableByIdAsync(id);
+        return await _tableService.GetTableByIdAsync(tableId);
     }
 
     [HttpGet("GetTableByRestaurant")]
@@ -38,13 +40,13 @@ public class TableController : ControllerBase
         return await _tableService.CreateTableAsync(tableDto);
     }
 
-    [HttpPut("UpdateTable/{tableId}")]
+    [HttpPut("UpdateTable/{tableId:guid}")]
     public async Task<IActionResult> UpdateTable([FromBody] TableDto tableDto, Guid tableId)
     {
         return await _tableService.UpdateTableAsync(tableDto, tableId);
     }
 
-    [HttpDelete("DeleteTable/{id:Guid}")]
+    [HttpDelete("DeleteTable/{id:guid}")]
     public async Task<IActionResult> DeleteTable(Guid id)
     {
         return await _tableService.DeleteTableAsync(id);

@@ -21,7 +21,6 @@ public class BookingController : ControllerBase
     [HttpGet("GetAllUserBookings")]
     [ProducesResponseType(typeof(List<BookingDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [Authorize]
     public async Task<IActionResult> GetUserBookings()
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("User ID not found in claims."));
@@ -29,24 +28,22 @@ public class BookingController : ControllerBase
         return await _bookingService.GetAllBookings(userId);
     }
 
-    [HttpGet("GetById/{id}")]
-    public async Task<IActionResult> GetUserBookingById(Guid id)
+    [HttpGet("GetById/{bookingId}")]
+    public async Task<IActionResult> GetUserBookingById(Guid bookingId)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("User ID not found in claims."));
             
-        return await _bookingService.GetBookingByIdAsync(id, userId);
+        return await _bookingService.GetBookingByIdAsync(bookingId, userId);
     }
 
-    [HttpDelete("Delete/{id}")]
-    [Authorize]
-    public async Task<IActionResult> DeleteUserBooking(Guid id)
+    [HttpDelete("Delete/{bookingId}")]
+    public async Task<IActionResult> DeleteUserBooking(Guid bookingId)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("User ID not found in claims."));
-        return await _bookingService.DeleteBookingAsync(id, userId);
+        return await _bookingService.DeleteBookingAsync(bookingId, userId);
     }
 
     [HttpPost("CreateBooking/{tableId}")]
-    [Authorize]
     public async Task<IActionResult> CreateUserBooking([FromBody] CreateBookingDto bookingToCreateDto, Guid tableId)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("User ID not found in claims."));
@@ -55,11 +52,9 @@ public class BookingController : ControllerBase
     }
 
     [HttpPut("UpdateBooking/{bookingId}")]
-    [Authorize]
     public async Task<IActionResult> UpdateUserBooking([FromBody] UpdateBookingDto updateBookingDto, Guid bookingId)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("User ID not found in claims."));
         return await _bookingService.UpdateBookingAsync(updateBookingDto, userId, bookingId);
     }
-
 }
