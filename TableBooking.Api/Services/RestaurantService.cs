@@ -71,14 +71,14 @@ namespace TableBooking.Api.Services
             {
                 Id = restaurant.Id,
                 Description = dto.Description,
-                Location = dto.Location,
-                Name = dto.Name,
-                Phone = dto.Phone,
+                Location = dto.Location ?? restaurant.Location,
+                Name = dto.Name ?? restaurant.Name,
+                Phone = dto.Phone ?? restaurant.Phone,
                 Price = dto.Price,
                 PrimaryImageURL = dto.PrimaryImageURL,
                 SecondaryImageURL = dto.SecondaryImageURL,
                 Tables = restaurant.Tables,
-                Type = dto.Type,
+                Type = dto.Type ?? restaurant.Type,
                 Rating = restaurant.Rating,
                 CloseTime = dto.CloseTime,
                 OpenTime = dto.OpenTime
