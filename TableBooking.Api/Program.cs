@@ -11,6 +11,7 @@ using Serilog;
 using TableBooking.Api.Configuration.DbSetup;
 using TableBooking.Api.Configuration.HealthCheck;
 using TableBooking.Api.Interfaces;
+using TableBooking.Api.Middleware;
 using TableBooking.Api.Services;
 using TableBooking.Logic;
 using TableBooking.Logic.Converters.RatingConverters;
@@ -57,9 +58,6 @@ builder.Services.AddSwaggerGen(c =>
                     new string[] { }
                 }
                 });
-
-    //var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    //c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
 builder.Services.AddCors(p => p.AddPolicy("cors", corsPolicyBuilder =>
@@ -152,7 +150,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 });
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-builder.Services.AddTransient<ITableConverter, TableConverter>(); // doczytaj debilu
+builder.Services.AddTransient<ITableConverter, TableConverter>();
 builder.Services.AddTransient<ITableToGetConverter, TableToGetConverter>();
 builder.Services.AddTransient<IRatingConverter, RatingConverter>();
 builder.Services.AddTransient<IShortUserInfoConverter, ShortUserInfoConverter>();
@@ -164,6 +162,8 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IRatingService, RatingService>();
 
 var app = builder.Build();
+
+app.UseMiddleware<TokenRevocationMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
@@ -181,4 +181,4 @@ app.UseAuthorization();
 app.MapControllers();
 app.Run();
 
-public partial class Program { }
+public partial class Program;

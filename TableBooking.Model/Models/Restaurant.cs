@@ -18,10 +18,10 @@ public class Restaurant : Entity
     public string Phone { get; set; } = string.Empty;
 
     [Required]
-    public string PrimaryImageURL { get; set; } =
+    public string PrimaryImageUrl { get; set; } =
         "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png";
     [Required]
-    public string SecondaryImageURL { get; set; } = 
+    public string SecondaryImageUrl { get; set; } = 
         "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png";
     [Precision(1,1)]
     public double Rating { get; set; }

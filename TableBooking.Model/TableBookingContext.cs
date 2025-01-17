@@ -14,10 +14,10 @@ public class TableBookingContext : DbContext//IdentityDbContext<AppUser>
         {
             const string defaultImage = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png";
                 
-            restaurantEntity.Property(r => r.PrimaryImageURL).IsRequired()
+            restaurantEntity.Property(r => r.PrimaryImageUrl).IsRequired()
                 .HasDefaultValue(defaultImage).HasMaxLength(1000);
 
-            restaurantEntity.Property(r => r.SecondaryImageURL).IsRequired()
+            restaurantEntity.Property(r => r.SecondaryImageUrl).IsRequired()
                 .HasDefaultValue(defaultImage).HasMaxLength(1000);
 
             restaurantEntity.Property(r => r.Name).HasMaxLength(64);
@@ -35,6 +35,11 @@ public class TableBookingContext : DbContext//IdentityDbContext<AppUser>
         modelBuilder.Entity<AppUser>(appUserEntity =>
         {
             appUserEntity.Property(r => r.RefreshToken).HasMaxLength(512);
+        });
+        
+        modelBuilder.Entity<RevokedToken>(appUserEntity =>
+        {
+            appUserEntity.Property(r => r.Token).HasMaxLength(512);
         });
             
         base.OnModelCreating(modelBuilder);
@@ -54,5 +59,5 @@ public class TableBookingContext : DbContext//IdentityDbContext<AppUser>
     public DbSet<Rating> Ratings { get; set; }
     public DbSet<AppUser> Users { get; set; }
     public DbSet<AppRole> Roles { get; set; }
-
+    public DbSet<RevokedToken> RevokedTokens { get; set; }
 }

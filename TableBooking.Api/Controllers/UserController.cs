@@ -37,10 +37,11 @@ public class UserController : ControllerBase
     [HttpPost]
     [Authorize]
     [Route("logout")]
-    public Task<IActionResult> Logout()
+    public async Task<IActionResult> Logout()
     {
-        // TODO: implement logout
-        throw new NotImplementedException();
+        var authHeader = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
+
+        return await _userService.Logout(authHeader);
     }
         
     [HttpGet]

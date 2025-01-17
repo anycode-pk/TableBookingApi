@@ -49,8 +49,8 @@ public class RestaurantService : IRestaurantService
             Price = dto.Price,
             OpenTime = dto.OpenTime,
             Type = dto.Type,
-            PrimaryImageURL = dto.PrimaryImageURL,
-            SecondaryImageURL = dto.SecondaryImageURL
+            PrimaryImageUrl = dto.PrimaryImageURL,
+            SecondaryImageUrl = dto.SecondaryImageURL
         };
         
         await _unitOfWork.RestaurantRepository.InsertAsync(restaurant);
@@ -102,8 +102,8 @@ public class RestaurantService : IRestaurantService
             Name = dto.Name ?? restaurant.Name,
             Phone = dto.Phone ?? restaurant.Phone,
             Price = dto.Price,
-            PrimaryImageURL = dto.PrimaryImageURL,
-            SecondaryImageURL = dto.SecondaryImageURL,
+            PrimaryImageUrl = dto.PrimaryImageURL,
+            SecondaryImageUrl = dto.SecondaryImageURL,
             Tables = restaurant.Tables,
             Type = dto.Type ?? restaurant.Type,
             Rating = restaurant.Rating,

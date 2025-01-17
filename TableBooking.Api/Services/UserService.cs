@@ -95,6 +95,27 @@ public class UserService : IUserService
         });
     }
 
+    public async Task<IActionResult> Logout(string? authHeader)
+    {
+        if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+        {
+            return new BadRequestObjectResult("Invalid authorization header.");
+        }
+
+        var token = authHeader.Substring("Bearer ".Length).Trim();
+
+        var revokedToken = new RevokedToken
+        {
+            Token = token,
+            RevokedAt = DateTime.UtcNow
+        };
+
+        _dbContext.RevokedTokens.Add(revokedToken);
+        await _dbContext.SaveChangesAsync();
+
+        return new OkObjectResult(revokedToken);
+    }
+
     public async Task<AppUserDto> GetUserInfo(Guid id, CancellationToken cancellationToken)
     {
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
