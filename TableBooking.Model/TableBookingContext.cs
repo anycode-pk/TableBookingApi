@@ -25,6 +25,10 @@ public class TableBookingContext : DbContext
             restaurantEntity.Property(r => r.Description).HasMaxLength(100);
             restaurantEntity.Property(r => r.Location).HasMaxLength(255);
             restaurantEntity.Property(r => r.Phone).HasMaxLength(32);
+            // TODO: set this in next migration
+            // restaurantEntity.Property(r => r.Price)
+            //     .IsRequired()
+            //     .HasConversion<int>(); 
         });
 
         modelBuilder.Entity<Rating>(ratingEntity =>
