@@ -28,7 +28,9 @@ public class BookingService : IBookingService
             DurationInMinutes = request.DurationInMinutes,
             TableId = table.Id,
             AppUserId = userId,
-            AmountOfPeople = request.AmountOfPeople
+            AmountOfPeople = request.AmountOfPeople,
+            Id = Guid.NewGuid(),
+            RestaurantId = table.RestaurantId
         };
 
         await _unitOfWork.BookingRepository.InsertAsync(newBooking);
@@ -40,10 +42,49 @@ public class BookingService : IBookingService
             Date = newBooking.Date,
             DurationInMinutes = newBooking.DurationInMinutes,
             AmountOfPeople = newBooking.AmountOfPeople,
-            AppUserId = userId
+            AppUserId = userId,
+            RestaurantId = newBooking.RestaurantId
         };
         return new CreatedResult(string.Empty, bookingDto);
     }
+
+    public async Task<IActionResult> CreateAutomaticBookingByRestaurantIdAsync(CreateBookingDto createBookingDto, Guid userId, Guid restaurantId)
+    {
+        // TODO: Assign 17:30 and not like 17:36:35Z ... 
+        var availableTable = await _unitOfWork.TableRepository.GetAvailableTableAsync(restaurantId, createBookingDto.AmountOfPeople, createBookingDto.Date);
+
+        if (availableTable == null)
+        {
+            return new BadRequestObjectResult($"No available table for {createBookingDto.AmountOfPeople} people at restaurant {restaurantId}");
+        }
+
+        var newBooking = new Booking
+        {
+            Date = createBookingDto.Date,
+            DurationInMinutes = createBookingDto.DurationInMinutes,
+            TableId = availableTable.Id,
+            AppUserId = userId,
+            AmountOfPeople = createBookingDto.AmountOfPeople,
+            Id = Guid.NewGuid(),
+            RestaurantId = availableTable.RestaurantId
+        };
+
+        await _unitOfWork.BookingRepository.InsertAsync(newBooking);
+        await _unitOfWork.SaveChangesAsync();
+
+        var bookingDto = new BookingDto
+        {
+            Id = newBooking.Id,
+            Date = newBooking.Date,
+            DurationInMinutes = newBooking.DurationInMinutes,
+            AmountOfPeople = newBooking.AmountOfPeople,
+            AppUserId = userId,
+            RestaurantId = newBooking.RestaurantId
+        };
+
+        return new CreatedResult(string.Empty, bookingDto);
+    }
+
 
     public async Task<IActionResult> DeleteBookingAsync(Guid bookingId, Guid userId)
     {
@@ -59,18 +100,27 @@ public class BookingService : IBookingService
 
     public async Task<IActionResult> GetBookingByIdAsync(Guid bookingId, Guid userId)
     {
-        
         var booking = await _unitOfWork.BookingRepository.GetBookingByIdForSpecificUserAsync(bookingId, userId);
 
         if (booking == null)
             return new BadRequestObjectResult("Bad request: no bookings");
+        
+        if (booking.RestaurantId == Guid.Empty)
+        {
+            var restaurantId= await _unitOfWork.TableRepository.GetRestaurantIdByTableIdAsync(booking.TableId);
+
+            booking.RestaurantId = restaurantId;
+            await _unitOfWork.BookingRepository.Update(booking);
+        }
+        
         var bookingDto = new BookingDto
         {
             Id = booking.Id,
             Date = booking.Date,
             DurationInMinutes = booking.DurationInMinutes,
             AmountOfPeople = booking.AmountOfPeople,
-            AppUserId = userId
+            AppUserId = userId,
+            RestaurantId = booking.RestaurantId
         };
         return new OkObjectResult(bookingDto);
     }
@@ -78,6 +128,18 @@ public class BookingService : IBookingService
     public async Task<IActionResult> GetAllBookings(Guid userId)
     {
         var bookings = await _unitOfWork.BookingRepository.GetAllBookingsForSpecificUserAsync(userId);
+
+        foreach (var booking in bookings)
+        {
+            if (booking.RestaurantId == Guid.Empty)
+            {
+                
+                var restaurantId= await _unitOfWork.TableRepository.GetRestaurantIdByTableIdAsync(booking.TableId);
+
+                booking.RestaurantId = restaurantId;
+                await _unitOfWork.BookingRepository.Update(booking);
+            }
+        }
         
         return new OkObjectResult(bookings);
     }
@@ -87,6 +149,8 @@ public class BookingService : IBookingService
         var booking = await _unitOfWork.BookingRepository.GetBookingByIdForSpecificUserAsync(bookingId, userId);
         if (booking == null)
             return new BadRequestObjectResult($"Booking with id {bookingId} doesn't exist.");
+        
+        // TODO: change tableId when user changed amount of people.
             
         var newBooking = new Booking
         {
@@ -95,7 +159,8 @@ public class BookingService : IBookingService
             DurationInMinutes = updateBookingDto.DurationInMinutes,
             AmountOfPeople = updateBookingDto.AmountOfPeople,
             TableId = booking.TableId,
-            AppUserId = userId
+            AppUserId = userId,
+            RestaurantId = booking.RestaurantId
         };
 
         await _unitOfWork.BookingRepository.Update(newBooking);

@@ -17,8 +17,21 @@ public class TableRepository : GenericRepository<Table>, ITableRepository
                 .ToListAsync();
         }
 
+    public async Task<Table?> GetAvailableTableAsync(Guid restaurantId, int amountOfPeople, DateTime bookingDate)
+    {
+        return await ObjectSet.Where(t =>
+            t.Bookings != null && t.RestaurantId == restaurantId && t.NumberOfSeats >= amountOfPeople && t.Bookings.All(b => b.Date != bookingDate)).FirstOrDefaultAsync();
+    }
+
     public async Task<Table> GetTableByTableIdAsync(Guid tableId)
     {
-            return (await ObjectSet.FirstOrDefaultAsync(t => t.Id == tableId))!;
-        }
+        return (await ObjectSet.FirstOrDefaultAsync(t => t.Id == tableId))!;
+    }
+
+    public async Task<Guid> GetRestaurantIdByTableIdAsync(Guid tableId)
+    {
+        var table = await ObjectSet.FirstOrDefaultAsync(t => t.Id == tableId);
+
+        return table?.RestaurantId ?? Guid.Empty;
+    }
 }

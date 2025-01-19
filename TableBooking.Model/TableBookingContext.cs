@@ -25,6 +25,9 @@ public class TableBookingContext : DbContext
             restaurantEntity.Property(r => r.Description).HasMaxLength(100);
             restaurantEntity.Property(r => r.Location).HasMaxLength(255);
             restaurantEntity.Property(r => r.Phone).HasMaxLength(32);
+            restaurantEntity.Property(r => r.Price)
+                .IsRequired()
+                .HasConversion<int>(); 
         });
 
         modelBuilder.Entity<Rating>(ratingEntity =>
@@ -40,6 +43,23 @@ public class TableBookingContext : DbContext
         modelBuilder.Entity<RevokedToken>(appUserEntity =>
         {
             appUserEntity.Property(r => r.Token).HasMaxLength(512);
+        });
+        
+        modelBuilder.Entity<Booking>(appUserEntity =>
+        {
+            appUserEntity.Property(r => r.RestaurantId).IsRequired();
+            appUserEntity.Property(r => r.TableId).IsRequired();
+            appUserEntity.Property(r => r.AppUserId).IsRequired();
+            appUserEntity.Property(r => r.AmountOfPeople).IsRequired();
+            appUserEntity.Property(r => r.DurationInMinutes).IsRequired();
+            appUserEntity.Property(r => r.Date).IsRequired();
+        });
+        
+        modelBuilder.Entity<Table>(appUserEntity =>
+        {
+            appUserEntity.Property(t => t.RestaurantId).IsRequired();
+            appUserEntity.Property(t => t.NumberOfSeats).IsRequired();
+            appUserEntity.Property(t => t.Id).IsRequired();
         });
             
         base.OnModelCreating(modelBuilder);

@@ -7,4 +7,5 @@ public class Booking : Entity
     public int AmountOfPeople { get; set; }
     public Guid AppUserId { get; set; }
     public Guid TableId { get; set; }
+    public Guid RestaurantId { get; set; }
 }
