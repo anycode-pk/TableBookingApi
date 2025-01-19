@@ -9,5 +9,3 @@ CREATE USER "TableBookingUser" WITH
 CREATE DATABASE "TableBookingDB";
 
 ALTER DATABASE "TableBookingDB" OWNER TO "TableBookingUser";
-
-

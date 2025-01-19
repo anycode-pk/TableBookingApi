@@ -36,11 +36,15 @@ public class UserService : IUserService
     {
         var userExists = await _userManager.FindByNameAsync(dto.Username);
         if (userExists != null)
-            return new BadRequestObjectResult("Bad request: Registration failed");
+            return new BadRequestObjectResult($"User with the same username found: {dto.Username}.");
+        
+        var emailExists = await _userManager.FindByEmailAsync(dto.Email);
+        if (emailExists != null)
+            return new BadRequestObjectResult($"User with the same email found: {dto.Email}.");
 
         var appUserRole = await _roleManager.FindByIdAsync(UserRoleId);
         if (appUserRole == null)
-            return new BadRequestObjectResult("Bad request: Registration failed");
+            return new BadRequestObjectResult($"Can't find role by UserRoleId: {UserRoleId}");
 
         var user = new AppUser
         {
@@ -51,6 +55,7 @@ public class UserService : IUserService
         };
 
         var result = await _userManager.CreateAsync(user, dto.Password);
+        
         if (!result.Succeeded)
             return new BadRequestObjectResult("Invalid password lenght Or Bad Email");
 
