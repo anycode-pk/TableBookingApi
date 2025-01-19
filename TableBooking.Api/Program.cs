@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using TableBooking.Api.Configuration.DbSetup;
 using TableBooking.Api.Configuration.HealthCheck;
+using TableBooking.Api.Extensions;
 using TableBooking.Api.Interfaces;
 using TableBooking.Api.Middleware;
 using TableBooking.Api.Services;
@@ -162,6 +163,12 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IRatingService, RatingService>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    await RolesExtension.SeedRolesAsync(serviceProvider);
+}
 
 app.UseMiddleware<TokenRevocationMiddleware>();
 

@@ -3,6 +3,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Extensions;
 using Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,6 @@ public class UserService : IUserService
     private readonly UserManager<AppUser> _userManager;
     private readonly RoleManager<AppRole> _roleManager;
     private readonly IConfiguration _configuration;
-    private const string UserRoleId = "5ad1268f-f61f-4b1c-b690-cbf8c3d35019";
     private readonly TableBookingContext _dbContext;
 
     public UserService(UserManager<AppUser> userManager,
@@ -42,36 +42,38 @@ public class UserService : IUserService
         if (emailExists != null)
             return new BadRequestObjectResult($"User with the same email found: {dto.Email}.");
 
-        var appUserRole = await _roleManager.FindByIdAsync(UserRoleId);
+        var appUserRole = await _roleManager.FindByNameAsync("User");
         if (appUserRole == null)
-            return new BadRequestObjectResult($"Can't find role by UserRoleId: {UserRoleId}");
+            return new BadRequestObjectResult($"Can't find role by name 'User'.");
 
         var user = new AppUser
         {
             Email = dto.Email,
             SecurityStamp = Guid.NewGuid().ToString(),
             UserName = dto.Username,
-            AppRoleId = appUserRole.Id
+            AppRoleId = appUserRole.Id,
+            AppRole =  appUserRole
         };
-
+        
         var result = await _userManager.CreateAsync(user, dto.Password);
         
         if (!result.Succeeded)
-            return new BadRequestObjectResult("Invalid password lenght Or Bad Email");
+            return new BadRequestObjectResult("Invalid password length or Bad Email");
 
         return new OkObjectResult(new ResultDto { Status = "Success", Message = "User created successfully!" });
     }
 
     public async Task<IActionResult> Login(UserLoginDto dto)
     {
-        var user = await _userManager.FindByNameAsync(dto.Username) ;     
-        if (user == null || !await _userManager.CheckPasswordAsync(user, dto.Password))
-        {
-            return new UnauthorizedResult();
-        }
+        var user = await _userManager.FindByNameAsync(dto.Username);
+        if (user == null)
+            return new BadRequestObjectResult($"User with username '{dto.Username}' does not exist.");
         
-        var role = await _roleManager.FindByIdAsync(user.AppRoleId.ToString());
-        if (role == null) return new BadRequestObjectResult($"Can't login. Role for this user {user.Id} is null");
+        if (!await _userManager.CheckPasswordAsync(user, dto.Password))
+            return new BadRequestObjectResult($"Wrong password.");
+        
+        var role = await _roleManager.FindByNameAsync("User");
+        if (role == null) return new BadRequestObjectResult($"Can't login. Role named 'User' is not found.");
 
         if (string.IsNullOrEmpty(user.UserName))
         {
@@ -92,7 +94,7 @@ public class UserService : IUserService
         };
 
         var token = GetToken(authClaims);
-
+        
         return new OkObjectResult(new
         {
             token = new JwtSecurityTokenHandler().WriteToken(token),
@@ -143,10 +145,5 @@ public class UserService : IUserService
         );
             
         return token;
-    }
-
-    public Task SeedRoles()
-    {
-        throw new NotImplementedException();
     }
 }

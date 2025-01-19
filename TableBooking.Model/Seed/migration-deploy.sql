@@ -3,9 +3,9 @@
 
 CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
                                                        "MigrationId" character varying(150) NOT NULL,
-    "ProductVersion" character varying(32) NOT NULL,
-    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
-    );
+                                                       "ProductVersion" character varying(32) NOT NULL,
+                                                       CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
 
 START TRANSACTION;
 CREATE TABLE "Restaurants" (
@@ -142,5 +142,10 @@ ALTER TABLE "RevokedTokens" ALTER COLUMN "Token" TYPE character varying(512);
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
 VALUES ('20250117211021_RevokedTokensTableMaxLength', '9.0.0');
+
+ALTER TABLE "Bookings" ADD "RestaurantId" uuid NOT NULL DEFAULT '00000000-0000-0000-0000-000000000000';
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20250119150709_BookingChanges', '9.0.0');
 
 COMMIT;
