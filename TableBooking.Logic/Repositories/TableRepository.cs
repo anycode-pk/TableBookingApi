@@ -19,6 +19,13 @@ public class TableRepository : GenericRepository<Table>, ITableRepository
 
     public async Task<Table> GetTableByTableIdAsync(Guid tableId)
     {
-            return (await ObjectSet.FirstOrDefaultAsync(t => t.Id == tableId))!;
-        }
+        return (await ObjectSet.FirstOrDefaultAsync(t => t.Id == tableId))!;
+    }
+
+    public async Task<Guid> GetRestaurantIdByTableIdAsync(Guid tableId)
+    {
+        var table = await ObjectSet.FirstOrDefaultAsync(t => t.Id == tableId);
+
+        return table?.RestaurantId ?? Guid.Empty;
+    }
 }

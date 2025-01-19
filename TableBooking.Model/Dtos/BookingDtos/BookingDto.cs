@@ -7,4 +7,5 @@ public class BookingDto
     public int DurationInMinutes { get; set; }
     public int AmountOfPeople { get; set; }
     public Guid AppUserId { get; set; }
+    public Guid RestaurantId { get; set; }
 }

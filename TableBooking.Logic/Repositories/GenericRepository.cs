@@ -54,10 +54,14 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
         if (existingEntity != null)
         {
-            _context.Entry(existingEntity).State = EntityState.Detached;
+            _context.Entry(existingEntity).CurrentValues.SetValues(entity);
+        }
+        else
+        {
+            ObjectSet.Add(entity);
         }
 
-        ObjectSet.Update(entity);
+        await _context.SaveChangesAsync();
     }
         
     private object[] GetKeyValues(T entity)
