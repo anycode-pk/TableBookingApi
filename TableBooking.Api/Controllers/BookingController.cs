@@ -50,6 +50,14 @@ public class BookingController : ControllerBase
             
         return await _bookingService.CreateBookingAsync(bookingToCreateDto, userId, tableId);
     }
+    
+    [HttpPost("CreateBookingAutomatically/{restaurantId}")]
+    public async Task<IActionResult> CreateUserBookingAutomaticByRestaurantId([FromBody] CreateBookingDto bookingToCreateDto, Guid restaurantId)
+    {
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("User ID not found in claims."));
+            
+        return await _bookingService.CreateAutomaticBookingByRestaurantIdAsync(bookingToCreateDto, userId, restaurantId);
+    }
 
     [HttpPut("UpdateBooking/{bookingId}")]
     public async Task<IActionResult> UpdateUserBooking([FromBody] UpdateBookingDto updateBookingDto, Guid bookingId)

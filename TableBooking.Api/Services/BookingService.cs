@@ -48,6 +48,44 @@ public class BookingService : IBookingService
         return new CreatedResult(string.Empty, bookingDto);
     }
 
+    public async Task<IActionResult> CreateAutomaticBookingByRestaurantIdAsync(CreateBookingDto createBookingDto, Guid userId, Guid restaurantId)
+    {
+        // TODO: Assign 17:30 and not like 17:36:35Z ... 
+        var availableTable = await _unitOfWork.TableRepository.GetAvailableTableAsync(restaurantId, createBookingDto.AmountOfPeople, createBookingDto.Date);
+
+        if (availableTable == null)
+        {
+            return new BadRequestObjectResult($"No available table for {createBookingDto.AmountOfPeople} people at restaurant {restaurantId}");
+        }
+
+        var newBooking = new Booking
+        {
+            Date = createBookingDto.Date,
+            DurationInMinutes = createBookingDto.DurationInMinutes,
+            TableId = availableTable.Id,
+            AppUserId = userId,
+            AmountOfPeople = createBookingDto.AmountOfPeople,
+            Id = Guid.NewGuid(),
+            RestaurantId = availableTable.RestaurantId
+        };
+
+        await _unitOfWork.BookingRepository.InsertAsync(newBooking);
+        await _unitOfWork.SaveChangesAsync();
+
+        var bookingDto = new BookingDto
+        {
+            Id = newBooking.Id,
+            Date = newBooking.Date,
+            DurationInMinutes = newBooking.DurationInMinutes,
+            AmountOfPeople = newBooking.AmountOfPeople,
+            AppUserId = userId,
+            RestaurantId = newBooking.RestaurantId
+        };
+
+        return new CreatedResult(string.Empty, bookingDto);
+    }
+
+
     public async Task<IActionResult> DeleteBookingAsync(Guid bookingId, Guid userId)
     {
         var booking = await _unitOfWork.BookingRepository.GetBookingByIdForSpecificUserAsync(bookingId, userId);
