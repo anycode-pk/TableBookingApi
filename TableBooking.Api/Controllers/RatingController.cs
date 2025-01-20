@@ -24,7 +24,7 @@ public class RatingController : ControllerBase
         return await _ratingService.GetAllRatingsAsync(restaurantId);
     }
 
-    [HttpGet("GetRating/{id}")]
+    [HttpGet("GetRating/{id:guid}")]
     public async Task<IActionResult> GetRatingById(Guid id)
     {
         return await _ratingService.GetRatingByIdAsync(id);
@@ -33,23 +33,18 @@ public class RatingController : ControllerBase
     [HttpPost("CreateRating")]
     public async Task<IActionResult> CreateRating([FromBody] CreateRatingDto createRatingDto)
     {
-        if (createRatingDto.AppUserId.HasValue)
-            return await _ratingService.CreateRatingAsync(createRatingDto);
-
         var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (string.IsNullOrEmpty(userIdString))
             return BadRequest("User ID could not be determined from the claims.");
 
-        if (!Guid.TryParse(userIdString, out var userId))
+        if (!Guid.TryParse(userIdString, out _))
             return BadRequest("Invalid User ID format in claims.");
-
-        createRatingDto.AppUserId = userId;
-
-        return await _ratingService.CreateRatingAsync(createRatingDto);
+        
+        return await _ratingService.CreateRatingAsync(createRatingDto, Guid.Parse(userIdString));
     }
 
-    [HttpDelete("DeleteRating/{id}")]
+    [HttpDelete("DeleteRating/{id:guid}")]
     public async Task<IActionResult> DeleteRating(Guid id)
     {
         return await _ratingService.DeleteRatingAsync(id);

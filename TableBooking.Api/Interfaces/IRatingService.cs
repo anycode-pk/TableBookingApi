@@ -7,6 +7,6 @@ public interface IRatingService
 {
     public Task<IActionResult> GetAllRatingsAsync(Guid restaurantId);
     public Task<IActionResult> GetRatingByIdAsync(Guid ratingId);
-    public Task<IActionResult> CreateRatingAsync(CreateRatingDto dto);
+    public Task<IActionResult> CreateRatingAsync(CreateRatingDto dto, Guid userId);
     public Task<IActionResult> DeleteRatingAsync(Guid ratingId);
 }

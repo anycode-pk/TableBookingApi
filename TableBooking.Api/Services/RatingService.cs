@@ -17,7 +17,7 @@ public class RatingService : IRatingService
         _unitOfWork = unitOfWork;
         _ratingConverter = ratingConverter;
     }
-    public async Task<IActionResult> CreateRatingAsync(CreateRatingDto dto)
+    public async Task<IActionResult> CreateRatingAsync(CreateRatingDto dto, Guid userId)
     {
         var restaurant = await _unitOfWork.RestaurantRepository.GetByIdAsync(dto.RestaurantId);
 
@@ -26,18 +26,13 @@ public class RatingService : IRatingService
             return new BadRequestObjectResult("Rating must be between 1 and 5.");
         }
         
-        if (dto.AppUserId == null)
-        {
-            return new BadRequestObjectResult("AppUserId is required when creating rating.");
-        }
-            
-        var existingRating = await _unitOfWork.RatingRepository.GetRatingByUserIdAsync(dto.AppUserId.Value, dto.RestaurantId);
+        var existingRating = await _unitOfWork.RatingRepository.GetRatingByUserIdAsync(userId, dto.RestaurantId);
 
         if (existingRating != null)
         {
             return new BadRequestObjectResult("You have already submitted a review for this restaurant.");
         }
-            
+        
         var rating = new Rating
         {
             Id = Guid.NewGuid(),
@@ -45,22 +40,22 @@ public class RatingService : IRatingService
             Comment = dto.Comment ?? string.Empty,
             DateOfRating = DateTime.UtcNow,
             RestaurantId = dto.RestaurantId,
-            AppUserId =  dto.AppUserId.Value
+            AppUserId = userId,
+            Restaurant = restaurant
         };
 
         await _unitOfWork.RatingRepository.InsertAsync(rating);
         await _unitOfWork.SaveChangesAsync();
         
-        var ratings = await _unitOfWork.RatingRepository.GetRatingsAsync(dto.RestaurantId) ;
+        var ratings = await _unitOfWork.RatingRepository.GetRatingsAsync(dto.RestaurantId);
         var enumerable = ratings.ToList();
         var numberOfRatings = enumerable.Count;
-
+        
         if (numberOfRatings <= 0) return new OkObjectResult(_ratingConverter.RatingToRatingDto(rating));
-            
+        
         var averageRating = enumerable.Select(x => x.RatingStars).Average();
         var roundedRating = Math.Round(averageRating, 0, MidpointRounding.AwayFromZero);
-
-
+        
         restaurant.Rating = (int)roundedRating;
         await _unitOfWork.RestaurantRepository.Update(restaurant);
         await _unitOfWork.SaveChangesAsync();
