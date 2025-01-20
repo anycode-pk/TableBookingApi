@@ -72,11 +72,6 @@ public class RestaurantService : IRestaurantService
     {
         // TODO: check if AllowAnonymous users can see bookings.
         var restaurants = await _unitOfWork.RestaurantRepository.GetRestaurantsAsync(restaurantName, price);
-        foreach (var restaurant in restaurants)
-        {
-            var tables = await _unitOfWork.TableRepository.GetTablesByRestaurantIdAsync(restaurant.Id);
-            restaurant.Tables = tables;
-        }
 
         return new OkObjectResult(restaurants);
     }
@@ -84,7 +79,11 @@ public class RestaurantService : IRestaurantService
     public async Task<IActionResult> GetRestaurantByIdAsync(Guid restaurantId)
     {
         var restaurant = await _unitOfWork.RestaurantRepository.GetByIdAsync(restaurantId);
-        
+
+        if (restaurant == null)
+        {
+            return new NotFoundObjectResult($"Restaurant with id {restaurantId} not found.");
+        }
         var tables = await _unitOfWork.TableRepository.GetTablesByRestaurantIdAsync(restaurantId);
         restaurant.Tables = tables;
         

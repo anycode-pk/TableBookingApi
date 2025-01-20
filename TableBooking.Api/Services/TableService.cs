@@ -46,13 +46,7 @@ public class TableService : ITableService
     public async Task<IActionResult> GetAllTablesAsync()
     {
         var tables = await _unitOfWork.TableRepository.GetAllAsync();
-
         var tablesList = tables.ToList();
-        foreach (var table in tablesList)
-        {
-            var bookings = await _unitOfWork.BookingRepository.GetBookingsByTableId(table.Id);
-            table.Bookings = bookings;
-        }
             
         return new OkObjectResult(_tableConverter.TablesToTableDtos(tablesList));
     }
@@ -82,13 +76,7 @@ public class TableService : ITableService
     public async Task<IActionResult> GetTablesForRestaurantAsync(Guid restaurantId)
     {
         var tables = await _unitOfWork.TableRepository.GetTablesByRestaurantIdAsync(restaurantId);
-
         var tablesList = tables.ToList();
-        foreach (var table in tablesList)
-        {
-            var bookings = await _unitOfWork.BookingRepository.GetBookingsByTableId(table.Id);
-            table.Bookings = bookings;
-        }
             
         return new OkObjectResult(_tableConverter.TablesToTableDtos(tablesList));
     }

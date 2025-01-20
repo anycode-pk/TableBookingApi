@@ -14,12 +14,21 @@ public class RestaurantRepository : GenericRepository<Restaurant>, IRestaurantRe
         return await ObjectSet
             .FilterByName(restaurantName)
             .FilterByPrice(price)
+            .Include(r => r.Tables)
+            .ThenInclude(t => t.Bookings)
             .ToListAsync();
     }
 
     public async Task<Restaurant> GetRestaurantByTableIdAsync(Guid tableId)
     {
-        return (await ObjectSet.FirstOrDefaultAsync(r => r.Tables.Any(t => t.Id == tableId)))!;
+        return (await ObjectSet.Include(r => r.Tables).ThenInclude(t => t.Bookings)
+            .FirstOrDefaultAsync(r => r.Tables.Any(t => t.Id == tableId)))!;
+    }
+
+    public async Task<Restaurant> GetRestaurantByRestaurantIdAsync(Guid restaurantId)
+    {
+        return (await ObjectSet.Include(r => r.Tables).ThenInclude(t => t.Bookings)
+            .FirstOrDefaultAsync(r => r.Tables.Any(t => t.RestaurantId == restaurantId)))!;
     }
 
     public async Task<IEnumerable<Guid>> GetAllRestaurantIds()
