@@ -34,8 +34,8 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "TableBooking API",
-        Version = "v0.0.1",
-        Description = "Application created by AnyCode Students Club at Koszalin University of Technology",
+        Version = "v1.0.0",
+        Description = "API for TableBooking service.",
     });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -81,7 +81,7 @@ builder.Services.AddDbContext<TableBookingContext>(o =>
 
     var dbPort = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DB_PORT")) 
         ? Environment.GetEnvironmentVariable("DB_PORT") 
-        : "5432";
+        : "5433";
 
     var dbName = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("POSTGRES_DB")) 
         ? Environment.GetEnvironmentVariable("POSTGRES_DB") 

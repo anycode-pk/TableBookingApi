@@ -25,6 +25,14 @@ public class TableBookingContext : DbContext
             restaurantEntity.Property(r => r.Description).HasMaxLength(100);
             restaurantEntity.Property(r => r.Location).HasMaxLength(255);
             restaurantEntity.Property(r => r.Phone).HasMaxLength(32);
+            
+            restaurantEntity.Property(r => r.CloseTime).HasConversion(
+                d => d.ToUniversalTime(),
+                d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
+            restaurantEntity.Property(r => r.OpenTime).HasConversion(
+                d => d.ToUniversalTime(),
+                d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
+            
             restaurantEntity.Property(r => r.Price)
                 .IsRequired()
                 .HasConversion<int>(); 
@@ -33,16 +41,27 @@ public class TableBookingContext : DbContext
         modelBuilder.Entity<Rating>(ratingEntity =>
         {
             ratingEntity.Property(r => r.Comment).HasMaxLength(500);
+            ratingEntity.Property(r => r.DateOfRating).HasConversion(
+                d => d.ToUniversalTime(),
+                d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
         });
             
         modelBuilder.Entity<AppUser>(appUserEntity =>
         {
             appUserEntity.Property(r => r.RefreshToken).HasMaxLength(512);
+            appUserEntity.Property(r => r.RefreshTokenExpiryTime)
+                .HasMaxLength(512)
+                .HasConversion(
+                    d => d.HasValue ? d.Value.ToUniversalTime() : (DateTime?)null,
+                    d => d.HasValue ? DateTime.SpecifyKind(d.Value, DateTimeKind.Utc) : null);
         });
         
         modelBuilder.Entity<RevokedToken>(appUserEntity =>
         {
             appUserEntity.Property(r => r.Token).HasMaxLength(512);
+            appUserEntity.Property(r => r.RevokedAt).HasMaxLength(512).HasConversion(
+                d => d.ToUniversalTime(),
+                d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
         });
         
         modelBuilder.Entity<Booking>(appUserEntity =>
@@ -52,7 +71,9 @@ public class TableBookingContext : DbContext
             appUserEntity.Property(r => r.AppUserId).IsRequired();
             appUserEntity.Property(r => r.AmountOfPeople).IsRequired();
             appUserEntity.Property(r => r.DurationInMinutes).IsRequired();
-            appUserEntity.Property(r => r.Date).IsRequired();
+            appUserEntity.Property(r => r.Date).IsRequired().HasConversion(
+                d => d.ToUniversalTime(),
+                d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
         });
         
         modelBuilder.Entity<Table>(appUserEntity =>

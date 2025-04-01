@@ -46,6 +46,8 @@ public class BookingController : ControllerBase
     [HttpPost("CreateBooking/{tableId}")]
     public async Task<IActionResult> CreateUserBooking([FromBody] CreateBookingDto bookingToCreateDto, Guid tableId)
     {
+        bookingToCreateDto.Date = DateTime.SpecifyKind(bookingToCreateDto.Date, DateTimeKind.Utc);
+
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("User ID not found in claims."));
             
         return await _bookingService.CreateBookingAsync(bookingToCreateDto, userId, tableId);
@@ -54,6 +56,8 @@ public class BookingController : ControllerBase
     [HttpPost("CreateBookingAutomatically/{restaurantId}")]
     public async Task<IActionResult> CreateUserBookingAutomaticByRestaurantId([FromBody] CreateBookingDto bookingToCreateDto, Guid restaurantId)
     {
+        bookingToCreateDto.Date = DateTime.SpecifyKind(bookingToCreateDto.Date, DateTimeKind.Utc);
+
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("User ID not found in claims."));
             
         return await _bookingService.CreateAutomaticBookingByRestaurantIdAsync(bookingToCreateDto, userId, restaurantId);
@@ -62,6 +66,8 @@ public class BookingController : ControllerBase
     [HttpPut("UpdateBooking/{bookingId}")]
     public async Task<IActionResult> UpdateUserBooking([FromBody] UpdateBookingDto updateBookingDto, Guid bookingId)
     {
+        updateBookingDto.Date = DateTime.SpecifyKind(updateBookingDto.Date, DateTimeKind.Utc);
+
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("User ID not found in claims."));
         return await _bookingService.UpdateBookingAsync(updateBookingDto, userId, bookingId);
     }

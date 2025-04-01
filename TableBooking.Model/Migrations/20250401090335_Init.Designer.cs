@@ -12,8 +12,8 @@ using TableBooking.Model;
 namespace TableBooking.Model.Migrations
 {
     [DbContext(typeof(TableBookingContext))]
-    [Migration("20250117211021_RevokedTokensTableMaxLength")]
-    partial class RevokedTokensTableMaxLength
+    [Migration("20250401090335_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,6 +92,7 @@ namespace TableBooking.Model.Migrations
                         .HasColumnType("character varying(512)");
 
                     b.Property<DateTime?>("RefreshTokenExpiryTime")
+                        .HasMaxLength(512)
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SecurityStamp")
@@ -127,6 +128,9 @@ namespace TableBooking.Model.Migrations
 
                     b.Property<int>("DurationInMinutes")
                         .HasColumnType("integer");
+
+                    b.Property<Guid>("RestaurantId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("TableId")
                         .HasColumnType("uuid");
@@ -245,6 +249,7 @@ namespace TableBooking.Model.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("RevokedAt")
+                        .HasMaxLength(512)
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Token")

@@ -1,11 +1,12 @@
-﻿#nullable disable
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
 
 namespace TableBooking.Model.Migrations
 {
-    using Microsoft.EntityFrameworkCore.Migrations;
-
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,13 +16,13 @@ namespace TableBooking.Model.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Type = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    Location = table.Column<string>(type: "text", nullable: false),
-                    Phone = table.Column<string>(type: "text", nullable: false),
-                    PrimaryImageURL = table.Column<string>(type: "text", nullable: false, defaultValue: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png"),
-                    SecondaryImageURL = table.Column<string>(type: "text", nullable: false, defaultValue: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png"),
+                    Name = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                    Type = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Location = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Phone = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
+                    PrimaryImageUrl = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false, defaultValue: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png"),
+                    SecondaryImageUrl = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false, defaultValue: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png"),
                     Rating = table.Column<double>(type: "double precision", precision: 1, scale: 1, nullable: false),
                     Price = table.Column<int>(type: "integer", nullable: false),
                     OpenTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -30,6 +31,19 @@ namespace TableBooking.Model.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Restaurants", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RevokedTokens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Token = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
+                    RevokedAt = table.Column<DateTime>(type: "timestamp with time zone", maxLength: 512, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RevokedTokens", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -70,8 +84,8 @@ namespace TableBooking.Model.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    RefreshToken = table.Column<string>(type: "text", nullable: true),
-                    RefreshTokenExpiryTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    RefreshToken = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
+                    RefreshTokenExpiryTime = table.Column<DateTime>(type: "timestamp with time zone", maxLength: 512, nullable: true),
                     AppRoleId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserName = table.Column<string>(type: "text", nullable: true),
                     NormalizedUserName = table.Column<string>(type: "text", nullable: true),
@@ -108,7 +122,8 @@ namespace TableBooking.Model.Migrations
                     DurationInMinutes = table.Column<int>(type: "integer", nullable: false),
                     AmountOfPeople = table.Column<int>(type: "integer", nullable: false),
                     AppUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    TableId = table.Column<Guid>(type: "uuid", nullable: false)
+                    TableId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RestaurantId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -134,7 +149,7 @@ namespace TableBooking.Model.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     RatingStars = table.Column<int>(type: "integer", nullable: false),
                     NumberOfLikes = table.Column<int>(type: "integer", nullable: false),
-                    Comment = table.Column<string>(type: "text", nullable: false),
+                    Comment = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     DateOfRating = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     RestaurantId = table.Column<Guid>(type: "uuid", nullable: false),
                     AppUserId = table.Column<Guid>(type: "uuid", nullable: false)
@@ -195,6 +210,9 @@ namespace TableBooking.Model.Migrations
 
             migrationBuilder.DropTable(
                 name: "Ratings");
+
+            migrationBuilder.DropTable(
+                name: "RevokedTokens");
 
             migrationBuilder.DropTable(
                 name: "Tables");

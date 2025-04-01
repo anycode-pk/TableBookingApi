@@ -42,6 +42,9 @@ public class RestaurantController : ControllerBase
     [Authorize]
     public async Task<IActionResult> CreateRestaurant([FromBody] RestaurantShortInfoDto restaurantShortInfoDto)
     {
+        restaurantShortInfoDto.OpenTime = DateTime.SpecifyKind(restaurantShortInfoDto.OpenTime, DateTimeKind.Utc);
+        restaurantShortInfoDto.CloseTime = DateTime.SpecifyKind(restaurantShortInfoDto.CloseTime, DateTimeKind.Utc);
+        
         var allowedPrices = Enum.GetValues(typeof(Price)).Cast<Price>();
 
         if (!allowedPrices.Contains(restaurantShortInfoDto.Price))
@@ -64,6 +67,9 @@ public class RestaurantController : ControllerBase
     [Authorize]
     public async Task<IActionResult> UpdateRestaurant([FromBody] RestaurantShortInfoDto restaurantShortInfoDto, Guid restaurantId)
     {
+        restaurantShortInfoDto.OpenTime = DateTime.SpecifyKind(restaurantShortInfoDto.OpenTime, DateTimeKind.Utc);
+        restaurantShortInfoDto.CloseTime = DateTime.SpecifyKind(restaurantShortInfoDto.CloseTime, DateTimeKind.Utc);
+        
         var allowedPrices = Enum.GetValues(typeof(Price)).Cast<Price>();
 
         if (!allowedPrices.Contains(restaurantShortInfoDto.Price))

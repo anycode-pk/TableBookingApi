@@ -89,6 +89,7 @@ namespace TableBooking.Model.Migrations
                         .HasColumnType("character varying(512)");
 
                     b.Property<DateTime?>("RefreshTokenExpiryTime")
+                        .HasMaxLength(512)
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SecurityStamp")
@@ -245,6 +246,7 @@ namespace TableBooking.Model.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("RevokedAt")
+                        .HasMaxLength(512)
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Token")
