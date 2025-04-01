@@ -26,13 +26,6 @@ public class TableBookingContext : DbContext
             restaurantEntity.Property(r => r.Location).HasMaxLength(255);
             restaurantEntity.Property(r => r.Phone).HasMaxLength(32);
             
-            restaurantEntity.Property(r => r.CloseTime).HasConversion(
-                d => d.ToUniversalTime(),
-                d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
-            restaurantEntity.Property(r => r.OpenTime).HasConversion(
-                d => d.ToUniversalTime(),
-                d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
-            
             restaurantEntity.Property(r => r.Price)
                 .IsRequired()
                 .HasConversion<int>(); 

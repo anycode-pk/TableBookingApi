@@ -18,19 +18,6 @@ public class RestaurantShortInfoDto
     [Required]
     public string PrimaryImageURL { get; set; } =
         "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png";
-    
-    private DateTime _openTime;
-    private DateTime _closeTime;
     public Price Price { get; set; } = Price.Medium;
-
-    public DateTime OpenTime
-    {
-        get => _openTime;
-        set => _openTime = DateTime.SpecifyKind(value, DateTimeKind.Utc);
-    }
-    public DateTime CloseTime
-    {
-        get => _closeTime;
-        set => _closeTime = DateTime.SpecifyKind(value, DateTimeKind.Utc);
-    }
+    public OpeningAndClosingHours OpeningAndClosingHours { get; set; }
 }
