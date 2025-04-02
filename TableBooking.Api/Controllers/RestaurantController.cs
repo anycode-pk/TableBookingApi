@@ -41,18 +41,7 @@ public class RestaurantController : ControllerBase
     [HttpPost("CreateRestaurant")]
     [Authorize]
     public async Task<IActionResult> CreateRestaurant([FromBody] RestaurantShortInfoDto restaurantShortInfoDto)
-    {
-        restaurantShortInfoDto.OpenTime = DateTime.SpecifyKind(restaurantShortInfoDto.OpenTime, DateTimeKind.Utc);
-        restaurantShortInfoDto.CloseTime = DateTime.SpecifyKind(restaurantShortInfoDto.CloseTime, DateTimeKind.Utc);
-        
-        var allowedPrices = Enum.GetValues(typeof(Price)).Cast<Price>();
-
-        if (!allowedPrices.Contains(restaurantShortInfoDto.Price))
-        {
-            var allowedValues = string.Join(", ", allowedPrices.Select(p => $"{p} = {(int)p}"));
-            return BadRequest($"Price must be one of the following: {allowedValues}. Request sent: {restaurantShortInfoDto.Price} is wrong.");
-        }
-        
+    { 
         return await _restaurantService.CreateRestaurantAsync(restaurantShortInfoDto);
     }
 
@@ -67,17 +56,6 @@ public class RestaurantController : ControllerBase
     [Authorize]
     public async Task<IActionResult> UpdateRestaurant([FromBody] RestaurantShortInfoDto restaurantShortInfoDto, Guid restaurantId)
     {
-        restaurantShortInfoDto.OpenTime = DateTime.SpecifyKind(restaurantShortInfoDto.OpenTime, DateTimeKind.Utc);
-        restaurantShortInfoDto.CloseTime = DateTime.SpecifyKind(restaurantShortInfoDto.CloseTime, DateTimeKind.Utc);
-        
-        var allowedPrices = Enum.GetValues(typeof(Price)).Cast<Price>();
-
-        if (!allowedPrices.Contains(restaurantShortInfoDto.Price))
-        {
-            var allowedValues = string.Join(", ", allowedPrices.Select(p => $"{p} = {(int)p}"));
-            return BadRequest($"Price must be one of the following: {allowedValues}. Request sent: {restaurantShortInfoDto.Price} is wrong.");
-        }
-        
         return await _restaurantService.UpdateRestaurantAsync(restaurantShortInfoDto, restaurantId);
     }
 }

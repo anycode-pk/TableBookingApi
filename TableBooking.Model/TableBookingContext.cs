@@ -28,7 +28,9 @@ public class TableBookingContext : DbContext
             
             restaurantEntity.Property(r => r.Price)
                 .IsRequired()
-                .HasConversion<int>(); 
+                .HasConversion<int>();
+            
+            restaurantEntity.OwnsOne(r => r.OpeningAndClosingHours);
         });
 
         modelBuilder.Entity<Rating>(ratingEntity =>
