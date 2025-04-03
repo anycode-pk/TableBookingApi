@@ -1,7 +1,5 @@
 namespace TableBooking.Api.Validators;
 
-using System;
-using System.Linq.Expressions;
 using FluentValidation;
 using Model.Dtos.RestaurantDtos;
 using Model.Models;
@@ -20,29 +18,53 @@ public class RestaurantShortInfoDtoValidator : AbstractValidator<RestaurantShort
         RuleFor(x => x.Price).IsInEnum().WithMessage("Invalid price value.");
         RuleFor(x => x.OpeningAndClosingHours).NotNull().WithMessage("Opening and closing hours are required.");
 
-        ValidateWeekDay(x => x.OpeningAndClosingHours.Monday, "Monday");
-        ValidateWeekDay(x => x.OpeningAndClosingHours.Tuesday, "Tuesday");
-        ValidateWeekDay(x => x.OpeningAndClosingHours.Wednesday, "Wednesday");
-        ValidateWeekDay(x => x.OpeningAndClosingHours.Thursday, "Thursday");
-        ValidateWeekDay(x => x.OpeningAndClosingHours.Friday, "Friday");
-        ValidateWeekDay(x => x.OpeningAndClosingHours.Saturday, "Saturday");
-        ValidateWeekDay(x => x.OpeningAndClosingHours.Sunday, "Sunday");
-
+        ValidateDay(x =>
+        {
+            var monday = x.OpeningAndClosingHours.Monday;
+        }, "Monday");
+        ValidateDay(x =>
+        {
+            var tuesday = x.OpeningAndClosingHours.Tuesday;
+        }, "Tuesday");
+        ValidateDay(x =>
+        {
+            var wednesday = x.OpeningAndClosingHours.Wednesday;
+        }, "Wednesday");
+        ValidateDay(x =>
+        {
+            var thursday = x.OpeningAndClosingHours.Thursday;
+        }, "Thursday");
+        ValidateDay(x =>
+        {
+            var friday = x.OpeningAndClosingHours.Friday;
+        }, "Friday");
+        ValidateDay(x =>
+        {
+            var saturday = x.OpeningAndClosingHours.Saturday;
+        }, "Saturday");
+        ValidateDay(x =>
+        {
+            var sunday = x.OpeningAndClosingHours.Sunday;
+        }, "Sunday");
     }
 
-    private void ValidateWeekDay(Expression<Func<RestaurantShortInfoDto, WeekDayInfo>> dayExpression, string dayName)
+    private void ValidateDay(Action<RestaurantShortInfoDto> dayExpression, string dayName)
     {
-        RuleFor(dayExpression)
-            .NotNull().WithMessage($"{dayName} information is required.")
-            .DependentRules(() =>
+        RuleFor(x => x.OpeningAndClosingHours)
+            .Must(openingHours =>
             {
-                RuleFor(dayExpression)
-                    .Must(day => day.Closed || (day.OpenTime.HasValue && day.CloseTime.HasValue))
-                    .WithMessage($"{dayName} must have opening and closing hours unless it is marked as closed.");
+                var day = openingHours.GetType().GetProperty(dayName)?.GetValue(openingHours);
+                if (day == null) return true;
 
-                RuleFor(dayExpression)
-                    .Must(day => !day.OpenTime.HasValue || !day.CloseTime.HasValue || day.OpenTime < day.CloseTime)
-                    .WithMessage($"{dayName} closing time must be after opening time.");
-            });
+                var dayInfo = day as WeekDayInfo;
+                if (dayInfo == null) return true;
+
+                if (dayInfo.Closed) return !dayInfo.OpenTime.HasValue && !dayInfo.CloseTime.HasValue;
+
+                return dayInfo.OpenTime.HasValue
+                       && dayInfo.CloseTime.HasValue
+                       && dayInfo.OpenTime < dayInfo.CloseTime;
+            })
+            .WithMessage($"{dayName} must have opening and closing hours unless it is marked as closed.");
     }
 }

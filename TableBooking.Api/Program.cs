@@ -36,7 +36,7 @@ builder.Services
     .AddFluentValidationAutoValidation()
     .AddFluentValidationClientsideAdapters();
 
-// builder.Services.AddValidatorsFromAssemblyContaining<RestaurantShortInfoDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<RestaurantShortInfoDtoValidator>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
