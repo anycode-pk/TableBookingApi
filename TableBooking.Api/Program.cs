@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ using TableBooking.Api.Extensions;
 using TableBooking.Api.Interfaces;
 using TableBooking.Api.Middleware;
 using TableBooking.Api.Services;
+using TableBooking.Api.Validators;
 using TableBooking.Logic;
 using TableBooking.Logic.Converters.RatingConverters;
 using TableBooking.Logic.Converters.TableConverters;
@@ -21,6 +23,7 @@ using TableBooking.Logic.Converters.UserConverters;
 using TableBooking.Logic.Interfaces;
 using TableBooking.Model;
 using TableBooking.Model.Models;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +31,13 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
+
+builder.Services
+    .AddFluentValidationAutoValidation()
+    .AddFluentValidationClientsideAdapters();
+
+builder.Services.AddValidatorsFromAssemblyContaining<RestaurantShortInfoDtoValidator>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {

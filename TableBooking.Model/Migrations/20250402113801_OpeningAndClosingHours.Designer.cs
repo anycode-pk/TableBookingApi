@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TableBooking.Model;
@@ -11,9 +12,11 @@ using TableBooking.Model;
 namespace TableBooking.Model.Migrations
 {
     [DbContext(typeof(TableBookingContext))]
-    partial class TableBookingContextModelSnapshot : ModelSnapshot
+    [Migration("20250402113801_OpeningAndClosingHours")]
+    partial class OpeningAndClosingHours
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -324,187 +327,54 @@ namespace TableBooking.Model.Migrations
                             b1.Property<Guid>("RestaurantId")
                                 .HasColumnType("uuid");
 
+                            b1.Property<TimeSpan?>("FridayClose")
+                                .HasColumnType("interval");
+
+                            b1.Property<TimeSpan?>("FridayOpen")
+                                .HasColumnType("interval");
+
+                            b1.Property<TimeSpan?>("MondayClose")
+                                .HasColumnType("interval");
+
+                            b1.Property<TimeSpan?>("MondayOpen")
+                                .HasColumnType("interval");
+
+                            b1.Property<TimeSpan?>("SaturdayClose")
+                                .HasColumnType("interval");
+
+                            b1.Property<TimeSpan?>("SaturdayOpen")
+                                .HasColumnType("interval");
+
+                            b1.Property<TimeSpan?>("SundayClose")
+                                .HasColumnType("interval");
+
+                            b1.Property<TimeSpan?>("SundayOpen")
+                                .HasColumnType("interval");
+
+                            b1.Property<TimeSpan?>("ThursdayClose")
+                                .HasColumnType("interval");
+
+                            b1.Property<TimeSpan?>("ThursdayOpen")
+                                .HasColumnType("interval");
+
+                            b1.Property<TimeSpan?>("TuesdayClose")
+                                .HasColumnType("interval");
+
+                            b1.Property<TimeSpan?>("TuesdayOpen")
+                                .HasColumnType("interval");
+
+                            b1.Property<TimeSpan?>("WednesdayClose")
+                                .HasColumnType("interval");
+
+                            b1.Property<TimeSpan?>("WednesdayOpen")
+                                .HasColumnType("interval");
+
                             b1.HasKey("RestaurantId");
 
                             b1.ToTable("Restaurants");
 
                             b1.WithOwner()
                                 .HasForeignKey("RestaurantId");
-
-                            b1.OwnsOne("TableBooking.Model.Models.WeekDayInfo", "Friday", b2 =>
-                                {
-                                    b2.Property<Guid>("OpeningAndClosingHoursRestaurantId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<TimeSpan?>("CloseTime")
-                                        .HasColumnType("interval");
-
-                                    b2.Property<bool>("Closed")
-                                        .HasColumnType("boolean");
-
-                                    b2.Property<TimeSpan?>("OpenTime")
-                                        .HasColumnType("interval");
-
-                                    b2.HasKey("OpeningAndClosingHoursRestaurantId");
-
-                                    b2.ToTable("Restaurants");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("OpeningAndClosingHoursRestaurantId");
-                                });
-
-                            b1.OwnsOne("TableBooking.Model.Models.WeekDayInfo", "Monday", b2 =>
-                                {
-                                    b2.Property<Guid>("OpeningAndClosingHoursRestaurantId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<TimeSpan?>("CloseTime")
-                                        .HasColumnType("interval");
-
-                                    b2.Property<bool>("Closed")
-                                        .HasColumnType("boolean");
-
-                                    b2.Property<TimeSpan?>("OpenTime")
-                                        .HasColumnType("interval");
-
-                                    b2.HasKey("OpeningAndClosingHoursRestaurantId");
-
-                                    b2.ToTable("Restaurants");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("OpeningAndClosingHoursRestaurantId");
-                                });
-
-                            b1.OwnsOne("TableBooking.Model.Models.WeekDayInfo", "Saturday", b2 =>
-                                {
-                                    b2.Property<Guid>("OpeningAndClosingHoursRestaurantId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<TimeSpan?>("CloseTime")
-                                        .HasColumnType("interval");
-
-                                    b2.Property<bool>("Closed")
-                                        .HasColumnType("boolean");
-
-                                    b2.Property<TimeSpan?>("OpenTime")
-                                        .HasColumnType("interval");
-
-                                    b2.HasKey("OpeningAndClosingHoursRestaurantId");
-
-                                    b2.ToTable("Restaurants");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("OpeningAndClosingHoursRestaurantId");
-                                });
-
-                            b1.OwnsOne("TableBooking.Model.Models.WeekDayInfo", "Sunday", b2 =>
-                                {
-                                    b2.Property<Guid>("OpeningAndClosingHoursRestaurantId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<TimeSpan?>("CloseTime")
-                                        .HasColumnType("interval");
-
-                                    b2.Property<bool>("Closed")
-                                        .HasColumnType("boolean");
-
-                                    b2.Property<TimeSpan?>("OpenTime")
-                                        .HasColumnType("interval");
-
-                                    b2.HasKey("OpeningAndClosingHoursRestaurantId");
-
-                                    b2.ToTable("Restaurants");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("OpeningAndClosingHoursRestaurantId");
-                                });
-
-                            b1.OwnsOne("TableBooking.Model.Models.WeekDayInfo", "Thursday", b2 =>
-                                {
-                                    b2.Property<Guid>("OpeningAndClosingHoursRestaurantId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<TimeSpan?>("CloseTime")
-                                        .HasColumnType("interval");
-
-                                    b2.Property<bool>("Closed")
-                                        .HasColumnType("boolean");
-
-                                    b2.Property<TimeSpan?>("OpenTime")
-                                        .HasColumnType("interval");
-
-                                    b2.HasKey("OpeningAndClosingHoursRestaurantId");
-
-                                    b2.ToTable("Restaurants");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("OpeningAndClosingHoursRestaurantId");
-                                });
-
-                            b1.OwnsOne("TableBooking.Model.Models.WeekDayInfo", "Tuesday", b2 =>
-                                {
-                                    b2.Property<Guid>("OpeningAndClosingHoursRestaurantId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<TimeSpan?>("CloseTime")
-                                        .HasColumnType("interval");
-
-                                    b2.Property<bool>("Closed")
-                                        .HasColumnType("boolean");
-
-                                    b2.Property<TimeSpan?>("OpenTime")
-                                        .HasColumnType("interval");
-
-                                    b2.HasKey("OpeningAndClosingHoursRestaurantId");
-
-                                    b2.ToTable("Restaurants");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("OpeningAndClosingHoursRestaurantId");
-                                });
-
-                            b1.OwnsOne("TableBooking.Model.Models.WeekDayInfo", "Wednesday", b2 =>
-                                {
-                                    b2.Property<Guid>("OpeningAndClosingHoursRestaurantId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<TimeSpan?>("CloseTime")
-                                        .HasColumnType("interval");
-
-                                    b2.Property<bool>("Closed")
-                                        .HasColumnType("boolean");
-
-                                    b2.Property<TimeSpan?>("OpenTime")
-                                        .HasColumnType("interval");
-
-                                    b2.HasKey("OpeningAndClosingHoursRestaurantId");
-
-                                    b2.ToTable("Restaurants");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("OpeningAndClosingHoursRestaurantId");
-                                });
-
-                            b1.Navigation("Friday")
-                                .IsRequired();
-
-                            b1.Navigation("Monday")
-                                .IsRequired();
-
-                            b1.Navigation("Saturday")
-                                .IsRequired();
-
-                            b1.Navigation("Sunday")
-                                .IsRequired();
-
-                            b1.Navigation("Thursday")
-                                .IsRequired();
-
-                            b1.Navigation("Tuesday")
-                                .IsRequired();
-
-                            b1.Navigation("Wednesday")
-                                .IsRequired();
                         });
 
                     b.Navigation("OpeningAndClosingHours")

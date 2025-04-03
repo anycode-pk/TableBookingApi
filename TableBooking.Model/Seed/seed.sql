@@ -2,19 +2,61 @@ ALTER ROLE "TableBookingUser" SET search_path = public;
 
 -- Create Restaurants table
 CREATE TABLE IF NOT EXISTS "Restaurants" (
-    "Id" UUID PRIMARY KEY,
-    "Name" VARCHAR(255) NOT NULL,
-    "CloseTime" TIMESTAMP NOT NULL,
-    "Description" TEXT,
-    "Location" VARCHAR(255) NOT NULL,
-    "OpenTime" TIMESTAMP NOT NULL,
-    "Type" VARCHAR(255),
-    "PrimaryImageURL" TEXT NOT NULL,
-    "SecondaryImageURL" TEXT NOT NULL,
-    "Price" INT,
-    "Rating" DOUBLE PRECISION,
-    "Phone" VARCHAR(20)
+     "Id" UUID PRIMARY KEY,
+     "Name" VARCHAR(64) NOT NULL,
+     "Type" VARCHAR(100) NOT NULL,
+     "Description" VARCHAR(100) NOT NULL,
+     "Location" VARCHAR(255) NOT NULL,
+     "Phone" VARCHAR(32) NOT NULL,
+     "PrimaryImageUrl" VARCHAR(1000) DEFAULT 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png' NOT NULL,
+     "SecondaryImageUrl" VARCHAR(1000) DEFAULT 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png' NOT NULL,
+     "Rating" DOUBLE PRECISION NOT NULL,
+     "Price" INTEGER NOT NULL,
+     "OpeningAndClosingHours_Monday_OpenTime" INTERVAL,
+     "OpeningAndClosingHours_Monday_CloseTime" INTERVAL,
+     "OpeningAndClosingHours_Monday_Closed" BOOLEAN DEFAULT FALSE NOT NULL,
+     "OpeningAndClosingHours_Tuesday_OpenTime" INTERVAL,
+     "OpeningAndClosingHours_Tuesday_CloseTime" INTERVAL,
+     "OpeningAndClosingHours_Tuesday_Closed" BOOLEAN DEFAULT FALSE NOT NULL,
+     "OpeningAndClosingHours_Wednesday_OpenTime" INTERVAL,
+     "OpeningAndClosingHours_Wednesday_CloseTime" INTERVAL,
+     "OpeningAndClosingHours_Wednesday_Closed" BOOLEAN DEFAULT FALSE NOT NULL,
+     "OpeningAndClosingHours_Thursday_OpenTime" INTERVAL,
+     "OpeningAndClosingHours_Thursday_CloseTime" INTERVAL,
+     "OpeningAndClosingHours_Thursday_Closed" BOOLEAN DEFAULT FALSE NOT NULL,
+     "OpeningAndClosingHours_Friday_OpenTime" INTERVAL,
+     "OpeningAndClosingHours_Friday_CloseTime" INTERVAL,
+     "OpeningAndClosingHours_Friday_Closed" BOOLEAN DEFAULT FALSE NOT NULL,
+     "OpeningAndClosingHours_Saturday_OpenTime" INTERVAL,
+     "OpeningAndClosingHours_Saturday_CloseTime" INTERVAL,
+     "OpeningAndClosingHours_Saturday_Closed" BOOLEAN DEFAULT FALSE NOT NULL,
+     "OpeningAndClosingHours_Sunday_OpenTime" INTERVAL,
+     "OpeningAndClosingHours_Sunday_CloseTime" INTERVAL,
+     "OpeningAndClosingHours_Sunday_Closed" BOOLEAN DEFAULT FALSE NOT NULL
 );
+
+-- seed Restaurants records
+INSERT INTO "Restaurants" (
+    "Id", "Name", "Type", "Description", "Location", "Phone",
+    "PrimaryImageUrl", "SecondaryImageUrl", "Rating", "Price",
+    "OpeningAndClosingHours_Monday_OpenTime", "OpeningAndClosingHours_Monday_CloseTime", "OpeningAndClosingHours_Monday_Closed",
+    "OpeningAndClosingHours_Tuesday_OpenTime", "OpeningAndClosingHours_Tuesday_CloseTime", "OpeningAndClosingHours_Tuesday_Closed",
+    "OpeningAndClosingHours_Wednesday_OpenTime", "OpeningAndClosingHours_Wednesday_CloseTime", "OpeningAndClosingHours_Wednesday_Closed",
+    "OpeningAndClosingHours_Thursday_OpenTime", "OpeningAndClosingHours_Thursday_CloseTime", "OpeningAndClosingHours_Thursday_Closed",
+    "OpeningAndClosingHours_Friday_OpenTime", "OpeningAndClosingHours_Friday_CloseTime", "OpeningAndClosingHours_Friday_Closed",
+    "OpeningAndClosingHours_Saturday_OpenTime", "OpeningAndClosingHours_Saturday_CloseTime", "OpeningAndClosingHours_Saturday_Closed",
+    "OpeningAndClosingHours_Sunday_OpenTime", "OpeningAndClosingHours_Sunday_CloseTime", "OpeningAndClosingHours_Sunday_Closed"
+) VALUES (
+             'a7f7be1c-adae-40df-b315-f772857936d5', 'UNO', 'Pizza', 'Description of UNO.', 'Śniadeckich 10b/2', '123-456-789',
+             'https://placehold.co/300x200?text=Restaurant', 'https://placehold.co/300x200?text=Restaurant', 5, 1,
+             '0 years 0 mons 0 days 8 hours 0 mins 0.0 secs', '0 years 0 mons 0 days 21 hours 30 mins 0.0 secs', FALSE,
+             '12:00:00', '21:00:00', FALSE,
+             '12:00:00', '21:00:00', FALSE,
+             '12:00:00', '21:00:00', FALSE,
+             '12:00:00', '21:00:00', FALSE,
+             '12:00:00', '21:00:00', FALSE,
+             '12:00:00', '21:00:00', FALSE
+         );
 
 -- Create Tables table
 CREATE TABLE IF NOT EXISTS "Tables" (
@@ -73,18 +115,6 @@ CREATE TABLE IF NOT EXISTS "Ratings" (
     "RestaurantId" UUID REFERENCES "Restaurants"("Id"),
     "AppUserId" UUID REFERENCES "Users"("Id")
 );
-
--- seed Restaurants records
-INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageUrl","SecondaryImageUrl", "Price", "Rating", "Phone")
-VALUES ('a7f7be1c-adae-40df-b315-f772857936d5', 'UNO', '2023-10-26 21:00:00', 'Description of UNO.', 'Śniadeckich 10b/2', '2023-10-26 12:00:00', 'Pizza', 'https://placehold.co/300x200?text=Restaurant','https://placehold.co/300x200?text=Restaurant', 1, 5, 123-456-789);
-INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageUrl","SecondaryImageUrl", "Price", "Rating", "Phone")
-VALUES ('bfa8ba14-e4ef-4f13-a4a9-4b1d29d2f8ba','Mozaika', '2023-10-26 22:15:00', 'Description of Mozaika restaurant.', 'Ratuszowska 10', '2023-10-26 15:00:00', 'Generic restaurant', 'https://placehold.co/300x200?text=Restaurant','https://placehold.co/300x200?text=Restaurant', 2, 4, 41-334-219);
-INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageUrl","SecondaryImageUrl", "Price", "Rating", "Phone")
-VALUES ('a50c6651-c1b4-497f-b8db-e101da537692','NieNaŻarty', '2023-10-27 00:15:00', 'Description of NieNaŻarty.', 'Zwycięstwa 20/2', '2023-10-26 13:30:00', 'Burger', 'https://placehold.co/300x200?text=Restaurant','https://placehold.co/300x200?text=Restaurant', 0, 3, 432-123-543);
-INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageUrl","SecondaryImageUrl", "Price", "Rating", "Phone")
-VALUES ('207989de-6d2b-416a-9634-c45870cd9f4f','Heaven', '2023-10-26 20:00:00', 'Description of Heaven.', 'Staszewskiego 2', '2023-10-26 12:00:00', 'Pizza', 'https://placehold.co/300x200?text=Restaurant','https://placehold.co/300x200?text=Restaurant', 0, 2, 164-231-324);
-INSERT INTO "Restaurants" ("Id","Name", "CloseTime", "Description", "Location", "OpenTime", "Type", "PrimaryImageUrl","SecondaryImageUrl", "Price", "Rating", "Phone")
-VALUES ('123e1a20-6801-4a5e-a327-ecc5cb2bd906','Green', '2023-10-26 24:00:00', 'Description of Green restaurant.', 'Fałata 5/5', '2023-10-26 14:30:00', 'Generic restaurant', 'https://placehold.co/300x200?text=Restaurant','https://placehold.co/300x200?text=Restaurant', 1, 1, 357-877-667);
 
 -- seed Table records
 INSERT INTO "Tables" ("Id","NumberOfSeats", "RestaurantId") VALUES ('c29ba544-19be-4cbd-94d0-8d183b7b29af',1, '123e1a20-6801-4a5e-a327-ecc5cb2bd906');

@@ -23,32 +23,16 @@ public class RestaurantService : IRestaurantService
 
     public async Task<IActionResult> CreateRestaurantAsync(RestaurantShortInfoDto dto)
     {
-        if (string.IsNullOrEmpty(dto.Name))
-            return new BadRequestObjectResult("Name for new restaurant not specified.");
-        
-        if (string.IsNullOrEmpty(dto.Phone))
-            return new BadRequestObjectResult("Phone for new restaurant not specified.");
-        
-        if (string.IsNullOrEmpty(dto.Location))
-            return new BadRequestObjectResult("Location for new restaurant not specified.");
-        
-        if (string.IsNullOrEmpty(dto.Type))
-            return new BadRequestObjectResult("Type for new restaurant not specified.");
-        
-        if (string.IsNullOrEmpty(dto.Description))
-            return new BadRequestObjectResult("Description for new restaurant not specified.");
-
         var restaurant = new Restaurant
         {
-            Name = dto.Name,
-            CloseTime = dto.CloseTime,
-            Description = dto.Description,
-            Phone = dto.Phone,
-            Location = dto.Location,
+            Name = dto.Name!,
+            Description = dto.Description!,
+            Phone = dto.Phone!,
+            Location = dto.Location!,
             Rating = 1,
             Price = dto.Price,
-            OpenTime = dto.OpenTime,
-            Type = dto.Type,
+            OpeningAndClosingHours = dto.OpeningAndClosingHours,
+            Type = dto.Type!,
             PrimaryImageUrl = dto.PrimaryImageURL,
             SecondaryImageUrl = dto.SecondaryImageURL
         };
@@ -107,8 +91,7 @@ public class RestaurantService : IRestaurantService
             Tables = restaurant.Tables,
             Type = dto.Type ?? restaurant.Type,
             Rating = restaurant.Rating,
-            CloseTime = dto.CloseTime,
-            OpenTime = dto.OpenTime
+            OpeningAndClosingHours = dto.OpeningAndClosingHours
         };
 
         await _unitOfWork.RestaurantRepository.Update(newRestaurant);

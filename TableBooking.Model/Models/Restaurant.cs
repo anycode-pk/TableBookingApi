@@ -26,20 +26,6 @@ public class Restaurant : Entity
     [Precision(1,1)]
     public double Rating { get; set; }
     public Price Price { get; set; }
-
-    private readonly DateTime _openTime;
-    private readonly DateTime _closeTime;
-
-    public DateTime OpenTime
-    {
-        get => _openTime;
-        init => _openTime = DateTime.SpecifyKind(value, DateTimeKind.Utc);
-    }
-    
-    public DateTime CloseTime
-    {
-        get => _closeTime;
-        init => _closeTime = DateTime.SpecifyKind(value, DateTimeKind.Utc);
-    }
+    public OpeningAndClosingHours OpeningAndClosingHours { get; set; }
     public IEnumerable<Table> Tables { get; set; } = new List<Table>();
 }
