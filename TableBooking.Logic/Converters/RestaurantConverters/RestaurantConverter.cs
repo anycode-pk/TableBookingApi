@@ -2,75 +2,70 @@ namespace TableBooking.Logic.Converters.RestaurantConverters;
 
 using Model.Dtos.RestaurantDtos;
 using Model.Models;
+using System;
 
 public class RestaurantConverter : IRestaurantConverter
 {
+    private static readonly string[] DaysOfWeek = [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
     public OpeningAndClosingHoursDto ConvertToDto(OpeningAndClosingHours hours)
     {
-        return new OpeningAndClosingHoursDto
+        var dto = new OpeningAndClosingHoursDto();
+        foreach (var day in DaysOfWeek)
         {
-            MondayHours = FormatTimeSpan(hours.MondayOpen, hours.MondayClose),
-            TuesdayHours = FormatTimeSpan(hours.TuesdayOpen, hours.TuesdayClose),
-            WednesdayHours = FormatTimeSpan(hours.WednesdayOpen, hours.WednesdayClose),
-            ThursdayHours = FormatTimeSpan(hours.ThursdayOpen, hours.ThursdayClose),
-            FridayHours = FormatTimeSpan(hours.FridayOpen, hours.FridayClose),
-            SaturdayHours = FormatTimeSpan(hours.SaturdayOpen, hours.SaturdayClose),
-            SundayHours = FormatTimeSpan(hours.SundayOpen, hours.SundayClose)
-        };
+            var property = typeof(OpeningAndClosingHours).GetProperty($"{day}Open");
+            if (property == null) continue;
+
+            var dayInfo = property.GetValue(hours) as WeekDayInfo;
+            typeof(OpeningAndClosingHoursDto)
+                .GetProperty($"{day}Hours")?
+                .SetValue(dto, FormatTimeSpan(dayInfo));
+        }
+
+        return dto;
     }
 
     public OpeningAndClosingHours ConvertToModel(OpeningAndClosingHoursDto hoursDto)
     {
-        return new OpeningAndClosingHours
+        var model = new OpeningAndClosingHours();
+        foreach (var day in DaysOfWeek)
         {
-            MondayOpen = ParseTime(hoursDto.MondayHours, true),
-            MondayClose = ParseTime(hoursDto.MondayHours, false),
-            
-            TuesdayOpen = ParseTime(hoursDto.TuesdayHours, true),
-            TuesdayClose = ParseTime(hoursDto.TuesdayHours, false),
-            
-            WednesdayOpen = ParseTime(hoursDto.WednesdayHours, true),
-            WednesdayClose = ParseTime(hoursDto.WednesdayHours, false),
-            
-            ThursdayOpen = ParseTime(hoursDto.ThursdayHours, true),
-            ThursdayClose = ParseTime(hoursDto.ThursdayHours, false),
-            
-            FridayOpen = ParseTime(hoursDto.FridayHours, true),
-            FridayClose = ParseTime(hoursDto.FridayHours, false),
-            
-            SaturdayOpen = ParseTime(hoursDto.SaturdayHours, true),
-            SaturdayClose = ParseTime(hoursDto.SaturdayHours, false),
-            
-            SundayOpen = ParseTime(hoursDto.SundayHours, true),
-            SundayClose = ParseTime(hoursDto.SundayHours, false)
-        };
+            var dayHours = typeof(OpeningAndClosingHoursDto).GetProperty($"{day}Hours")?.GetValue(hoursDto) as string;
+            var dayInfo = ParseTime(dayHours);
+
+            typeof(OpeningAndClosingHours)
+                .GetProperty($"{day}Open")?
+                .SetValue(model, dayInfo);
+        }
+
+        return model;
     }
 
-    private static string FormatTimeSpan(TimeSpan? open, TimeSpan? close)
+    private static string FormatTimeSpan(WeekDayInfo dayInfo)
     {
-        if (open == null || close == null)
+        if (dayInfo == null || dayInfo.Closed || dayInfo.OpenTime == null || dayInfo.CloseTime == null)
         {
             return "closed";
         }
 
-        return $"{open:hh\\:mm}-{close:hh\\:mm}";
+        return $"{dayInfo.OpenTime:hh\\:mm}-{dayInfo.CloseTime:hh\\:mm}";
     }
 
-    private static TimeSpan? ParseTime(string hours, bool isOpen)
+    private static WeekDayInfo ParseTime(string hours)
     {
         if (string.IsNullOrEmpty(hours) || hours.Equals("closed", StringComparison.OrdinalIgnoreCase))
         {
-            return null;
+            return new WeekDayInfo { Closed = true };
         }
 
         var times = hours.Split('-');
-        if (times.Length != 2) return null;
+        if (times.Length != 2) return new WeekDayInfo { Closed = true };
 
-        if (isOpen)
+        return new WeekDayInfo
         {
-            return TimeSpan.TryParse(times[0], out var openTime) ? openTime : null;
-        }
-
-        return TimeSpan.TryParse(times[1], out var closeTime) ? closeTime : null;
+            Closed = false,
+            OpenTime = TimeSpan.TryParse(times[0], out var openTime) ? openTime : null,
+            CloseTime = TimeSpan.TryParse(times[1], out var closeTime) ? closeTime : null
+        };
     }
 }

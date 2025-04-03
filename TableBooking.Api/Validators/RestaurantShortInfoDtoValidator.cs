@@ -4,10 +4,11 @@ using System;
 using System.Linq.Expressions;
 using FluentValidation;
 using Model.Dtos.RestaurantDtos;
+using Model.Models;
 
 public class RestaurantShortInfoDtoValidator : AbstractValidator<RestaurantShortInfoDto>
 {
-public RestaurantShortInfoDtoValidator()
+    public RestaurantShortInfoDtoValidator()
     {
         RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required.");
         RuleFor(x => x.Type).NotEmpty().WithMessage("Type is required.");
@@ -19,31 +20,29 @@ public RestaurantShortInfoDtoValidator()
         RuleFor(x => x.Price).IsInEnum().WithMessage("Invalid price value.");
         RuleFor(x => x.OpeningAndClosingHours).NotNull().WithMessage("Opening and closing hours are required.");
 
-        ValidateTimeFormat(x => x.OpeningAndClosingHours.MondayOpen, "Monday open");
-        ValidateTimeFormat(x => x.OpeningAndClosingHours.MondayClose, "Monday close");
-        ValidateTimeFormat(x => x.OpeningAndClosingHours.TuesdayOpen, "Tuesday open");
-        ValidateTimeFormat(x => x.OpeningAndClosingHours.TuesdayClose, "Tuesday close");
-        ValidateTimeFormat(x => x.OpeningAndClosingHours.WednesdayOpen, "Wednesday open");
-        ValidateTimeFormat(x => x.OpeningAndClosingHours.WednesdayClose, "Wednesday close");
-        ValidateTimeFormat(x => x.OpeningAndClosingHours.ThursdayOpen, "Thursday open");
-        ValidateTimeFormat(x => x.OpeningAndClosingHours.ThursdayClose, "Thursday close");
-        ValidateTimeFormat(x => x.OpeningAndClosingHours.FridayOpen, "Friday open");
-        ValidateTimeFormat(x => x.OpeningAndClosingHours.FridayClose, "Friday close");
-        ValidateTimeFormat(x => x.OpeningAndClosingHours.SaturdayOpen, "Saturday open");
-        ValidateTimeFormat(x => x.OpeningAndClosingHours.SaturdayClose, "Saturday close");
-        ValidateTimeFormat(x => x.OpeningAndClosingHours.SundayOpen, "Sunday open");
-        ValidateTimeFormat(x => x.OpeningAndClosingHours.SundayClose, "Sunday close");
+        ValidateWeekDay(x => x.OpeningAndClosingHours.Monday, "Monday");
+        ValidateWeekDay(x => x.OpeningAndClosingHours.Tuesday, "Tuesday");
+        ValidateWeekDay(x => x.OpeningAndClosingHours.Wednesday, "Wednesday");
+        ValidateWeekDay(x => x.OpeningAndClosingHours.Thursday, "Thursday");
+        ValidateWeekDay(x => x.OpeningAndClosingHours.Friday, "Friday");
+        ValidateWeekDay(x => x.OpeningAndClosingHours.Saturday, "Saturday");
+        ValidateWeekDay(x => x.OpeningAndClosingHours.Sunday, "Sunday");
+
     }
 
-    private void ValidateTimeFormat(Expression<Func<RestaurantShortInfoDto, TimeSpan?>> timeExpression, string fieldName)
+    private void ValidateWeekDay(Expression<Func<RestaurantShortInfoDto, WeekDayInfo>> dayExpression, string dayName)
     {
-        RuleFor(timeExpression)
-            .Must(time => time == null || BeValidTimeSpan(time.Value))
-            .WithMessage($"{fieldName} must be in the format HH:mm (e.g., 08:00) or null (closed).");
-    }
+        RuleFor(dayExpression)
+            .NotNull().WithMessage($"{dayName} information is required.")
+            .DependentRules(() =>
+            {
+                RuleFor(dayExpression)
+                    .Must(day => day.Closed || (day.OpenTime.HasValue && day.CloseTime.HasValue))
+                    .WithMessage($"{dayName} must have opening and closing hours unless it is marked as closed.");
 
-    private bool BeValidTimeSpan(TimeSpan time)
-    {
-        return time >= TimeSpan.Zero && time < TimeSpan.FromHours(24);
+                RuleFor(dayExpression)
+                    .Must(day => !day.OpenTime.HasValue || !day.CloseTime.HasValue || day.OpenTime < day.CloseTime)
+                    .WithMessage($"{dayName} closing time must be after opening time.");
+            });
     }
 }

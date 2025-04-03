@@ -2,24 +2,18 @@ namespace TableBooking.Model.Models;
 
 public class OpeningAndClosingHours
 {
-    public TimeSpan? MondayOpen { get; set; }
-    public TimeSpan? MondayClose { get; set; }
+    public WeekDayInfo Monday { get; set; } = new();
+    public WeekDayInfo Tuesday { get; set; } = new();
+    public WeekDayInfo Wednesday { get; set; } = new();
+    public WeekDayInfo Thursday { get; set; } = new();
+    public WeekDayInfo Friday { get; set; } = new();
+    public WeekDayInfo Saturday { get; set; } = new();
+    public WeekDayInfo Sunday { get; set; } = new();
+}
 
-    public TimeSpan? TuesdayOpen { get; set; }
-    public TimeSpan? TuesdayClose { get; set; }
-
-    public TimeSpan? WednesdayOpen { get; set; }
-    public TimeSpan? WednesdayClose { get; set; }
-
-    public TimeSpan? ThursdayOpen { get; set; }
-    public TimeSpan? ThursdayClose { get; set; }
-
-    public TimeSpan? FridayOpen { get; set; }
-    public TimeSpan? FridayClose { get; set; }
-
-    public TimeSpan? SaturdayOpen { get; set; }
-    public TimeSpan? SaturdayClose { get; set; }
-
-    public TimeSpan? SundayOpen { get; set; }
-    public TimeSpan? SundayClose { get; set; }
+public class WeekDayInfo
+{
+    public bool Closed { get; set; }
+    public TimeSpan? OpenTime { get; set; }
+    public TimeSpan? CloseTime { get; set; }
 }

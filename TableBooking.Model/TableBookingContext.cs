@@ -30,7 +30,16 @@ public class TableBookingContext : DbContext
                 .IsRequired()
                 .HasConversion<int>();
             
-            restaurantEntity.OwnsOne(r => r.OpeningAndClosingHours);
+            restaurantEntity.OwnsOne(r => r.OpeningAndClosingHours, hours =>
+            {
+                hours.OwnsOne(h => h.Monday);
+                hours.OwnsOne(h => h.Tuesday);
+                hours.OwnsOne(h => h.Wednesday);
+                hours.OwnsOne(h => h.Thursday);
+                hours.OwnsOne(h => h.Friday);
+                hours.OwnsOne(h => h.Saturday);
+                hours.OwnsOne(h => h.Sunday);
+            });
         });
 
         modelBuilder.Entity<Rating>(ratingEntity =>
