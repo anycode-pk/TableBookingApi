@@ -23,14 +23,14 @@ public class RatingService : IRatingService
 
         if (dto.RatingStars < 1 || dto.RatingStars > 5)
         {
-            return new BadRequestObjectResult("Rating must be between 1 and 5.");
+            return new BadRequestObjectResult(new { message = "Rating must be between 1 and 5." });
         }
         
         var existingRating = await _unitOfWork.RatingRepository.GetRatingByUserIdAsync(userId, dto.RestaurantId);
 
         if (existingRating != null)
         {
-            return new BadRequestObjectResult("You have already submitted a review for this restaurant.");
+            return new BadRequestObjectResult(new { message = "You have already submitted a review for this restaurant." } );
         }
         
         var rating = new Rating

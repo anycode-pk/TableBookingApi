@@ -19,7 +19,7 @@ public class BookingService : IBookingService
 
         if (request.AmountOfPeople != table.NumberOfSeats)
         {
-            return new BadRequestObjectResult($"Number of seats for this table is {table.NumberOfSeats}, but user has {request.AmountOfPeople} people.");
+            return new BadRequestObjectResult(new { message = $"Number of seats for this table is {table.NumberOfSeats}, but user has {request.AmountOfPeople} people."});
         }
             
         var newBooking = new Booking
@@ -62,7 +62,7 @@ public class BookingService : IBookingService
 
         if (availableTable == null)
         {
-            return new BadRequestObjectResult($"No available table for {createBookingDto.AmountOfPeople} people at restaurant {restaurantId}");
+            return new BadRequestObjectResult(new { message = $"No available table for {createBookingDto.AmountOfPeople} people at restaurant {restaurantId}" });
         }
 
         var newBooking = new Booking
@@ -103,7 +103,7 @@ public class BookingService : IBookingService
     {
         var booking = await _unitOfWork.BookingRepository.GetBookingByIdForSpecificUserAsync(bookingId, userId);
         if (booking == null)
-            return new BadRequestObjectResult("Bad request");
+            return new BadRequestObjectResult(new { message = "Bad request"});
 
         await _unitOfWork.BookingRepository.Delete(booking.Id);
         await _unitOfWork.SaveChangesAsync();
@@ -116,7 +116,7 @@ public class BookingService : IBookingService
         var booking = await _unitOfWork.BookingRepository.GetBookingByIdForSpecificUserAsync(bookingId, userId);
 
         if (booking == null)
-            return new BadRequestObjectResult("Bad request: no bookings");
+            return new BadRequestObjectResult(new { message = "Bad request: no bookings" });
         
         if (booking.RestaurantId == Guid.Empty)
         {
@@ -150,7 +150,7 @@ public class BookingService : IBookingService
     {
         var booking = await _unitOfWork.BookingRepository.GetBookingByIdForSpecificUserAsync(bookingId, userId);
         if (booking == null)
-            return new BadRequestObjectResult($"Booking with id {bookingId} doesn't exist.");
+            return new BadRequestObjectResult(new { message = $"Booking with id {bookingId} doesn't exist." });
         
         // TODO: change tableId when user changed amount of people.
         var newBooking = new Booking
