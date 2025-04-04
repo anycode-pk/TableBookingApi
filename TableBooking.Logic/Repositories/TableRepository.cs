@@ -7,9 +7,7 @@ using Model.Models;
 
 public class TableRepository : GenericRepository<Table>, ITableRepository
 {
-    public TableRepository(TableBookingContext context) : base(context)
-    {
-    }
+    public TableRepository(TableBookingContext context) : base(context) { }
 
     public async Task<IEnumerable<Table>> GetTablesByRestaurantIdAsync(Guid restaurantId)
     {

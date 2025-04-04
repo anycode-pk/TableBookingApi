@@ -11,9 +11,12 @@ public class BookingRepository : GenericRepository<Booking>, IBookingRepository
     {
     }
 
-    public async Task<IEnumerable<Booking>> GetAllBookingsForSpecificUserAsync(Guid userId)
+    public async Task<IEnumerable<Booking>> GetAllBookingsForSpecificUserAsync(Guid userId, DateTime? from = null, DateTime? to = null)
     {
-        return await ObjectSet.Where(x => x.AppUserId.Equals(userId)).ToListAsync();
+        return await ObjectSet.Where(x => x.AppUserId.Equals(userId))
+            .Where(x => !from.HasValue || x.Date >= from.Value)
+            .Where(x => !to.HasValue || x.Date <= to.Value)
+            .ToListAsync();
     }
 
     public async Task<Booking?> GetBookingByIdForSpecificUserAsync(Guid bookingId, Guid userId)

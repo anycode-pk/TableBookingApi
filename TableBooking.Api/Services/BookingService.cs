@@ -148,9 +148,9 @@ public class BookingService : IBookingService
         return new OkObjectResult(bookingDto);
     }
 
-    public async Task<IActionResult> GetAllBookings(Guid userId)
+    public async Task<IActionResult> GetAllBookings(Guid userId, DateTime? from = null, DateTime? to = null)
     {
-        var bookings = await _unitOfWork.BookingRepository.GetAllBookingsForSpecificUserAsync(userId);
+        var bookings = await _unitOfWork.BookingRepository.GetAllBookingsForSpecificUserAsync(userId, from, to);
 
         return new OkObjectResult(bookings);
     }
