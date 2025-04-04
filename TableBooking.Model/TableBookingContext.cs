@@ -20,6 +20,7 @@ public class TableBookingContext : DbContext
     public DbSet<AppUser> Users { get; set; }
     public DbSet<AppRole> Roles { get; set; }
     public DbSet<RevokedToken> RevokedTokens { get; set; }
+    public DbSet<UserFavouriteRestaurant> UserFavouriteRestaurant { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -73,6 +74,20 @@ public class TableBookingContext : DbContext
                     d => d.HasValue ? d.Value.ToUniversalTime() : (DateTime?)null,
                     d => d.HasValue ? DateTime.SpecifyKind(d.Value, DateTimeKind.Utc) : null);
         });
+
+        modelBuilder.Entity<UserFavouriteRestaurant>(userFavouriteRestaurantEntity =>
+        {
+            userFavouriteRestaurantEntity.HasKey(uf => new { uf.UserId, uf.RestaurantId });
+
+            userFavouriteRestaurantEntity.HasOne(uf => uf.User)
+                .WithMany(u => u.FavouriteRestaurants)
+                .HasForeignKey(uf => uf.UserId);
+
+            userFavouriteRestaurantEntity.HasOne(uf => uf.Restaurant)
+                .WithMany(r => r.Users)
+                .HasForeignKey(uf => uf.RestaurantId);
+        });
+
 
         modelBuilder.Entity<RevokedToken>(appUserEntity =>
         {

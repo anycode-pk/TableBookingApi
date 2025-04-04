@@ -13,18 +13,18 @@ public class AppUser : IdentityUser<Guid>
         get => _refreshTokenExpiryTime;
         init => _refreshTokenExpiryTime = value.HasValue ? DateTime.SpecifyKind(value.Value, DateTimeKind.Utc) : null;
     }
-
     public IEnumerable<Booking> Bookings { get; set; } = new List<Booking>();
     public Guid AppRoleId { get; set; }
     public AppRole AppRole { get; set; } = new();
-
+    public List<UserFavouriteRestaurant> FavouriteRestaurants { get; set; } = new List<UserFavouriteRestaurant>();
     public AppUserDto ToDto()
     {
         return new AppUserDto
         {
             Bookings = Bookings,
             Email = Email,
-            Username = UserName
+            Username = UserName,
+            FavouriteRestaurants = FavouriteRestaurants
         };
     }
 }

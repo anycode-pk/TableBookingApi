@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TableBooking.Model;
@@ -11,9 +12,11 @@ using TableBooking.Model;
 namespace TableBooking.Model.Migrations
 {
     [DbContext(typeof(TableBookingContext))]
-    partial class TableBookingContextModelSnapshot : ModelSnapshot
+    [Migration("20250404130333_FavouriteRestaurants")]
+    partial class FavouriteRestaurants
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace TableBooking.Model.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("AppUserRestaurant", b =>
+                {
+                    b.Property<Guid>("AppUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("FavouriteRestaurantsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("AppUserId", "FavouriteRestaurantsId");
+
+                    b.HasIndex("FavouriteRestaurantsId");
+
+                    b.ToTable("UserFavouriteRestaurants", (string)null);
+                });
 
             modelBuilder.Entity("TableBooking.Model.Models.AppRole", b =>
                 {
@@ -272,19 +290,19 @@ namespace TableBooking.Model.Migrations
                     b.ToTable("Tables");
                 });
 
-            modelBuilder.Entity("TableBooking.Model.Models.UserFavouriteRestaurant", b =>
+            modelBuilder.Entity("AppUserRestaurant", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.HasOne("TableBooking.Model.Models.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<Guid>("RestaurantId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("UserId", "RestaurantId");
-
-                    b.HasIndex("RestaurantId");
-
-                    b.ToTable("UserFavouriteRestaurant");
+                    b.HasOne("TableBooking.Model.Models.Restaurant", null)
+                        .WithMany()
+                        .HasForeignKey("FavouriteRestaurantsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TableBooking.Model.Models.AppUser", b =>
@@ -535,37 +553,14 @@ namespace TableBooking.Model.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TableBooking.Model.Models.UserFavouriteRestaurant", b =>
-                {
-                    b.HasOne("TableBooking.Model.Models.Restaurant", "Restaurant")
-                        .WithMany("Users")
-                        .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TableBooking.Model.Models.AppUser", "User")
-                        .WithMany("FavouriteRestaurants")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Restaurant");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("TableBooking.Model.Models.AppUser", b =>
                 {
                     b.Navigation("Bookings");
-
-                    b.Navigation("FavouriteRestaurants");
                 });
 
             modelBuilder.Entity("TableBooking.Model.Models.Restaurant", b =>
                 {
                     b.Navigation("Tables");
-
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("TableBooking.Model.Models.Table", b =>

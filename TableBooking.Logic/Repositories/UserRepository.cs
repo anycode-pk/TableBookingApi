@@ -7,9 +7,7 @@ using Model.Models;
 
 public class UserRepository : GenericRepository<AppUser>, IUserRepository
 {
-    public UserRepository(TableBookingContext context) : base(context)
-    {
-    }
+    public UserRepository(TableBookingContext context) : base(context) { }
 
     public async Task<IEnumerable<AppUser>> GetAllUsers()
     {
@@ -19,5 +17,14 @@ public class UserRepository : GenericRepository<AppUser>, IUserRepository
     public async Task<AppUser> GetUserById(Guid userId)
     {
         return (await ObjectSet.Include(x => x.Bookings).FirstOrDefaultAsync(x => x.Id == userId))!;
+    }
+
+    public async Task<List<UserFavouriteRestaurant>> GetFavouriteRestaurantsByUserId(Guid userId)
+    {
+        return await ObjectSet
+            .Where(uf => uf.Id == userId)
+            .Include(uf => uf.FavouriteRestaurants)
+            .SelectMany(uf => uf.FavouriteRestaurants)
+            .ToListAsync();
     }
 }

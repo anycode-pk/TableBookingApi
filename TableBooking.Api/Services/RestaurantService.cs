@@ -56,6 +56,39 @@ public class RestaurantService : IRestaurantService
         return new OkObjectResult(restaurantToDelete);
     }
 
+    public async Task<IActionResult> FavouriteRestaurantAsync(Guid userId, Guid restaurantId)
+    {
+        var restaurantToBeFavourite = await _unitOfWork.RestaurantRepository.GetByIdAsync(restaurantId);
+    
+        if (restaurantToBeFavourite == null)
+            return new NotFoundObjectResult(new { message = $"Restaurant with id {restaurantId} not found." });
+    
+        var user = await _unitOfWork.UserRepository.GetUserById(userId);
+        
+        var userFavs = await _unitOfWork.UserRepository.GetFavouriteRestaurantsByUserId(userId);
+
+        var existingFavourite = userFavs
+            .FirstOrDefault(uf => uf.RestaurantId == restaurantId);
+
+        if (existingFavourite != null)
+        {
+            user.FavouriteRestaurants.Remove(existingFavourite);
+        }
+        else
+        {
+            user.FavouriteRestaurants.Add(new UserFavouriteRestaurant
+            {
+                UserId = userId,
+                RestaurantId = restaurantId
+            });
+        }
+    
+        await _unitOfWork.SaveChangesAsync();
+    
+        return new OkObjectResult(user.ToDto());    
+    }
+
+
     public async Task<IActionResult> GetAllRestaurantsAsync(string? restaurantName, Price? price)
     {
         var restaurants = await _unitOfWork.RestaurantRepository.GetRestaurantsAsync(restaurantName, price);
@@ -69,6 +102,7 @@ public class RestaurantService : IRestaurantService
 
         if (restaurant == null)
             return new NotFoundObjectResult(new { message = $"Restaurant with id {restaurantId} not found." });
+        
         var tables = await _unitOfWork.TableRepository.GetTablesByRestaurantIdAsync(restaurantId);
         restaurant.Tables = tables;
 

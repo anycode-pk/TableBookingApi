@@ -12,4 +12,5 @@ public interface IRestaurantService
     public Task<IActionResult> CreateRestaurantAsync(RestaurantShortInfoDto dto);
     public Task<IActionResult> UpdateRestaurantAsync(RestaurantShortInfoDto dto, Guid restaurantId);
     public Task<IActionResult> DeleteRestaurantAsync(Guid restaurantId);
+    public Task<IActionResult> FavouriteRestaurantAsync(Guid userId, Guid restaurantId);
 }

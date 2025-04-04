@@ -1,5 +1,6 @@
 namespace TableBooking.Api.Controllers;
 
+using System.Security.Claims;
 using Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,12 @@ using Model.Models;
 public class RestaurantController : ControllerBase
 {
     private readonly IRestaurantService _restaurantService;
+    private readonly IUserService _userService;
 
-    public RestaurantController(IRestaurantService restaurantService)
+    public RestaurantController(IRestaurantService restaurantService, IUserService userService)
     {
         _restaurantService = restaurantService;
+        _userService = userService;
     }
 
     [HttpGet("GetAllRestaurants")]
@@ -54,9 +57,19 @@ public class RestaurantController : ControllerBase
 
     [HttpPut("UpdateRestaurant/{restaurantId:guid}")]
     [Authorize]
-    public async Task<IActionResult> UpdateRestaurant([FromBody] RestaurantShortInfoDto restaurantShortInfoDto,
-        Guid restaurantId)
+    public async Task<IActionResult> UpdateRestaurant([FromBody] RestaurantShortInfoDto restaurantShortInfoDto, Guid restaurantId)
     {
         return await _restaurantService.UpdateRestaurantAsync(restaurantShortInfoDto, restaurantId);
+    }
+    
+    [HttpPost("Favourite/{restaurantId:guid}")]
+    [Authorize]
+    public async Task<IActionResult> FavouriteRestaurant(Guid restaurantId)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (userId == null) throw new UnauthorizedAccessException("User is not authenticated.");
+        
+        return await _restaurantService.FavouriteRestaurantAsync(Guid.Parse(userId), restaurantId);
     }
 }

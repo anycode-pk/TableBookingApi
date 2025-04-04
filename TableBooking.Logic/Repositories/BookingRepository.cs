@@ -7,9 +7,7 @@ using Model.Models;
 
 public class BookingRepository : GenericRepository<Booking>, IBookingRepository
 {
-    public BookingRepository(TableBookingContext context) : base(context)
-    {
-    }
+    public BookingRepository(TableBookingContext context) : base(context) { }
 
     public async Task<IEnumerable<Booking>> GetAllBookingsForSpecificUserAsync(Guid userId, DateTime? from = null, DateTime? to = null)
     {

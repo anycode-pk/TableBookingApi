@@ -26,7 +26,7 @@ public class BookingController : ControllerBase
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ??
                                 throw new InvalidOperationException("User ID not found in claims."));
 
-        return await _bookingService.GetAllBookings(userId);
+        return await _bookingService.GetAllBookings(userId, fromDate, toDate);
     }
 
     [HttpGet("GetById/{bookingId}")]
