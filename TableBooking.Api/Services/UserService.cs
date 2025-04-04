@@ -120,7 +120,14 @@ public class UserService : IUserService
     public async Task<AppUserDto> GetUserInfo(Guid id, CancellationToken cancellationToken)
     {
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+        
+        var favRestaurants = await _dbContext.UserFavouriteRestaurant
+            .Where(uf => uf.UserId == id)
+            .Include(uf => uf.Restaurant)
+            .ToListAsync(cancellationToken);
 
+        user.FavouriteRestaurants = favRestaurants;
+        
         var userDto = user?.ToDto();
 
         return userDto ?? new AppUserDto();
