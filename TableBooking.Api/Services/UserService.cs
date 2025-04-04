@@ -35,15 +35,15 @@ public class UserService : IUserService
     {
         var userExists = await _userManager.FindByNameAsync(dto.Username);
         if (userExists != null)
-            return new BadRequestObjectResult($"User with the same username found: {dto.Username}.");
+            return new BadRequestObjectResult(new { message = $"User with the same username found: {dto.Username}."});
         
         var emailExists = await _userManager.FindByEmailAsync(dto.Email);
         if (emailExists != null)
-            return new BadRequestObjectResult($"User with the same email found: {dto.Email}.");
+            return new BadRequestObjectResult(new { message = $"User with the same email found: {dto.Email}." });
 
         var appUserRole = await _roleManager.FindByNameAsync("User");
         if (appUserRole == null)
-            return new BadRequestObjectResult($"Can't find role by name 'User'.");
+            return new BadRequestObjectResult(new { message = "Can't find role by name 'User'." });
 
         var user = new AppUser
         {
@@ -57,7 +57,7 @@ public class UserService : IUserService
         var result = await _userManager.CreateAsync(user, dto.Password);
         
         if (!result.Succeeded)
-            return new BadRequestObjectResult("Invalid password length or Bad Email");
+            return new BadRequestObjectResult(new { message = "Invalid password length or Bad Email" });
 
         return new OkObjectResult(new ResultDto { Status = "Success", Message = "User created successfully!" });
     }
@@ -66,22 +66,22 @@ public class UserService : IUserService
     {
         var user = await _userManager.FindByNameAsync(dto.Username);
         if (user == null)
-            return new BadRequestObjectResult($"User with username '{dto.Username}' does not exist.");
+            return new BadRequestObjectResult(new { message = $"User with username '{dto.Username}' does not exist." });
         
         if (!await _userManager.CheckPasswordAsync(user, dto.Password))
-            return new BadRequestObjectResult($"Wrong password.");
+            return new BadRequestObjectResult(new { message = "Wrong password." });
         
         var role = await _roleManager.FindByNameAsync("User");
-        if (role == null) return new BadRequestObjectResult($"Can't login. Role named 'User' is not found.");
+        if (role == null) return new BadRequestObjectResult(new { message = "Can't login. Role named 'User' is not found." });
 
         if (string.IsNullOrEmpty(user.UserName))
         {
-            return new BadRequestObjectResult($"User does not have a name. UserId {user.Id}");
+            return new BadRequestObjectResult(new { message = $"User does not have a name. UserId {user.Id}" });
         }
 
         if (string.IsNullOrEmpty(role.Name))
         {
-            return new BadRequestObjectResult($"Role does not have a name. RoleId {role.Id}");
+            return new BadRequestObjectResult(new { message = $"Role does not have a name. RoleId {role.Id}" });
         }
         
         var authClaims = new List<Claim>
@@ -105,7 +105,7 @@ public class UserService : IUserService
     {
         if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
         {
-            return new BadRequestObjectResult("Invalid authorization header.");
+            return new BadRequestObjectResult(new { message = "Invalid authorization header." });
         }
 
         var token = authHeader.Substring("Bearer ".Length).Trim();

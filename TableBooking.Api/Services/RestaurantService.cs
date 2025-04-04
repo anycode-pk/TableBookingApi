@@ -66,7 +66,7 @@ public class RestaurantService : IRestaurantService
 
         if (restaurant == null)
         {
-            return new NotFoundObjectResult($"Restaurant with id {restaurantId} not found.");
+            return new NotFoundObjectResult(new { message = $"Restaurant with id {restaurantId} not found." });
         }
         var tables = await _unitOfWork.TableRepository.GetTablesByRestaurantIdAsync(restaurantId);
         restaurant.Tables = tables;
