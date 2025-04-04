@@ -9,6 +9,7 @@ public class UpdateBookingDto
         get => _date;
         set => _date = DateTime.SpecifyKind(value, DateTimeKind.Utc);
     }
+
     public int DurationInMinutes { get; set; }
     public int AmountOfPeople { get; set; }
 }

@@ -2,11 +2,11 @@ namespace TableBooking.Logic.Converters.RestaurantConverters;
 
 using Model.Dtos.RestaurantDtos;
 using Model.Models;
-using System;
 
 public class RestaurantConverter : IRestaurantConverter
 {
-    private static readonly string[] DaysOfWeek = [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    private static readonly string[] DaysOfWeek =
+        ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
     public OpeningAndClosingHoursDto ConvertToDto(OpeningAndClosingHours hours)
     {
@@ -43,10 +43,7 @@ public class RestaurantConverter : IRestaurantConverter
 
     private static string FormatTimeSpan(WeekDayInfo dayInfo)
     {
-        if (dayInfo == null || dayInfo.Closed || dayInfo.OpenTime == null || dayInfo.CloseTime == null)
-        {
-            return "closed";
-        }
+        if (dayInfo == null || dayInfo.Closed || dayInfo.OpenTime == null || dayInfo.CloseTime == null) return "closed";
 
         return $"{dayInfo.OpenTime:hh\\:mm}-{dayInfo.CloseTime:hh\\:mm}";
     }
@@ -54,9 +51,7 @@ public class RestaurantConverter : IRestaurantConverter
     private static WeekDayInfo ParseTime(string hours)
     {
         if (string.IsNullOrEmpty(hours) || hours.Equals("closed", StringComparison.OrdinalIgnoreCase))
-        {
             return new WeekDayInfo { Closed = true };
-        }
 
         var times = hours.Split('-');
         if (times.Length != 2) return new WeekDayInfo { Closed = true };

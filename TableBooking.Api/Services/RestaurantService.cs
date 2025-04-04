@@ -9,6 +9,7 @@ using Model.Models;
 public class RestaurantService : IRestaurantService
 {
     private readonly IUnitOfWork _unitOfWork;
+
     public RestaurantService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
@@ -17,7 +18,7 @@ public class RestaurantService : IRestaurantService
     public async Task<IActionResult> GetRestaurantByTableIdAsync(Guid tableId)
     {
         var restaurant = await _unitOfWork.RestaurantRepository.GetRestaurantByTableIdAsync(tableId);
-        
+
         return new OkObjectResult(restaurant);
     }
 
@@ -36,7 +37,7 @@ public class RestaurantService : IRestaurantService
             PrimaryImageUrl = dto.PrimaryImageURL,
             SecondaryImageUrl = dto.SecondaryImageURL
         };
-        
+
         await _unitOfWork.RestaurantRepository.InsertAsync(restaurant);
         await _unitOfWork.SaveChangesAsync();
         return new OkObjectResult(restaurant);
@@ -45,10 +46,13 @@ public class RestaurantService : IRestaurantService
     public async Task<IActionResult> DeleteRestaurantAsync(Guid restaurantId)
     {
         var restaurantToDelete = await _unitOfWork.RestaurantRepository.GetByIdAsync(restaurantId);
-        
+
+        if (restaurantToDelete == null)
+            return new NotFoundObjectResult(new { message = $"Restaurant with id {restaurantId} not found." });
+
         await _unitOfWork.RestaurantRepository.Delete(restaurantToDelete.Id);
         await _unitOfWork.SaveChangesAsync();
-        
+
         return new OkObjectResult(restaurantToDelete);
     }
 
@@ -64,18 +68,19 @@ public class RestaurantService : IRestaurantService
         var restaurant = await _unitOfWork.RestaurantRepository.GetByIdAsync(restaurantId);
 
         if (restaurant == null)
-        {
             return new NotFoundObjectResult(new { message = $"Restaurant with id {restaurantId} not found." });
-        }
         var tables = await _unitOfWork.TableRepository.GetTablesByRestaurantIdAsync(restaurantId);
         restaurant.Tables = tables;
-        
+
         return new OkObjectResult(restaurant);
     }
 
     public async Task<IActionResult> UpdateRestaurantAsync(RestaurantShortInfoDto dto, Guid restaurantId)
     {
         var restaurant = await _unitOfWork.RestaurantRepository.GetByIdAsync(restaurantId);
+
+        if (restaurant == null)
+            return new NotFoundObjectResult(new { message = $"Restaurant with id {restaurantId} not found." });
 
         var newRestaurant = new Restaurant
         {

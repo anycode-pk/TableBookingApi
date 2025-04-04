@@ -40,7 +40,7 @@ public class RatingController : ControllerBase
 
         if (!Guid.TryParse(userIdString, out _))
             return BadRequest("Invalid User ID format in claims.");
-        
+
         return await _ratingService.CreateRatingAsync(createRatingDto, Guid.Parse(userIdString));
     }
 

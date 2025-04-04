@@ -29,11 +29,11 @@ public class UserController : ControllerBase
     [HttpPost]
     [AllowAnonymous]
     [Route("login")]
-    public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDto) 
+    public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDto)
     {
         return await _userService.Login(userLoginDto);
     }
-        
+
     [HttpPost]
     [Authorize]
     [Route("logout")]
@@ -43,17 +43,14 @@ public class UserController : ControllerBase
 
         return await _userService.Logout(authHeader);
     }
-        
+
     [HttpGet]
     [Authorize]
     public async Task<AppUserDto> GetUserInfo()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            
-        if (userId == null)
-        {
-            throw new UnauthorizedAccessException("User is not authenticated.");
-        }
+
+        if (userId == null) throw new UnauthorizedAccessException("User is not authenticated.");
 
         return await _userService.GetUserInfo(Guid.Parse(userId), CancellationToken.None);
     }

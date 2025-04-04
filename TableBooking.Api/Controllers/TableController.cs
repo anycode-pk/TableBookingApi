@@ -11,6 +11,7 @@ using Model.Dtos.TableDtos;
 public class TableController : ControllerBase
 {
     private readonly ITableService _tableService;
+
     public TableController(ITableService tableService)
     {
         _tableService = tableService;

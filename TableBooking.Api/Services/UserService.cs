@@ -15,14 +15,14 @@ using Model.Models;
 
 public class UserService : IUserService
 {
-    private readonly UserManager<AppUser> _userManager;
-    private readonly RoleManager<AppRole> _roleManager;
     private readonly IConfiguration _configuration;
     private readonly TableBookingContext _dbContext;
+    private readonly RoleManager<AppRole> _roleManager;
+    private readonly UserManager<AppUser> _userManager;
 
     public UserService(UserManager<AppUser> userManager,
         RoleManager<AppRole> roleManager,
-        IConfiguration configuration, 
+        IConfiguration configuration,
         TableBookingContext dbContext)
     {
         _userManager = userManager;
@@ -35,8 +35,8 @@ public class UserService : IUserService
     {
         var userExists = await _userManager.FindByNameAsync(dto.Username);
         if (userExists != null)
-            return new BadRequestObjectResult(new { message = $"User with the same username found: {dto.Username}."});
-        
+            return new BadRequestObjectResult(new { message = $"User with the same username found: {dto.Username}." });
+
         var emailExists = await _userManager.FindByEmailAsync(dto.Email);
         if (emailExists != null)
             return new BadRequestObjectResult(new { message = $"User with the same email found: {dto.Email}." });
@@ -51,11 +51,11 @@ public class UserService : IUserService
             SecurityStamp = Guid.NewGuid().ToString(),
             UserName = dto.Username,
             AppRoleId = appUserRole.Id,
-            AppRole =  appUserRole
+            AppRole = appUserRole
         };
-        
+
         var result = await _userManager.CreateAsync(user, dto.Password);
-        
+
         if (!result.Succeeded)
             return new BadRequestObjectResult(new { message = "Invalid password length or Bad Email" });
 
@@ -67,23 +67,20 @@ public class UserService : IUserService
         var user = await _userManager.FindByNameAsync(dto.Username);
         if (user == null)
             return new BadRequestObjectResult(new { message = $"User with username '{dto.Username}' does not exist." });
-        
+
         if (!await _userManager.CheckPasswordAsync(user, dto.Password))
             return new BadRequestObjectResult(new { message = "Wrong password." });
-        
+
         var role = await _roleManager.FindByNameAsync("User");
-        if (role == null) return new BadRequestObjectResult(new { message = "Can't login. Role named 'User' is not found." });
+        if (role == null)
+            return new BadRequestObjectResult(new { message = "Can't login. Role named 'User' is not found." });
 
         if (string.IsNullOrEmpty(user.UserName))
-        {
             return new BadRequestObjectResult(new { message = $"User does not have a name. UserId {user.Id}" });
-        }
 
         if (string.IsNullOrEmpty(role.Name))
-        {
             return new BadRequestObjectResult(new { message = $"Role does not have a name. RoleId {role.Id}" });
-        }
-        
+
         var authClaims = new List<Claim>
         {
             new(ClaimTypes.Name, user.UserName),
@@ -93,7 +90,7 @@ public class UserService : IUserService
         };
 
         var token = GetToken(authClaims);
-        
+
         return new OkObjectResult(new
         {
             token = new JwtSecurityTokenHandler().WriteToken(token),
@@ -104,9 +101,7 @@ public class UserService : IUserService
     public async Task<IActionResult> Logout(string? authHeader)
     {
         if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
-        {
             return new BadRequestObjectResult(new { message = "Invalid authorization header." });
-        }
 
         var token = authHeader.Substring("Bearer ".Length).Trim();
 
@@ -128,21 +123,22 @@ public class UserService : IUserService
 
         var userDto = user?.ToDto();
 
-        return userDto ?? new();
+        return userDto ?? new AppUserDto();
     }
 
     private JwtSecurityToken GetToken(List<Claim> authClaims)
     {
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"] ?? string.Empty));
+        var authSigningKey =
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"] ?? string.Empty));
 
         var token = new JwtSecurityToken(
-            issuer: _configuration["JWT:ValidIssuer"],
-            audience: _configuration["JWT:ValidAudience"],
+            _configuration["JWT:ValidIssuer"],
+            _configuration["JWT:ValidAudience"],
             expires: DateTime.Now.AddHours(3),
             claims: authClaims,
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
         );
-            
+
         return token;
     }
 }

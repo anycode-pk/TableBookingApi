@@ -9,59 +9,59 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="11.11.0" />
-        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+        <PackageReference Include="FluentValidation" Version="11.11.0"/>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.4" />
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.2" />
-        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
-        <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
-        <PackageReference Include="Serilog.Expressions" Version="5.0.0" />
-        <PackageReference Include="Serilog.Formatting.Compact" Version="3.0.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.4"/>
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.2"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0"/>
+        <PackageReference Include="Serilog.Exceptions" Version="8.4.0"/>
+        <PackageReference Include="Serilog.Expressions" Version="5.0.0"/>
+        <PackageReference Include="Serilog.Formatting.Compact" Version="3.0.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\TableBooking.Logic\TableBooking.Logic.csproj" />
-      <ProjectReference Include="..\TableBooking.Model\TableBooking.Model.csproj" />
+        <ProjectReference Include="..\TableBooking.Logic\TableBooking.Logic.csproj"/>
+        <ProjectReference Include="..\TableBooking.Model\TableBooking.Model.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="WebApp1\Areas\Identity\Pages\_ViewStart.cshtml" />
-      <_ContentIncludedByDefault Remove="WebApp1\Pages\Error.cshtml" />
-      <_ContentIncludedByDefault Remove="WebApp1\Pages\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="WebApp1\Pages\Privacy.cshtml" />
-      <_ContentIncludedByDefault Remove="WebApp1\Pages\Shared\_Layout.cshtml" />
-      <_ContentIncludedByDefault Remove="WebApp1\Pages\Shared\_LoginPartial.cshtml" />
-      <_ContentIncludedByDefault Remove="WebApp1\Pages\Shared\_ValidationScriptsPartial.cshtml" />
-      <_ContentIncludedByDefault Remove="WebApp1\Pages\_ViewImports.cshtml" />
-      <_ContentIncludedByDefault Remove="WebApp1\Pages\_ViewStart.cshtml" />
-      <_ContentIncludedByDefault Remove="WebApp1\appsettings.Development.json" />
-      <_ContentIncludedByDefault Remove="WebApp1\appsettings.json" />
-      <_ContentIncludedByDefault Remove="WebApp1\obj\project.assets.json" />
-      <_ContentIncludedByDefault Remove="WebApp1\obj\WebApp1.csproj.nuget.dgspec.json" />
-      <_ContentIncludedByDefault Remove="WebApp1\Properties\launchSettings.json" />
+        <_ContentIncludedByDefault Remove="WebApp1\Areas\Identity\Pages\_ViewStart.cshtml"/>
+        <_ContentIncludedByDefault Remove="WebApp1\Pages\Error.cshtml"/>
+        <_ContentIncludedByDefault Remove="WebApp1\Pages\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="WebApp1\Pages\Privacy.cshtml"/>
+        <_ContentIncludedByDefault Remove="WebApp1\Pages\Shared\_Layout.cshtml"/>
+        <_ContentIncludedByDefault Remove="WebApp1\Pages\Shared\_LoginPartial.cshtml"/>
+        <_ContentIncludedByDefault Remove="WebApp1\Pages\Shared\_ValidationScriptsPartial.cshtml"/>
+        <_ContentIncludedByDefault Remove="WebApp1\Pages\_ViewImports.cshtml"/>
+        <_ContentIncludedByDefault Remove="WebApp1\Pages\_ViewStart.cshtml"/>
+        <_ContentIncludedByDefault Remove="WebApp1\appsettings.Development.json"/>
+        <_ContentIncludedByDefault Remove="WebApp1\appsettings.json"/>
+        <_ContentIncludedByDefault Remove="WebApp1\obj\project.assets.json"/>
+        <_ContentIncludedByDefault Remove="WebApp1\obj\WebApp1.csproj.nuget.dgspec.json"/>
+        <_ContentIncludedByDefault Remove="WebApp1\Properties\launchSettings.json"/>
     </ItemGroup>
 
-	<ItemGroup>
-		<InternalsVisibleTo Include="TableBooking.IntegrationTests" />
-	</ItemGroup>
+    <ItemGroup>
+        <InternalsVisibleTo Include="TableBooking.IntegrationTests"/>
+    </ItemGroup>
 
-	<ItemGroup>
-	  <Content Include="..\.dockerignore">
-	    <Link>.dockerignore</Link>
-	  </Content>
-	</ItemGroup>
+    <ItemGroup>
+        <Content Include="..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
+    </ItemGroup>
 </Project>

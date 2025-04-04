@@ -9,19 +9,21 @@ public class TableRepository : GenericRepository<Table>, ITableRepository
 {
     public TableRepository(TableBookingContext context) : base(context)
     {
-        }
+    }
+
     public async Task<IEnumerable<Table>> GetTablesByRestaurantIdAsync(Guid restaurantId)
     {
-            return await ObjectSet
-                .Where(x => x.RestaurantId.Equals(restaurantId))
-                .Include(t => t.Bookings)
-                .ToListAsync();
-        }
+        return await ObjectSet
+            .Where(x => x.RestaurantId.Equals(restaurantId))
+            .Include(t => t.Bookings)
+            .ToListAsync();
+    }
 
     public async Task<Table?> GetAvailableTableAsync(Guid restaurantId, int amountOfPeople, DateTime bookingDate)
     {
         return await ObjectSet.Where(t =>
-            t.Bookings != null && t.RestaurantId == restaurantId && t.NumberOfSeats >= amountOfPeople && t.Bookings.All(b => b.Date != bookingDate))
+                t.Bookings != null && t.RestaurantId == restaurantId && t.NumberOfSeats >= amountOfPeople &&
+                t.Bookings.All(b => b.Date != bookingDate))
             .Include(t => t.Bookings)
             .FirstOrDefaultAsync();
     }

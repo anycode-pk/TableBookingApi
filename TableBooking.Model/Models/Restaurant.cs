@@ -9,6 +9,7 @@ public enum Price
     Medium,
     High
 }
+
 public class Restaurant : Entity
 {
     public string Name { get; set; } = string.Empty;
@@ -20,11 +21,13 @@ public class Restaurant : Entity
     [Required]
     public string PrimaryImageUrl { get; set; } =
         "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png";
+
     [Required]
-    public string SecondaryImageUrl { get; set; } = 
+    public string SecondaryImageUrl { get; set; } =
         "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png";
-    [Precision(1,1)]
-    public double Rating { get; set; }
+
+    [Precision(1, 1)] public double Rating { get; set; }
+
     public Price Price { get; set; }
     public OpeningAndClosingHours OpeningAndClosingHours { get; set; }
     public IEnumerable<Table> Tables { get; set; } = new List<Table>();

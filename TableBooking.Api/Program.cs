@@ -2,6 +2,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,6 @@ using TableBooking.Logic.Converters.UserConverters;
 using TableBooking.Logic.Interfaces;
 using TableBooking.Model;
 using TableBooking.Model.Models;
-using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,7 +45,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "TableBooking API",
         Version = "v1.0.0",
-        Description = "API for TableBooking service.",
+        Description = "API for TableBooking service."
     });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -54,27 +54,26 @@ builder.Services.AddSwaggerGen(c =>
         Name = "Authorization",
         Scheme = "Bearer",
         BearerFormat = "JWT",
-        Type = SecuritySchemeType.Http,
+        Type = SecuritySchemeType.Http
     });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
                 {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer",
-                        }
-                    },
-                    new string[] { }
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
                 }
-                });
+            },
+            new string[] { }
+        }
+    });
 });
 
-builder.Services.AddCors(p => p.AddPolicy("cors", corsPolicyBuilder =>
-{
-    corsPolicyBuilder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-}));
+builder.Services.AddCors(p => p.AddPolicy("cors",
+    corsPolicyBuilder => { corsPolicyBuilder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader(); }));
 
 builder.Host.UseSerilog((builderContext, loggerConfiguration) =>
 {
@@ -84,74 +83,75 @@ builder.Host.UseSerilog((builderContext, loggerConfiguration) =>
 builder.Services.AddDbContext<TableBookingContext>(o =>
 {
     var connectionString = builder.Configuration.GetConnectionString("TableBookingConnStr");
-    
-    var dbHost = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DB_HOST")) 
-        ? Environment.GetEnvironmentVariable("DB_HOST") 
+
+    var dbHost = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DB_HOST"))
+        ? Environment.GetEnvironmentVariable("DB_HOST")
         : "localhost";
 
-    var dbPort = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DB_PORT")) 
-        ? Environment.GetEnvironmentVariable("DB_PORT") 
+    var dbPort = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DB_PORT"))
+        ? Environment.GetEnvironmentVariable("DB_PORT")
         : "5433";
 
-    var dbName = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("POSTGRES_DB")) 
-        ? Environment.GetEnvironmentVariable("POSTGRES_DB") 
+    var dbName = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("POSTGRES_DB"))
+        ? Environment.GetEnvironmentVariable("POSTGRES_DB")
         : "TableBookingDB";
 
-    var dbUser = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("POSTGRES_USER")) 
-        ? Environment.GetEnvironmentVariable("POSTGRES_USER") 
+    var dbUser = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("POSTGRES_USER"))
+        ? Environment.GetEnvironmentVariable("POSTGRES_USER")
         : "TableBookingUser";
 
-    var dbPassword = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")) 
-        ? Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") 
+    var dbPassword = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("POSTGRES_PASSWORD"))
+        ? Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")
         : "postgres";
 
     connectionString = $"Host={dbHost};Port={dbPort};Database={dbName};Username={dbUser};Password={dbPassword}";
-    
+
     o.UseNpgsql(connectionString);
 });
 builder.Services.AddHostedService<DbInitializerService>();
 builder.Services.AddHealthChecks().AddCheck<DbHealthCheck>(
-        nameof(DbHealthCheck),
-        failureStatus: HealthStatus.Unhealthy);
+    nameof(DbHealthCheck),
+    HealthStatus.Unhealthy);
 
 builder.Services.AddIdentity<AppUser, AppRole>(x =>
-{
-    x.Password.RequireDigit = false;
-    x.Password.RequiredLength = 2;
-    x.Password.RequireUppercase = false;
-    x.Password.RequireLowercase = false;
-    x.Password.RequireNonAlphanumeric = false;
-    x.Password.RequiredUniqueChars = 0;
-    x.Lockout.AllowedForNewUsers = true;
-    x.Lockout.MaxFailedAccessAttempts = 5;
-    x.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(30);
-    x.SignIn.RequireConfirmedAccount = false;
-})
-.AddEntityFrameworkStores<TableBookingContext>()
-.AddDefaultTokenProviders();
+    {
+        x.Password.RequireDigit = false;
+        x.Password.RequiredLength = 2;
+        x.Password.RequireUppercase = false;
+        x.Password.RequireLowercase = false;
+        x.Password.RequireNonAlphanumeric = false;
+        x.Password.RequiredUniqueChars = 0;
+        x.Lockout.AllowedForNewUsers = true;
+        x.Lockout.MaxFailedAccessAttempts = 5;
+        x.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(30);
+        x.SignIn.RequireConfirmedAccount = false;
+    })
+    .AddEntityFrameworkStores<TableBookingContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.SaveToken = true;
-    options.RequireHttpsMetadata = false;
-    options.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.SaveToken = true;
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
 
-        ValidAudience = builder.Configuration["JWT:ValidAudience"],
-        ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"] ?? string.Empty))
-    };
-});
+            ValidAudience = builder.Configuration["JWT:ValidAudience"],
+            ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+            IssuerSigningKey =
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"] ?? string.Empty))
+        };
+    });
 
 builder.Services.Configure<IdentityOptions>(options =>
 {

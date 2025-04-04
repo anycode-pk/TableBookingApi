@@ -14,19 +14,15 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         _context = context;
         ObjectSet = _context.Set<T>();
     }
+
     public async Task<IEnumerable<T>> GetAllAsync()
     {
         return await ObjectSet.ToListAsync();
     }
 
-    public async Task<T> GetByIdAsync(object id)
+    public async Task<T?> GetByIdAsync(object id)
     {
         var entity = await ObjectSet.FindAsync(id);
-            
-        if (entity == null)
-        {
-            throw new KeyNotFoundException($"Entity of type {typeof(T).Name} with ID {id} was not found.");
-        }
 
         return entity;
     }
@@ -39,12 +35,10 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public async Task Delete(object id)
     {
         var objectToDelete = await ObjectSet.FindAsync(id);
-            
+
         if (objectToDelete == null)
-        {
             throw new KeyNotFoundException($"Entity of type {typeof(T).Name} with ID {id} was not found.");
-        }
-            
+
         ObjectSet.Remove(objectToDelete);
     }
 
@@ -53,17 +47,13 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         var existingEntity = await ObjectSet.FindAsync(GetKeyValues(entity));
 
         if (existingEntity != null)
-        {
             _context.Entry(existingEntity).CurrentValues.SetValues(entity);
-        }
         else
-        {
             ObjectSet.Add(entity);
-        }
 
         await _context.SaveChangesAsync();
     }
-        
+
     private object[] GetKeyValues(T entity)
     {
         if (entity == null)
@@ -81,11 +71,13 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             .Select(prop =>
             {
                 if (prop.PropertyInfo == null)
-                    throw new InvalidOperationException($"PropertyInfo is null for property {prop.Name} on entity type {typeof(T).Name}.");
+                    throw new InvalidOperationException(
+                        $"PropertyInfo is null for property {prop.Name} on entity type {typeof(T).Name}.");
 
                 var value = prop.PropertyInfo.GetValue(entity);
                 if (value == null)
-                    throw new InvalidOperationException($"Primary key property {prop.Name} on entity type {typeof(T).Name} has a null value.");
+                    throw new InvalidOperationException(
+                        $"Primary key property {prop.Name} on entity type {typeof(T).Name} has a null value.");
 
                 return value;
             })

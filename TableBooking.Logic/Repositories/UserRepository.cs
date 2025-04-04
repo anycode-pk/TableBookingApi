@@ -10,7 +10,7 @@ public class UserRepository : GenericRepository<AppUser>, IUserRepository
     public UserRepository(TableBookingContext context) : base(context)
     {
     }
-        
+
     public async Task<IEnumerable<AppUser>> GetAllUsers()
     {
         return await ObjectSet.Include(x => x.Bookings).ToListAsync();

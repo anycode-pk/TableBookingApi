@@ -5,7 +5,9 @@ using Models;
 
 public class RestaurantShortInfoDto
 {
-    private const string DefaultImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png";
+    private const string DefaultImageUrl =
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/240px-No_image_available.svg.png";
+
     public string? Name { get; set; }
     public string? Type { get; set; }
     public string? Description { get; set; }

@@ -6,7 +6,7 @@ public class Rating : Entity
     public int NumberOfLikes { get; set; }
     public string Comment { get; set; } = string.Empty;
     private DateTime _dateOfRating { get; set; }
-    
+
     public DateTime DateOfRating
     {
         get => _dateOfRating;

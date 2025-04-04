@@ -3,7 +3,7 @@
 public class Booking : Entity
 {
     private DateTime _date { get; set; }
-    
+
     public DateTime Date
     {
         get => _date;

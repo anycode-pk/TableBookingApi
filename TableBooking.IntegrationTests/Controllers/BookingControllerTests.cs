@@ -10,21 +10,21 @@ public class BookingControllerTests : IClassFixture<WebApplicationFactory<Progra
 
     public BookingControllerTests(WebApplicationFactory<Program> factory)
     {
-            _factory = factory;
-        }
+        _factory = factory;
+    }
 
     [Theory]
     [InlineData(1)]
     public async Task GetBookingById_WhenCalled_ReturnBooking(int id)
     {
-            var client = _factory.CreateClient();
+        var client = _factory.CreateClient();
 
-            var response = await client.GetAsync($"booking/{id}");
-            Assert.True(response.IsSuccessStatusCode);
+        var response = await client.GetAsync($"booking/{id}");
+        Assert.True(response.IsSuccessStatusCode);
 
-            var rawResponseData = await response.Content.ReadAsStringAsync();
-            var booking = JsonConvert.DeserializeObject<Booking>(rawResponseData);
+        var rawResponseData = await response.Content.ReadAsStringAsync();
+        var booking = JsonConvert.DeserializeObject<Booking>(rawResponseData);
 
-            Assert.NotNull(booking);
-        }
+        Assert.NotNull(booking);
+    }
 }

@@ -5,8 +5,9 @@ using Model;
 
 public class DbInitializerService : BackgroundService
 {
-    private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<DbInitializerService> _logger;
+    private readonly IServiceProvider _serviceProvider;
+
     public DbInitializerService(ILogger<DbInitializerService> logger, IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
@@ -20,9 +21,7 @@ public class DbInitializerService : BackgroundService
             using var scope = _serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<TableBookingContext>();
             if ((await dbContext.Database.GetPendingMigrationsAsync(stoppingToken)).Any())
-            {
-                await dbContext.Database.MigrateAsync(cancellationToken: stoppingToken);
-            }
+                await dbContext.Database.MigrateAsync(stoppingToken);
         }
         catch (Exception e)
         {

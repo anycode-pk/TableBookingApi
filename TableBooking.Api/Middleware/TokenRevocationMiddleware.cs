@@ -1,7 +1,6 @@
-using Microsoft.EntityFrameworkCore;
-
 namespace TableBooking.Api.Middleware;
 
+using Microsoft.EntityFrameworkCore;
 using Model;
 
 public class TokenRevocationMiddleware

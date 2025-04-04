@@ -10,21 +10,21 @@ public class RestaurantControllerTests : IClassFixture<WebApplicationFactory<Pro
 
     public RestaurantControllerTests(WebApplicationFactory<Program> factory)
     {
-            _factory = factory;
-        }
+        _factory = factory;
+    }
 
     [Theory]
     [InlineData(1)]
     public async Task GetRestaurantById_WhenCalled_ReturnRestaurant(int id)
     {
-            var client = _factory.CreateClient();
+        var client = _factory.CreateClient();
 
-            var response = await client.GetAsync($"restaurant/{id}");
-            Assert.True(response.IsSuccessStatusCode);
+        var response = await client.GetAsync($"restaurant/{id}");
+        Assert.True(response.IsSuccessStatusCode);
 
-            var rawResponseData = await response.Content.ReadAsStringAsync();
-            var restaurant = JsonConvert.DeserializeObject<Restaurant>(rawResponseData);
+        var rawResponseData = await response.Content.ReadAsStringAsync();
+        var restaurant = JsonConvert.DeserializeObject<Restaurant>(rawResponseData);
 
-            Assert.NotNull(restaurant);
-        }
+        Assert.NotNull(restaurant);
+    }
 }

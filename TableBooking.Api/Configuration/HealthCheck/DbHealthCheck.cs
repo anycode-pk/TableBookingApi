@@ -7,11 +7,14 @@ using Model;
 public class DbHealthCheck : IHealthCheck
 {
     private readonly TableBookingContext _tableBookingContext;
+
     public DbHealthCheck(TableBookingContext tableBookingContext)
     {
         _tableBookingContext = tableBookingContext;
     }
-    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
+        CancellationToken cancellationToken = default)
     {
         try
         {

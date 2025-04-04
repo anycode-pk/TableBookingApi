@@ -19,7 +19,7 @@ public class RestaurantController : ControllerBase
 
     [HttpGet("GetAllRestaurants")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetRestaurants([FromQuery]string? restaurantName, [FromQuery]Price? price)
+    public async Task<IActionResult> GetRestaurants([FromQuery] string? restaurantName, [FromQuery] Price? price)
     {
         return await _restaurantService.GetAllRestaurantsAsync(restaurantName, price);
     }
@@ -30,7 +30,7 @@ public class RestaurantController : ControllerBase
     {
         return await _restaurantService.GetRestaurantByIdAsync(restaurantId);
     }
-    
+
     [HttpGet("GetRestaurantByTableId/{tableId:guid}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetRestaurantByTableId(Guid tableId)
@@ -41,7 +41,7 @@ public class RestaurantController : ControllerBase
     [HttpPost("CreateRestaurant")]
     [Authorize]
     public async Task<IActionResult> CreateRestaurant([FromBody] RestaurantShortInfoDto restaurantShortInfoDto)
-    { 
+    {
         return await _restaurantService.CreateRestaurantAsync(restaurantShortInfoDto);
     }
 
@@ -54,7 +54,8 @@ public class RestaurantController : ControllerBase
 
     [HttpPut("UpdateRestaurant/{restaurantId:guid}")]
     [Authorize]
-    public async Task<IActionResult> UpdateRestaurant([FromBody] RestaurantShortInfoDto restaurantShortInfoDto, Guid restaurantId)
+    public async Task<IActionResult> UpdateRestaurant([FromBody] RestaurantShortInfoDto restaurantShortInfoDto,
+        Guid restaurantId)
     {
         return await _restaurantService.UpdateRestaurantAsync(restaurantShortInfoDto, restaurantId);
     }
