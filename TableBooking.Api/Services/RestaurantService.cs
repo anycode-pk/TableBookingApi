@@ -54,7 +54,6 @@ public class RestaurantService : IRestaurantService
 
     public async Task<IActionResult> GetAllRestaurantsAsync(string? restaurantName, Price? price)
     {
-        // TODO: check if AllowAnonymous users can see bookings.
         var restaurants = await _unitOfWork.RestaurantRepository.GetRestaurantsAsync(restaurantName, price);
 
         return new OkObjectResult(restaurants);
