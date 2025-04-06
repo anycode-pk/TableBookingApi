@@ -89,9 +89,9 @@ public class RestaurantService : IRestaurantService
     }
 
 
-    public async Task<IActionResult> GetAllRestaurantsAsync(string? restaurantName, Price? price)
+    public async Task<IActionResult> GetAllRestaurantsAsync(string? restaurantName, Price? price, bool? searchForEmptyTablesOnly, DateTime? requestedDateTimeForEmptyTables)
     {
-        var restaurants = await _unitOfWork.RestaurantRepository.GetRestaurantsAsync(restaurantName, price);
+        var restaurants = await _unitOfWork.RestaurantRepository.GetRestaurantsAsync(restaurantName, price, searchForEmptyTablesOnly, requestedDateTimeForEmptyTables);
 
         return new OkObjectResult(restaurants);
     }
