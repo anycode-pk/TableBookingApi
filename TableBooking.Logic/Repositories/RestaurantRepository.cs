@@ -8,9 +8,11 @@ using Model.Models;
 
 public class RestaurantRepository : GenericRepository<Restaurant>, IRestaurantRepository
 {
-    public RestaurantRepository(TableBookingContext context) : base(context) { }
     private const int DefaultDurationOfBooking = -2;
-    public async Task<IEnumerable<Restaurant>> GetRestaurantsAsync(string? restaurantName, Price? price, bool? searchForEmptyTablesOnly, DateTime? requestedDateTimeForEmptyTables)
+    public RestaurantRepository(TableBookingContext context) : base(context) { }
+    public async Task<IEnumerable<Restaurant>> GetRestaurantsAsync(string? restaurantName, Price? price,
+        bool? searchForEmptyTablesOnly, DateTime? requestedDateTimeForEmptyTables,
+        int? numberOfPeopleForEmptyTables)
     {
         var restaurants = await ObjectSet
             .FilterByName(restaurantName)
@@ -19,14 +21,15 @@ public class RestaurantRepository : GenericRepository<Restaurant>, IRestaurantRe
             .ThenInclude(t => t.Bookings)
             .ToListAsync();
         
-        if (searchForEmptyTablesOnly == true)
+        if (searchForEmptyTablesOnly == true && numberOfPeopleForEmptyTables != null)
         {
             var referenceTime = requestedDateTimeForEmptyTables ?? DateTime.UtcNow;
 
             referenceTime = referenceTime.AddHours(DefaultDurationOfBooking);
             
             restaurants = restaurants
-                .Where(r => r.Tables.Any(t => !t.Bookings.Any(b => b.Date >= referenceTime)))
+                .Where(r => r.Tables.Any(t => !t.Bookings.Any(b => b.Date >= referenceTime) 
+                    && t.NumberOfSeats == numberOfPeopleForEmptyTables))
                 .ToList();
         }
 

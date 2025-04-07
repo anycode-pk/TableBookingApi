@@ -22,9 +22,11 @@ public class RestaurantController : ControllerBase
 
     [HttpGet("GetAllRestaurants")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetRestaurants([FromQuery] string? restaurantName, [FromQuery] Price? price, [FromQuery] bool? searchForEmptyTablesOnly, [FromQuery] DateTime? requestedDateTimeForEmptyTables)
+    public async Task<IActionResult> GetRestaurants([FromQuery] string? restaurantName, [FromQuery] Price? price,
+        [FromQuery] bool? searchForEmptyTablesOnly, [FromQuery] DateTime? requestedDateTimeForEmptyTables,
+        [FromQuery] int? numberOfPeopleForEmptyTables)
     {
-        return await _restaurantService.GetAllRestaurantsAsync(restaurantName, price, searchForEmptyTablesOnly, requestedDateTimeForEmptyTables);
+        return await _restaurantService.GetAllRestaurantsAsync(restaurantName, price, searchForEmptyTablesOnly, requestedDateTimeForEmptyTables, numberOfPeopleForEmptyTables);
     }
 
     [HttpGet("GetRestaurantById/{restaurantId:guid}")]

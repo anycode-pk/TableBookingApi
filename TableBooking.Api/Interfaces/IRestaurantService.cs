@@ -6,7 +6,9 @@ using Model.Models;
 
 public interface IRestaurantService
 {
-    public Task<IActionResult> GetAllRestaurantsAsync(string? restaurantName, Price? price, bool? searchForEmptyTablesOnly, DateTime? requestedDateTimeForEmptyTables);
+    public Task<IActionResult> GetAllRestaurantsAsync(string? restaurantName, Price? price,
+        bool? searchForEmptyTablesOnly, DateTime? requestedDateTimeForEmptyTables,
+        int? numberOfPeopleForEmptyTables);
     public Task<IActionResult> GetRestaurantByIdAsync(Guid restaurantId);
     public Task<IActionResult> GetRestaurantByTableIdAsync(Guid tableId);
     public Task<IActionResult> CreateRestaurantAsync(RestaurantShortInfoDto dto);
