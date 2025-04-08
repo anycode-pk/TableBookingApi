@@ -3,13 +3,18 @@
 using Extensions;
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Model;
 using Model.Models;
+using Settings;
 
 public class RestaurantRepository : GenericRepository<Restaurant>, IRestaurantRepository
 {
-    private const int DefaultDurationOfBooking = -2;
-    public RestaurantRepository(TableBookingContext context) : base(context) { }
+    public RestaurantRepository(TableBookingContext context, BookingSettings settings) : base(context)
+    {
+        _defaultDurationOfBooking = settings.DefaultDurationOfBooking;
+    }
+    private readonly int _defaultDurationOfBooking;
     public async Task<IEnumerable<Restaurant>> GetRestaurantsAsync(string? restaurantName, Price? price,
         bool? searchForEmptyTablesOnly, DateTime? requestedDateTimeForEmptyTables,
         int? numberOfPeopleForEmptyTables)
@@ -21,16 +26,19 @@ public class RestaurantRepository : GenericRepository<Restaurant>, IRestaurantRe
             .ThenInclude(t => t.Bookings)
             .ToListAsync();
         
-        if (searchForEmptyTablesOnly == true && numberOfPeopleForEmptyTables != null)
+        if (searchForEmptyTablesOnly == true)
         {
-            var referenceTime = requestedDateTimeForEmptyTables ?? DateTime.UtcNow;
+            var requestedStart = requestedDateTimeForEmptyTables ?? DateTime.UtcNow;
+            var requestedEnd = requestedStart.AddHours(2);
 
-            referenceTime = referenceTime.AddHours(DefaultDurationOfBooking);
-            
             restaurants = restaurants
-                .Where(r => r.Tables.Any(t => !t.Bookings.Any(b => b.Date >= referenceTime) 
-                    && t.NumberOfSeats == numberOfPeopleForEmptyTables))
-                .ToList();
+                .Where(r => r.Tables.Any(t =>
+                    (numberOfPeopleForEmptyTables == null || t.NumberOfSeats == numberOfPeopleForEmptyTables) &&
+                    !t.Bookings.Any(b =>
+                            b.Date < requestedEnd &&
+                            b.Date.AddHours(_defaultDurationOfBooking) > requestedStart
+                        )))
+                .ToList();  
         }
 
         return restaurants;

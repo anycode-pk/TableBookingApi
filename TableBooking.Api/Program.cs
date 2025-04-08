@@ -22,6 +22,7 @@ using TableBooking.Logic.Converters.RatingConverters;
 using TableBooking.Logic.Converters.TableConverters;
 using TableBooking.Logic.Converters.UserConverters;
 using TableBooking.Logic.Interfaces;
+using TableBooking.Logic.Settings;
 using TableBooking.Model;
 using TableBooking.Model.Models;
 
@@ -35,6 +36,9 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services
     .AddFluentValidationAutoValidation()
     .AddFluentValidationClientsideAdapters();
+
+builder.Services.Configure<BookingSettings>(
+    builder.Configuration.GetSection("BookingSettings"));
 
 builder.Services.AddValidatorsFromAssemblyContaining<RestaurantShortInfoDtoValidator>();
 
