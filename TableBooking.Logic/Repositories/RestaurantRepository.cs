@@ -3,8 +3,8 @@
 using Extensions;
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Model;
+using Model.Dtos.RestaurantDtos;
 using Model.Models;
 using Settings;
 
@@ -13,11 +13,15 @@ public class RestaurantRepository : GenericRepository<Restaurant>, IRestaurantRe
     public RestaurantRepository(TableBookingContext context, BookingSettings settings) : base(context)
     {
         _defaultDurationOfBooking = settings.DefaultDurationOfBooking;
+        _defaultCountOfReturnedSuggestions = settings.DefaultCountOfReturnedSuggestions;
     }
+    
     private readonly int _defaultDurationOfBooking;
-    public async Task<IEnumerable<Restaurant>> GetRestaurantsAsync(string? restaurantName, Price? price,
+    private readonly int _defaultCountOfReturnedSuggestions;
+    
+    public async Task<RestaurantSearchResponseDto> SearchRestaurantsAsync(string? restaurantName, Price? price,
         bool? searchForEmptyTablesOnly, DateTime? requestedDateTimeForEmptyTables,
-        int? numberOfPeopleForEmptyTables)
+        int? numberOfPeopleForEmptyTables, int page, int pageSize)
     {
         var restaurants = await ObjectSet
             .FilterByName(restaurantName)
@@ -40,8 +44,28 @@ public class RestaurantRepository : GenericRepository<Restaurant>, IRestaurantRe
                         )))
                 .ToList();  
         }
+        
+        var paginatedRestaurants = restaurants
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
 
-        return restaurants;
+        var suggestions = restaurants
+            .Where(r => !string.IsNullOrWhiteSpace(restaurantName) &&
+                        r.Name.Contains(restaurantName, StringComparison.OrdinalIgnoreCase))
+            .Select(r => r.Name)
+            .Distinct()
+            .Take(5)
+            .ToList();
+
+        return new RestaurantSearchResponseDto
+        {
+            Restaurants = paginatedRestaurants,
+            Suggestions = suggestions,
+            TotalCount = restaurants.Count,
+            Page = page,
+            PageSize = pageSize
+        };
     }
     
     public async Task<Restaurant?> GetRestaurantByTableIdAsync(Guid tableId)
