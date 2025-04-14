@@ -89,15 +89,19 @@ public class RestaurantService : IRestaurantService
     }
 
 
-    public async Task<IActionResult> GetAllRestaurantsAsync(string? restaurantName, Price? price,
+    public async Task<RestaurantSearchResponseDto> SearchRestaurantsAsync(string? restaurantName, Price? price,
         bool? searchForEmptyTablesOnly, DateTime? requestedDateTimeForEmptyTables,
-        int? numberOfPeopleForEmptyTables)
+        int? numberOfPeopleForEmptyTables, int page, int pageSize)
     {
-        var restaurants = await _unitOfWork.RestaurantRepository
-            .GetRestaurantsAsync(restaurantName, price, searchForEmptyTablesOnly, requestedDateTimeForEmptyTables,
-                numberOfPeopleForEmptyTables);
-
-        return new OkObjectResult(restaurants);
+        var responseDto = await _unitOfWork.RestaurantRepository
+            .SearchRestaurantsAsync(restaurantName, price, searchForEmptyTablesOnly, requestedDateTimeForEmptyTables,
+                numberOfPeopleForEmptyTables, page, pageSize);
+        
+        return new RestaurantSearchResponseDto
+        {
+            Restaurants = responseDto.Restaurants,
+            Suggestions = responseDto.Suggestions
+        };
     }
 
     public async Task<IActionResult> GetRestaurantByIdAsync(Guid restaurantId)
