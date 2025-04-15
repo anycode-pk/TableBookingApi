@@ -16,7 +16,7 @@ public class AppUser : IdentityUser<Guid>
     public IEnumerable<Booking> Bookings { get; set; } = new List<Booking>();
     public Guid AppRoleId { get; set; }
     public AppRole AppRole { get; set; } = new();
-    public List<UserFavouriteRestaurant> FavouriteRestaurants { get; set; } = new List<UserFavouriteRestaurant>();
+    public List<UserFavouriteRestaurant> FavouriteRestaurants { get; set; } = new();
     public AppUserDto ToDto()
     {
         return new AppUserDto
@@ -24,7 +24,8 @@ public class AppUser : IdentityUser<Guid>
             Bookings = Bookings,
             Email = Email,
             Username = UserName,
-            FavouriteRestaurants = FavouriteRestaurants
+            FavouriteRestaurants = FavouriteRestaurants,
+            RoleName = AppRole.Name ?? "RoleName is null. AppRoleId: " + AppRole.Id
         };
     }
 }

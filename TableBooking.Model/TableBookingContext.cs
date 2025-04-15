@@ -5,13 +5,9 @@ using Models;
 
 public class TableBookingContext : DbContext
 {
-    public TableBookingContext()
-    {
-    }
+    public TableBookingContext() { }
 
-    public TableBookingContext(DbContextOptions<TableBookingContext> options) : base(options)
-    {
-    }
+    public TableBookingContext(DbContextOptions<TableBookingContext> options) : base(options) { }
 
     public DbSet<Restaurant> Restaurants { get; set; }
     public DbSet<Booking> Bookings { get; set; }

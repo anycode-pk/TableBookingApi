@@ -41,10 +41,19 @@ public class UserService : IUserService
         if (emailExists != null)
             return new BadRequestObjectResult(new { message = $"User with the same email found: {dto.Email}." });
 
-        var appUserRole = await _roleManager.FindByNameAsync("User");
+        AppRole? appUserRole;
+        if (dto.IsRestaurant)
+        {
+            appUserRole = await _roleManager.FindByNameAsync("Restaurant");
+        }
+        else
+        {
+            appUserRole = await _roleManager.FindByNameAsync("User");
+        }
+         
         if (appUserRole == null)
             return new BadRequestObjectResult(new { message = "Can't find role by name 'User'." });
-
+        
         var user = new AppUser
         {
             Email = dto.Email,
@@ -53,7 +62,7 @@ public class UserService : IUserService
             AppRoleId = appUserRole.Id,
             AppRole = appUserRole
         };
-
+        
         var result = await _userManager.CreateAsync(user, dto.Password);
 
         if (!result.Succeeded)
@@ -81,6 +90,7 @@ public class UserService : IUserService
         if (string.IsNullOrEmpty(role.Name))
             return new BadRequestObjectResult(new { message = $"Role does not have a name. RoleId {role.Id}" });
 
+        var roles = await _userManager.GetRolesAsync(user);
         var authClaims = new List<Claim>
         {
             new(ClaimTypes.Name, user.UserName),
@@ -88,6 +98,8 @@ public class UserService : IUserService
             new(ClaimTypes.Role, role.Name),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
+        
+        authClaims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
         var token = GetToken(authClaims);
 
@@ -119,7 +131,9 @@ public class UserService : IUserService
 
     public async Task<AppUserDto> GetUserInfo(Guid id, CancellationToken cancellationToken)
     {
-        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+        var user = await _dbContext.Users
+            .Include(appUser => appUser.AppRole)
+            .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
         
         var favRestaurants = await _dbContext.UserFavouriteRestaurant
             .Where(uf => uf.UserId == id)
@@ -129,6 +143,8 @@ public class UserService : IUserService
         user.FavouriteRestaurants = favRestaurants;
         
         var userDto = user?.ToDto();
+        
+        await _userManager.AddToRoleAsync(user, "Restaurant");
 
         return userDto ?? new AppUserDto();
     }

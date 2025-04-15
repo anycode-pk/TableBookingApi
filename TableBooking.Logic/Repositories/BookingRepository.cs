@@ -26,4 +26,13 @@ public class BookingRepository : GenericRepository<Booking>, IBookingRepository
     {
         return await ObjectSet.Where(b => b.TableId == tableId).ToListAsync();
     }
+    
+    public async Task<IEnumerable<Booking>> GetBookingsForSpecificRestaurantAsync(Guid restaurantId, DateTime? from = null, DateTime? to = null)
+    {
+        return await ObjectSet
+            .Where(b => b.RestaurantId == restaurantId)
+            .Where(b => !from.HasValue || b.Date >= from.Value)
+            .Where(b => !to.HasValue || b.Date <= to.Value)
+            .ToListAsync();
+    }
 }

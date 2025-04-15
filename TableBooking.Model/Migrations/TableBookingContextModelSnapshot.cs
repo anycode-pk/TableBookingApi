@@ -39,7 +39,7 @@ namespace TableBooking.Model.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("TableBooking.Model.Models.AppUser", b =>
@@ -105,7 +105,7 @@ namespace TableBooking.Model.Migrations
 
                     b.HasIndex("AppRoleId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("TableBooking.Model.Models.Booking", b =>
@@ -138,7 +138,7 @@ namespace TableBooking.Model.Migrations
 
                     b.HasIndex("TableId");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", (string)null);
                 });
 
             modelBuilder.Entity("TableBooking.Model.Models.Rating", b =>
@@ -173,7 +173,7 @@ namespace TableBooking.Model.Migrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("Ratings");
+                    b.ToTable("Ratings", (string)null);
                 });
 
             modelBuilder.Entity("TableBooking.Model.Models.Restaurant", b =>
@@ -230,7 +230,7 @@ namespace TableBooking.Model.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Restaurants");
+                    b.ToTable("Restaurants", (string)null);
                 });
 
             modelBuilder.Entity("TableBooking.Model.Models.RevokedToken", b =>
@@ -250,7 +250,7 @@ namespace TableBooking.Model.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RevokedTokens");
+                    b.ToTable("RevokedTokens", (string)null);
                 });
 
             modelBuilder.Entity("TableBooking.Model.Models.Table", b =>
@@ -269,7 +269,7 @@ namespace TableBooking.Model.Migrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("Tables");
+                    b.ToTable("Tables", (string)null);
                 });
 
             modelBuilder.Entity("TableBooking.Model.Models.UserFavouriteRestaurant", b =>
@@ -284,7 +284,7 @@ namespace TableBooking.Model.Migrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("UserFavouriteRestaurant");
+                    b.ToTable("UserFavouriteRestaurant", (string)null);
                 });
 
             modelBuilder.Entity("TableBooking.Model.Models.AppUser", b =>
@@ -341,7 +341,7 @@ namespace TableBooking.Model.Migrations
 
                             b1.HasKey("RestaurantId");
 
-                            b1.ToTable("Restaurants");
+                            b1.ToTable("Restaurants", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("RestaurantId");
@@ -362,7 +362,7 @@ namespace TableBooking.Model.Migrations
 
                                     b2.HasKey("OpeningAndClosingHoursRestaurantId");
 
-                                    b2.ToTable("Restaurants");
+                                    b2.ToTable("Restaurants", (string)null);
 
                                     b2.WithOwner()
                                         .HasForeignKey("OpeningAndClosingHoursRestaurantId");
@@ -384,7 +384,7 @@ namespace TableBooking.Model.Migrations
 
                                     b2.HasKey("OpeningAndClosingHoursRestaurantId");
 
-                                    b2.ToTable("Restaurants");
+                                    b2.ToTable("Restaurants", (string)null);
 
                                     b2.WithOwner()
                                         .HasForeignKey("OpeningAndClosingHoursRestaurantId");
@@ -406,7 +406,7 @@ namespace TableBooking.Model.Migrations
 
                                     b2.HasKey("OpeningAndClosingHoursRestaurantId");
 
-                                    b2.ToTable("Restaurants");
+                                    b2.ToTable("Restaurants", (string)null);
 
                                     b2.WithOwner()
                                         .HasForeignKey("OpeningAndClosingHoursRestaurantId");
@@ -428,7 +428,7 @@ namespace TableBooking.Model.Migrations
 
                                     b2.HasKey("OpeningAndClosingHoursRestaurantId");
 
-                                    b2.ToTable("Restaurants");
+                                    b2.ToTable("Restaurants", (string)null);
 
                                     b2.WithOwner()
                                         .HasForeignKey("OpeningAndClosingHoursRestaurantId");
@@ -450,7 +450,7 @@ namespace TableBooking.Model.Migrations
 
                                     b2.HasKey("OpeningAndClosingHoursRestaurantId");
 
-                                    b2.ToTable("Restaurants");
+                                    b2.ToTable("Restaurants", (string)null);
 
                                     b2.WithOwner()
                                         .HasForeignKey("OpeningAndClosingHoursRestaurantId");
@@ -472,7 +472,7 @@ namespace TableBooking.Model.Migrations
 
                                     b2.HasKey("OpeningAndClosingHoursRestaurantId");
 
-                                    b2.ToTable("Restaurants");
+                                    b2.ToTable("Restaurants", (string)null);
 
                                     b2.WithOwner()
                                         .HasForeignKey("OpeningAndClosingHoursRestaurantId");
@@ -494,7 +494,7 @@ namespace TableBooking.Model.Migrations
 
                                     b2.HasKey("OpeningAndClosingHoursRestaurantId");
 
-                                    b2.ToTable("Restaurants");
+                                    b2.ToTable("Restaurants", (string)null);
 
                                     b2.WithOwner()
                                         .HasForeignKey("OpeningAndClosingHoursRestaurantId");

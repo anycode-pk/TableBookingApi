@@ -120,6 +120,13 @@ public class BookingService : IBookingService
         return new NoContentResult();
     }
 
+    public async Task<IActionResult> GetBookingsForRestaurant(Guid restaurantId, DateTime? from = null, DateTime? to = null)
+    {
+        var bookings = await _unitOfWork.BookingRepository.GetBookingsForSpecificRestaurantAsync(restaurantId, from, to);
+        
+        return new OkObjectResult(bookings);
+    }
+
     public async Task<IActionResult> GetBookingByIdAsync(Guid bookingId, Guid userId)
     {
         var booking = await _unitOfWork.BookingRepository.GetBookingByIdForSpecificUserAsync(bookingId, userId);
@@ -148,7 +155,7 @@ public class BookingService : IBookingService
         return new OkObjectResult(bookingDto);
     }
 
-    public async Task<IActionResult> GetAllBookings(Guid userId, DateTime? from = null, DateTime? to = null)
+    public async Task<IActionResult> GetAllBookingsForUser(Guid userId, DateTime? from = null, DateTime? to = null)
     {
         var bookings = await _unitOfWork.BookingRepository.GetAllBookingsForSpecificUserAsync(userId, from, to);
 

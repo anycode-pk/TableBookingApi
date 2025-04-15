@@ -13,4 +13,5 @@ public class UserRegisterDto
 
     [Required(ErrorMessage = "Password is required")]
     public string Password { get; set; } = string.Empty;
+    public bool IsRestaurant { get; set; }
 }
