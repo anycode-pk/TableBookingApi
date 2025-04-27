@@ -70,6 +70,16 @@ public class TableBookingContext : IdentityDbContext<AppUser, AppRole, Guid>
                 .HasConversion(
                     d => d.HasValue ? d.Value.ToUniversalTime() : (DateTime?)null,
                     d => d.HasValue ? DateTime.SpecifyKind(d.Value, DateTimeKind.Utc) : null);
+            
+            // appUserEntity.HasMany(u => u.OwnerRestaurantIds)
+            //     .WithMany( => restaurantIds)
+            //     .UsingEntity<Dictionary<string, object>>(
+            //         "UserRestaurant", 
+            //         j => j.HasOne<Restaurant>().WithMany().HasForeignKey("RestaurantId"),
+            //         j => j.HasOne<AppUser>().WithMa
+            // ny().HasForeignKey("UserId"));
+            
+            // appUserEntity.HasMany(u => u.OwnerRestaurantIds);
         });
 
         modelBuilder.Entity<UserFavouriteRestaurant>(userFavouriteRestaurantEntity =>

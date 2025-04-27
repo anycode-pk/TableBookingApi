@@ -111,6 +111,7 @@ public class BookingService : IBookingService
     public async Task<IActionResult> DeleteBookingAsync(Guid bookingId, Guid userId)
     {
         var booking = await _unitOfWork.BookingRepository.GetBookingByIdForSpecificUserAsync(bookingId, userId);
+        
         if (booking == null)
             return new BadRequestObjectResult(new { message = "Bad request" });
 
@@ -120,7 +121,7 @@ public class BookingService : IBookingService
         return new NoContentResult();
     }
 
-    public async Task<IActionResult> GetBookingsForRestaurant(Guid restaurantId, DateTime? from = null, DateTime? to = null)
+    public async Task<IActionResult> GetBookingsForRestaurantById(Guid restaurantId, DateTime? from = null, DateTime? to = null)
     {
         var bookings = await _unitOfWork.BookingRepository.GetBookingsForSpecificRestaurantAsync(restaurantId, from, to);
         

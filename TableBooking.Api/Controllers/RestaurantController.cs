@@ -12,12 +12,10 @@ using Model.Models;
 public class RestaurantController : ControllerBase
 {
     private readonly IRestaurantService _restaurantService;
-    private readonly IUserService _userService;
 
     public RestaurantController(IRestaurantService restaurantService, IUserService userService)
     {
         _restaurantService = restaurantService;
-        _userService = userService;
     }
     
     [HttpGet("search")]
@@ -47,27 +45,6 @@ public class RestaurantController : ControllerBase
     public async Task<IActionResult> GetRestaurantByTableId(Guid tableId)
     {
         return await _restaurantService.GetRestaurantByTableIdAsync(tableId);
-    }
-
-    [HttpPost("CreateRestaurant")]
-    [Authorize]
-    public async Task<IActionResult> CreateRestaurant([FromBody] RestaurantShortInfoDto restaurantShortInfoDto)
-    {
-        return await _restaurantService.CreateRestaurantAsync(restaurantShortInfoDto);
-    }
-
-    [HttpDelete("DeleteRestaurant/{restaurantId:guid}")]
-    [Authorize]
-    public async Task<IActionResult> DeleteRestaurant(Guid restaurantId)
-    {
-        return await _restaurantService.DeleteRestaurantAsync(restaurantId);
-    }
-
-    [HttpPut("UpdateRestaurant/{restaurantId:guid}")]
-    [Authorize]
-    public async Task<IActionResult> UpdateRestaurant([FromBody] RestaurantShortInfoDto restaurantShortInfoDto, Guid restaurantId)
-    {
-        return await _restaurantService.UpdateRestaurantAsync(restaurantShortInfoDto, restaurantId);
     }
     
     [HttpPost("Favourite/{restaurantId:guid}")]

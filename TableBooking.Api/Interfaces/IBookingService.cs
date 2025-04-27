@@ -15,5 +15,5 @@ public interface IBookingService
     public Task<IActionResult> UpdateBookingAsync(UpdateBookingDto updateBookingDto, Guid userId, Guid bookingId);
     public Task<IActionResult> DeleteBookingAsync(Guid bookingId, Guid userId);
     
-    public Task<IActionResult> GetBookingsForRestaurant(Guid restaurantId, DateTime? from = null, DateTime? to = null);
+    public Task<IActionResult> GetBookingsForRestaurantById(Guid restaurantId, DateTime? from = null, DateTime? to = null);
 }

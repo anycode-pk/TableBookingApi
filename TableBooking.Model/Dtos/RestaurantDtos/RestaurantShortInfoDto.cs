@@ -17,4 +17,5 @@ public class RestaurantShortInfoDto
     [Required] public string PrimaryImageURL { get; set; } = DefaultImageUrl;
     public Price Price { get; set; } = Price.Medium;
     public OpeningAndClosingHours OpeningAndClosingHours { get; set; } = new();
+    public string OwnerId { get; set; } = string.Empty;
 }

@@ -35,7 +35,8 @@ public class RestaurantService : IRestaurantService
             OpeningAndClosingHours = dto.OpeningAndClosingHours,
             Type = dto.Type!,
             PrimaryImageUrl = dto.PrimaryImageURL,
-            SecondaryImageUrl = dto.SecondaryImageURL
+            SecondaryImageUrl = dto.SecondaryImageURL,
+            OwnerId = dto.OwnerId
         };
 
         await _unitOfWork.RestaurantRepository.InsertAsync(restaurant);
@@ -137,7 +138,8 @@ public class RestaurantService : IRestaurantService
             Tables = restaurant.Tables,
             Type = dto.Type ?? restaurant.Type,
             Rating = restaurant.Rating,
-            OpeningAndClosingHours = dto.OpeningAndClosingHours
+            OpeningAndClosingHours = dto.OpeningAndClosingHours,
+            OwnerId = dto.OwnerId
         };
 
         await _unitOfWork.RestaurantRepository.Update(newRestaurant);

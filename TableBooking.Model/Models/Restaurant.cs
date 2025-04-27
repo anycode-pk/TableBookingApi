@@ -32,4 +32,5 @@ public class Restaurant : Entity
     public OpeningAndClosingHours OpeningAndClosingHours { get; set; }
     public IEnumerable<Table> Tables { get; set; } = new List<Table>();
     public List<UserFavouriteRestaurant> Users { get; set; } = new();
+    public string OwnerId { get; set; } = string.Empty;
 }

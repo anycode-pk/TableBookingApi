@@ -15,6 +15,7 @@ public class AppUser : IdentityUser<Guid>
     }
     public IEnumerable<Booking> Bookings { get; set; } = new List<Booking>();
     public Guid AppRoleId { get; set; }
+    public List<Guid>? OwnerRestaurantIds { get; set; }
     public AppRole AppRole { get; set; } = new();
     public List<UserFavouriteRestaurant> FavouriteRestaurants { get; set; } = new();
     public AppUserDto ToDto()
