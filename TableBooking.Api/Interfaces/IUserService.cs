@@ -9,4 +9,5 @@ public interface IUserService
     public Task<IActionResult> Login(UserLoginDto userLoginDto);
     public Task<IActionResult> Logout(string? authHeader);
     public Task<AppUserDto> GetUserInfo(Guid id, CancellationToken cancellationToken);
+    public Task<List<string>> GetUserRoles(string userId);
 }

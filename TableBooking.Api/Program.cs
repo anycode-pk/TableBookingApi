@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -174,8 +175,10 @@ builder.Services.AddTransient<IShortUserInfoConverter, ShortUserInfoConverter>()
 builder.Services.AddTransient<IBookingService, BookingService>();
 builder.Services.AddTransient<IRestaurantService, RestaurantService>();
 builder.Services.AddTransient<ITableService, TableService>();
-builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IRatingService, RatingService>();
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddTransient<IClaimsTransformation, ClaimsTransformationService>(); // middleware
 
 var app = builder.Build();
 

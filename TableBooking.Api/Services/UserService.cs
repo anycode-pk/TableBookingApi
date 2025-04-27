@@ -164,4 +164,18 @@ public class UserService : IUserService
 
         return token;
     }
+
+    public async Task<List<string>> GetUserRoles(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+
+        if (user == null)
+        {
+            return new List<string>();
+        }
+        
+        var roles = (await _userManager.GetRolesAsync(user)).ToList();
+
+        return roles;
+    }
 }

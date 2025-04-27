@@ -1,9 +1,10 @@
 ﻿namespace TableBooking.Model;
 
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
-public class TableBookingContext : DbContext
+public class TableBookingContext : IdentityDbContext<AppUser, AppRole, Guid>
 {
     public TableBookingContext() { }
 
